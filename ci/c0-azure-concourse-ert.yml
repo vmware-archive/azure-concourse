@@ -45,10 +45,10 @@ resource_types:
 
 resources:
 
-- name: gcp-concourse
+- name: azure-concourse
   type: git
   source:
-    uri: git@github.com:c0-ops/gcp-concourse.git
+    uri: git@github.com:c0-ops/azure-concourse.git
     branch: master
     private_key: {{githubsshkey}}
 
@@ -91,15 +91,15 @@ jobs:
   serial_groups: [full]
   plan:
   - aggregate:
-    - get: gcp-concourse
+    - get: azure-concourse
       trigger: false
     - get: pivnet-opsmgr
-      trigger: true
+      trigger: false
       params:
         globs:
-        - "*GCP*"
+        - "*Azure*"
     - get: pivnet-elastic-runtime
-      trigger: true
+      trigger: false
       params:
         globs:
         - "*pivotal"
@@ -108,11 +108,11 @@ jobs:
       platform: linux
       image: docker:///virtmerlin/c0-worker-gcp
       inputs:
-        - name: gcp-concourse
+        - name: azure-concourse
       outputs:
         - name: opsman-metadata
       run:
-        path: gcp-concourse/ci/tasks/wipe/wipe-env.sh
+        path: azure-concourse/ci/tasks/wipe/wipe-env.sh
       params:
         arg_wipe: {{arg_wipe}}
         gcp_proj_id: {{gcp_proj_id}}
@@ -122,16 +122,16 @@ jobs:
         gcp_zone_3: {{gcp_zone_3}}
         gcp_svc_acct_key: {{gcp_svc_acct_key}}
         gcp_terraform_prefix: {{gcp_terraform_prefix}}
-    on_success:
-      put: slack-c0-coreteam
-      params:
-        text: |
-          concourse-success:-> {{pcf_iaas}} pipeline run has started https://fly.customer0.net/teams/main/pipelines/$BUILD_PIPELINE_NAME
-    on_failure:
-      put: slack-c0-coreteam
-      params:
-        text: |
-          concourse-fail:-> {{pcf_iaas}} https://fly.customer0.net/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME or https://fly.customer0.net/teams/main/pipelines/$BUILD_ID for more details
+#    on_success:
+#      put: slack-c0-coreteam
+#      params:
+#        text: |
+#          concourse-success:-> {{pcf_iaas}} pipeline run has started https://fly.customer0.net/teams/main/pipelines/$BUILD_PIPELINE_NAME
+#    on_failure:
+#      put: slack-c0-coreteam
+#      params:
+#        text: |
+#          concourse-fail:-> {{pcf_iaas}} https://fly.customer0.net/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME or https://fly.customer0.net/teams/main/pipelines/$BUILD_ID for more details
 
 - name: deploy-iaas
   serial: true
@@ -139,31 +139,31 @@ jobs:
   serial_groups: [full]
   plan:
   - aggregate:
-    - get: gcp-concourse
+    - get: azure-concourse
       trigger: false
-    - get: pivnet-opsmgr
-      trigger: true
-      passed: [wipe-env]
-      params:
-        globs:
-        - "*GCP*"
-    - get: pivnet-elastic-runtime
-      trigger: true
-      passed: [wipe-env]
-      params:
-        globs:
-        - "*pivotal"
+#    - get: pivnet-opsmgr
+#      trigger: true
+#      passed: [wipe-env]
+#      params:
+#        globs:
+#        - "*GCP*"
+#    - get: pivnet-elastic-runtime
+#      trigger: true
+#      passed: [wipe-env]
+#      params:
+#        globs:
+#        - "*pivotal"
   - task: upload-opsman
     config:
       platform: linux
       image: docker:///virtmerlin/c0-worker-gcp
       inputs:
-        - name: gcp-concourse
+        - name: azure-concourse
         - name: pivnet-opsmgr
       outputs:
         - name: opsman-metadata
       run:
-        path: gcp-concourse/ci/tasks/iaas/upload-opsman.sh
+        path: azure-concourse/ci/tasks/iaas/upload-opsman.sh
       params:
         gcp_proj_id: {{gcp_proj_id}}
         gcp_region: {{gcp_region}}
@@ -173,10 +173,10 @@ jobs:
       platform: linux
       image: docker:///virtmerlin/c0-worker-gcp
       inputs:
-        - name: gcp-concourse
+        - name: azure-concourse
         - name: opsman-metadata
       run:
-        path: gcp-concourse/ci/tasks/iaas/deploy-iaas.sh
+        path: azure-concourse/ci/tasks/iaas/deploy-iaas.sh
       params:
         gcp_pcf_terraform_template: {{gcp_pcf_terraform_template}}
         gcp_proj_id: {{gcp_proj_id}}
@@ -197,10 +197,10 @@ jobs:
       platform: linux
       image: docker:///virtmerlin/c0-worker-gcp
       inputs:
-        - name: gcp-concourse
+        - name: azure-concourse
         - name: opsman-metadata
       run:
-        path: gcp-concourse/ci/tasks/iaas/c0-set-dns.sh
+        path: azure-concourse/ci/tasks/iaas/c0-set-dns.sh
       params:
         gcp_proj_id: {{gcp_proj_id}}
         gcp_region: {{gcp_region}}
@@ -217,7 +217,7 @@ jobs:
   serial_groups: [full]
   plan:
   - aggregate:
-    - get: gcp-concourse
+    - get: azure-concourse
       trigger: false
     - get: pivnet-opsmgr
       trigger: true
@@ -240,10 +240,10 @@ jobs:
       platform: linux
       image: docker:///virtmerlin/c0-worker-gcp
       inputs:
-        - name: gcp-concourse
+        - name: azure-concourse
         - name: tool-om
       run:
-        path: gcp-concourse/ci/tasks/iaas/config-opsman.sh
+        path: azure-concourse/ci/tasks/iaas/config-opsman.sh
       params:
         pcf_ert_domain: {{pcf_ert_domain}}
         pcf_opsman_admin: {{pcf_opsman_admin}}
@@ -256,7 +256,7 @@ jobs:
   serial_groups: [full]
   plan:
   - aggregate:
-    - get: gcp-concourse
+    - get: azure-concourse
       trigger: false
     - get: pivnet-opsmgr
       trigger: true
@@ -279,10 +279,10 @@ jobs:
       platform: linux
       image: docker:///virtmerlin/c0-worker-gcp
       inputs:
-        - name: gcp-concourse
+        - name: azure-concourse
         - name: tool-om
       run:
-        path: gcp-concourse/ci/tasks/iaas/deploy-director.sh
+        path: azure-concourse/ci/tasks/iaas/deploy-director.sh
       params:
         pcf_ert_domain: {{pcf_ert_domain}}
         pcf_opsman_admin: {{pcf_opsman_admin}}
@@ -298,7 +298,7 @@ jobs:
   serial_groups: [full]
   plan:
   - aggregate:
-    - get: gcp-concourse
+    - get: azure-concourse
       trigger: false
     - get: pivnet-opsmgr
       trigger: true
@@ -321,11 +321,11 @@ jobs:
       platform: linux
       image: docker:///virtmerlin/c0-worker-gcp
       inputs:
-        - name: gcp-concourse
+        - name: azure-concourse
         - name: tool-om
         - name: pivnet-elastic-runtime
       run:
-        path: gcp-concourse/ci/tasks/ert/upload-ert.sh
+        path: azure-concourse/ci/tasks/ert/upload-ert.sh
       params:
         pcf_ert_domain: {{pcf_ert_domain}}
         pcf_opsman_admin: {{pcf_opsman_admin}}
@@ -337,7 +337,7 @@ jobs:
   serial_groups: [full]
   plan:
   - aggregate:
-    - get: gcp-concourse
+    - get: azure-concourse
       trigger: false
     - get: pivnet-opsmgr
       trigger: true
@@ -360,10 +360,10 @@ jobs:
       platform: linux
       image: docker:///virtmerlin/c0-worker-gcp
       inputs:
-        - name: gcp-concourse
+        - name: azure-concourse
         - name: tool-om
       run:
-        path: gcp-concourse/ci/tasks/ert/deploy-ert.sh
+        path: azure-concourse/ci/tasks/ert/deploy-ert.sh
       params:
         pcf_ert_domain: {{pcf_ert_domain}}
         pcf_opsman_admin: {{pcf_opsman_admin}}
@@ -386,7 +386,7 @@ jobs:
   serial_groups: [full]
   plan:
   - aggregate:
-    - get: gcp-concourse
+    - get: azure-concourse
       trigger: false
     - get: tool-om
       params:
@@ -409,12 +409,12 @@ jobs:
       platform: linux
       image: docker:///virtmerlin/c0-worker-gcp
       inputs:
-        - name: gcp-concourse
+        - name: azure-concourse
         - name: tool-om
       outputs:
         - name: pipeline-metadata
       run:
-        path: gcp-concourse/ci/tasks/cats/run-cats.sh
+        path: azure-concourse/ci/tasks/cats/run-cats.sh
       params:
         pcf_ert_domain: {{pcf_ert_domain}}
         pcf_opsman_admin: {{pcf_opsman_admin}}

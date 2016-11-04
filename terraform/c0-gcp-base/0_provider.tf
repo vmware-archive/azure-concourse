@@ -1,9 +1,0 @@
-///////////////////////////////////////////////
-//////// Set GCP Provider info ////////////////
-///////////////////////////////////////////////
-
-provider "google" {
-  project = "${var.gcp_proj_id}"
-  region = "${var.gcp_region}"
-  credentials = "${file("/tmp/svc-acct.json")}"
-}
