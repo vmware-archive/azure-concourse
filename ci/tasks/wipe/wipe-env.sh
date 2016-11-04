@@ -11,5 +11,6 @@ if [ $arg_wipe == "wipe" ];
                 exit 0
 fi
 
+azure login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
 
-exit 1
+azure group delete --subscription ${azure_subscription_id} --name ${azure_terraform_prefix} --quiet

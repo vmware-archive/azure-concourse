@@ -97,12 +97,12 @@ jobs:
       trigger: false
       params:
         globs:
-        - "*Azure*"
-    - get: pivnet-elastic-runtime
-      trigger: false
-      params:
-        globs:
-        - "*pivotal"
+        - "*Azure.pdf*"
+  #  - get: pivnet-elastic-runtime
+  #    trigger: false
+  #    params:
+  #      globs:
+  #      - "*pivotal"
   - task: wipe-env
     config:
       platform: linux
@@ -143,14 +143,12 @@ jobs:
     - get: azure-concourse
       trigger: false
 #    - get: pivnet-opsmgr
-#      trigger: true
-#      passed: [wipe-env]
+#      trigger: false
 #      params:
 #        globs:
 #        - "*GCP*"
 #    - get: pivnet-elastic-runtime
-#      trigger: true
-#      passed: [wipe-env]
+#      trigger: false
 #      params:
 #        globs:
 #        - "*pivotal"
@@ -166,9 +164,6 @@ jobs:
       run:
         path: azure-concourse/ci/tasks/iaas/upload-opsman.sh
       params:
-        gcp_proj_id: {{gcp_proj_id}}
-        gcp_region: {{gcp_region}}
-        gcp_svc_acct_key: {{gcp_svc_acct_key}}
   - task: deploy-iaas
     config:
       platform: linux
@@ -179,20 +174,6 @@ jobs:
       run:
         path: azure-concourse/ci/tasks/iaas/deploy-iaas.sh
       params:
-        gcp_pcf_terraform_template: {{gcp_pcf_terraform_template}}
-        gcp_proj_id: {{gcp_proj_id}}
-        gcp_region: {{gcp_region}}
-        gcp_zone_1: {{gcp_zone_1}}
-        gcp_zone_2: {{gcp_zone_2}}
-        gcp_zone_3: {{gcp_zone_3}}
-        gcp_svc_acct_key: {{gcp_svc_acct_key}}
-        gcp_terraform_prefix: {{gcp_terraform_prefix}}
-        gcp_terraform_subnet_ops_manager: {{gcp_terraform_subnet_ops_manager}}
-        gcp_terraform_subnet_ert: {{gcp_terraform_subnet_ert}}
-        gcp_terraform_subnet_services_1: {{gcp_terraform_subnet_services_1}}
-        pcf_ert_domain: {{pcf_ert_domain}}
-        pcf_ert_ssl_cert: {{pcf_ert_ssl_cert}}
-        pcf_ert_ssl_key: {{pcf_ert_ssl_key}}
   - task: c0-set-dns.sh
     config:
       platform: linux
@@ -203,14 +184,6 @@ jobs:
       run:
         path: azure-concourse/ci/tasks/iaas/c0-set-dns.sh
       params:
-        gcp_proj_id: {{gcp_proj_id}}
-        gcp_region: {{gcp_region}}
-        gcp_svc_acct_key: {{gcp_svc_acct_key}}
-        gcp_terraform_prefix: {{gcp_terraform_prefix}}
-        dyn_enabled: {{dyn_enabled}}
-        dyn_user: {{dyn_user}}
-        dyn_token: {{dyn_token}}
-        pcf_ert_domain: {{pcf_ert_domain}}
 
 - name: config-opsman
   serial: true
@@ -221,14 +194,12 @@ jobs:
     - get: azure-concourse
       trigger: false
     - get: pivnet-opsmgr
-      trigger: true
-      passed: [deploy-iaas]
+      trigger: false
       params:
         globs:
         - "*GCP*"
     - get: pivnet-elastic-runtime
-      trigger: true
-      passed: [deploy-iaas]
+      trigger: false
       params:
         globs:
         - "*pivotal"
@@ -246,9 +217,6 @@ jobs:
       run:
         path: azure-concourse/ci/tasks/iaas/config-opsman.sh
       params:
-        pcf_ert_domain: {{pcf_ert_domain}}
-        pcf_opsman_admin: {{pcf_opsman_admin}}
-        pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
 
 
 - name: deploy-director
@@ -260,14 +228,12 @@ jobs:
     - get: azure-concourse
       trigger: false
     - get: pivnet-opsmgr
-      trigger: true
-      passed: [config-opsman]
+      trigger: false
       params:
         globs:
         - "*GCP*"
     - get: pivnet-elastic-runtime
-      trigger: true
-      passed: [config-opsman]
+      trigger: false
       params:
         globs:
         - "*pivotal"
@@ -285,13 +251,7 @@ jobs:
       run:
         path: azure-concourse/ci/tasks/iaas/deploy-director.sh
       params:
-        pcf_ert_domain: {{pcf_ert_domain}}
-        pcf_opsman_admin: {{pcf_opsman_admin}}
-        pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
-        gcp_pcf_terraform_template: {{gcp_pcf_terraform_template}}
-        gcp_proj_id: {{gcp_proj_id}}
-        gcp_terraform_prefix: {{gcp_terraform_prefix}}
-        gcp_svc_acct_key: {{gcp_svc_acct_key}}
+
 
 - name: upload-ert
   serial: true
@@ -302,14 +262,12 @@ jobs:
     - get: azure-concourse
       trigger: false
     - get: pivnet-opsmgr
-      trigger: true
-      passed: [deploy-director]
+      trigger: false
       params:
         globs:
         - "*GCP*"
     - get: pivnet-elastic-runtime
-      trigger: true
-      passed: [deploy-director]
+      trigger: false
       params:
         globs:
         - "*pivotal"
@@ -341,14 +299,12 @@ jobs:
     - get: azure-concourse
       trigger: false
     - get: pivnet-opsmgr
-      trigger: true
-      passed: [upload-ert]
+      trigger: false
       params:
         globs:
         - "*GCP*"
     - get: pivnet-elastic-runtime
-      trigger: true
-      passed: [upload-ert]
+      trigger: false
       params:
         globs:
         - "*pivotal"
@@ -369,7 +325,7 @@ jobs:
         pcf_ert_domain: {{pcf_ert_domain}}
         pcf_opsman_admin: {{pcf_opsman_admin}}
         pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
-        gcp_pcf_terraform_template: {{gcp_pcf_terraform_template}}
+        azure_pcf_terraform_template: {{azure_pcf_terraform_template}}
     on_success:
       put: slack-c0-coreteam
       params:
@@ -394,14 +350,12 @@ jobs:
         globs:
         - "om-linux"
     - get: pivnet-opsmgr
-      trigger: true
-      passed: [deploy-ert]
+      trigger: false
       params:
         globs:
         - "*GCP*"
     - get: pivnet-elastic-runtime
-      trigger: true
-      passed: [deploy-ert]
+      trigger: false
       params:
         globs:
         - "*pivotal"
@@ -420,7 +374,7 @@ jobs:
         pcf_ert_domain: {{pcf_ert_domain}}
         pcf_opsman_admin: {{pcf_opsman_admin}}
         pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
-        gcp_pcf_terraform_template: {{gcp_pcf_terraform_template}}
+        azure_pcf_terraform_template: {{azure_pcf_terraform_template}}
     on_failure:
       put: slack-c0-coreteam
       params:
