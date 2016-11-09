@@ -1,3 +1,8 @@
+///////////////////////////////////////////////
+//////// Pivotal Customer[0] //////////////////
+//////// ALB for TCP routing //////////////////
+///////////////////////////////////////////////
+
 resource "azurerm_public_ip" "tcp-lb-public-ip" {
   name                         = "tcp-lb-public-ip"
   location                     = "${var.location}"

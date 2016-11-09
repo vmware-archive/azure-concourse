@@ -1,3 +1,8 @@
+///////////////////////////////////////////////
+//////// Pivotal Customer[0] //////////////////
+//////// Set Ops Mgr //////////////////////////
+///////////////////////////////////////////////
+
 resource "azurerm_public_ip" "ops_manager_public_ip" {
   name                         = "${var.env_name}-ops-manager-public-ip"
   location                     = "${var.location}"

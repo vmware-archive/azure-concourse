@@ -1,3 +1,8 @@
+///////////////////////////////////////////////
+//////// Pivotal Customer[0] //////////////////
+//////// Build VNET and Subnets ///////////////
+///////////////////////////////////////////////
+
 resource "azurerm_virtual_network" "pcf_virtual_network" {
   name                = "${var.env_name}-virtual-network"
   depends_on          = ["azurerm_resource_group.pcf_resource_group"]

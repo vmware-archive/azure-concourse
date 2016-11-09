@@ -1,3 +1,8 @@
+///////////////////////////////////////////////
+//////// Pivotal Customer[0] //////////////////
+//////// Set Azure Storage Accts //////////////
+///////////////////////////////////////////////
+
 resource "azurerm_storage_account" "bosh_root_storage_account" {
   name                = "${var.env_short_name}director"
   resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
