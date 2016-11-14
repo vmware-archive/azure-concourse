@@ -31,35 +31,36 @@ export PATH=/opt/terraform/terraform:$PATH
     -var "env_name=${azure_terraform_prefix}" \
     azure-concourse/terraform/${azure_pcf_terraform_template}/init
 
-exit 1
-
 
 echo "=============================================================================================="
 echo "This gcp_pcf_terraform_template has an 'Init' set of terraform that has pre-created IPs..."
 echo "=============================================================================================="
 
 
+azure login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
+
+
 
 function fn_get_ip {
-     gcp_cmd="gcloud compute addresses list  --format json | jq '.[] | select (.name == \"$gcp_terraform_prefix-$1\") | .address '"
-     api_ip=$(eval $gcp_cmd | tr -d '"')
-     echo $api_ip
+     azure_cmd="azure network public-ip list -g c0-opsman-validation --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
+     pub_ip=$(eval $azure_cmd)
+     echo $pub_ip
 }
 
-pub_ip_global_pcf=$(fn_get_ip "global-pcf")
-pub_ip_ssh_tcp_lb=$(fn_get_ip "tcp-lb")
-pub_ip_ssh_and_doppler=$(fn_get_ip "ssh-and-doppler")
+pub_ip_pcf=$(fn_get_ip "web-lb")
+pub_ip_tcp_lb=$(fn_get_ip "tcp-lb")
+pub_ip_ssh_and_doppler=$(fn_get_ip "web-lb")
 pub_ip_jumpbox=$(fn_get_ip "jumpbox")
 pub_ip_opsman=$(fn_get_ip "opsman")
 
 echo "You have now deployed Public IPs to GCP that must be resolvable to:"
 echo "----------------------------------------------------------------------------------------------"
-echo "*.sys.${pcf_ert_domain} == ${pub_ip_global_pcf}"
-echo "*.cfapps.${pcf_ert_domain} == ${pub_ip_global_pcf}"
+echo "*.sys.${pcf_ert_domain} == ${pub_ip_pcf}"
+echo "*.cfapps.${pcf_ert_domain} == ${pub_ip_pcf}"
 echo "ssh.sys.${pcf_ert_domain} == ${pub_ip_ssh_and_doppler}"
 echo "doppler.sys.${pcf_ert_domain} == ${pub_ip_ssh_and_doppler}"
 echo "loggregator.sys.${pcf_ert_domain} == ${pub_ip_ssh_and_doppler}"
-echo "tcp.${pcf_ert_domain} == ${pub_ip_ssh_tcp_lb}"
+echo "tcp.${pcf_ert_domain} == ${pub_ip_tcp_lb}"
 echo "opsman.${pcf_ert_domain} == ${pub_ip_opsman}"
 echo "----------------------------------------------------------------------------------------------"
 echo "DO Not Start the 'deploy-iaas' Concourse Job of this Pipeline until you have confirmed that DNS is reolving correctly.  Failure to do so will result in a FAIL!!!!"
