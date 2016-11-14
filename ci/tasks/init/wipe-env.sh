@@ -14,7 +14,7 @@ fi
 azure login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
 
 
-
+# Test if Resource Group exists,  if so then wipe it!!!
 get_res_group_cmd="azure group list --json | jq '.[] | select(.name == \"${azure_terraform_prefix}\") | .' | jq .name | tr -d '\"'"
 get_res_group=$(eval ${get_res_group_cmd})
 if [[ ${get_res_groups} = ${azure_terraform_prefix} ]]; then
