@@ -19,7 +19,7 @@ export PATH=/opt/terraform/terraform:$PATH
   -var "tenant_id=${azure_tenant_id}" \
   -var "location=${azure_region}" \
   -var "env_name=${azure_terraform_prefix}"
-  gcp-concourse/terraform/$gcp_pcf_terraform_template/init
+  gcp-concourse/terraform/${azure_pcf_terraform_template}/init
 
 exit 1
 
