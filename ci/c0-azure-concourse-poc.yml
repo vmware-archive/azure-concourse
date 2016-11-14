@@ -12,8 +12,8 @@ groups:
 
 - name: init
   jobs:
-  - Init-env
-  - init-public-ip
+  - init-env
+
 - name: iaas
   jobs:
   - deploy-iaas
@@ -48,9 +48,8 @@ resources:
 - name: azure-concourse
   type: git
   source:
-    uri: git@github.com:c0-ops/azure-concourse.git
+    uri: https://github.com/c0-ops/azure-concourse.git
     branch: master
-    private_key: {{githubsshkey}}
 
 - name: tool-om
   type: github-release
