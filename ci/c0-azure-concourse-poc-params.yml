@@ -2,7 +2,7 @@ groups:
 
 - name: all
   jobs:
-  - wipe-env
+  - init-env
   - deploy-iaas
   - config-opsman
   - deploy-director
@@ -10,10 +10,10 @@ groups:
   - deploy-ert
   - run-cats
 
-- name: wipe
+- name: init
   jobs:
-  - wipe-env
-
+  - Init-env
+  - init-public-ip
 - name: iaas
   jobs:
   - deploy-iaas
@@ -85,7 +85,7 @@ resources:
 
 jobs:
 
-- name: wipe-env
+- name: init-env
   serial: true
   max_in_flight: 1
   serial_groups: [full]
@@ -93,16 +93,6 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
-    - get: pivnet-opsmgr
-      trigger: false
-      params:
-        globs:
-        - "*Azure.pdf*"
-  #  - get: pivnet-elastic-runtime
-  #    trigger: false
-  #    params:
-  #      globs:
-  #      - "*pivotal"
   - task: wipe-env
     config:
       platform: linux
@@ -112,7 +102,26 @@ jobs:
       outputs:
         - name: opsman-metadata
       run:
-        path: azure-concourse/ci/tasks/wipe/wipe-env.sh
+        path: azure-concourse/ci/tasks/init/wipe-env.sh
+      params:
+        arg_wipe: {{arg_wipe}}
+        azure_pcf_terraform_template: {{azure_pcf_terraform_template}}
+        azure_subscription_id: {{azure_subscription_id}}
+        azure_tenant_id: {{azure_tenant_id}}
+        azure_service_principal_id: {{azure_service_principal_id}}
+        azure_service_principal_password: {{azure_service_principal_password}}
+        azure_region: {{azure_region}}
+        azure_terraform_prefix: {{azure_terraform_prefix}}
+  - task: init-public-ip
+    config:
+      platform: linux
+      image: docker:///virtmerlin/c0-worker
+      inputs:
+        - name: azure-concourse
+      outputs:
+        - name: opsman-metadata
+      run:
+        path: azure-concourse/ci/tasks/init/init-public-ip.sh
       params:
         arg_wipe: {{arg_wipe}}
         azure_pcf_terraform_template: {{azure_pcf_terraform_template}}
