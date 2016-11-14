@@ -7,17 +7,6 @@ if [[ ! $dyn_enabled == true || -z $dyn_enabled ]]; then
 fi
 
 #############################################################
-#################### GCP Auth  & functions ##################
-#############################################################
-
-echo $gcp_svc_acct_key > /tmp/blah
-gcloud auth activate-service-account --key-file /tmp/blah
-rm -rf /tmp/blah
-
-gcloud config set project $gcp_proj_id
-gcloud config set compute/region $gcp_region
-
-#############################################################
 ############### Set C0 Dyn DNS             ##################
 #############################################################
 
