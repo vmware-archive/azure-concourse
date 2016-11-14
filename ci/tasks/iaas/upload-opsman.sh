@@ -5,25 +5,17 @@ set -e
 #################### Azure Auth  & functions ##################
 #############################################################
 
-exit 1
 
 ### For GCP, grab the OpsManager image name from the Pivent PDF
 echo "=============================================================================================="
-echo "Getting GCP Ops Manager Image ...."
+echo "Getting Azure Ops Manager VHD URI ...."
 echo "=============================================================================================="
 
-/usr/bin/pdftotext pivnet-opsmgr/*GCP*.pdf /tmp/opsman.txt
-opsman_region="US"
-pcf_opsman_image_tgz=$(grep -i -A 1 "$opsman_region:" /tmp/opsman.txt | grep release)
-echo "Found GCP OpsMan Image @ $pcf_opsman_image_tgz ...."
-pcf_opsman_image_name="opsman-"$(echo $pcf_opsman_image_tgz | awk -F "/" '{print$2}' | awk -F '.tar.gz' '{print$1}' | tr '.' "-")
+/usr/bin/pdftotext pivnet-opsmgr/*Azure*.pdf /tmp/opsman.txt
+opsman_region="East US"
+pcf_opsman_image_vhd=$(grep -i -A 1 "$opsman_region" /tmp/opsman.txt | grep "https")
+#pcf_opsman_image_version=$(grep -i -A 1 "$opsman_region" /tmp/opsman.txt | grep "https" | awk -F "ops-manager-" '{print$2}')
 
-echo $pcf_opsman_image_name > opsman-metadata/name
 
-###test if image exists & if not then create it
-if  [[ -z $(gcloud compute images list | grep $pcf_opsman_image_name) ]]; then
-  echo "|||Opsman $pcf_opsman_image_name not found, creating it ...."
-  gcloud compute images create $pcf_opsman_image_name --family pcf-opsman --source-uri "gs://$pcf_opsman_image_tgz"
-else
-  echo "|||Opsman $pcf_opsman_image_name found in current project ...."
-fi
+echo "Found Azure OpsMan Image @ $pcf_opsman_image_vhd ...."
+echo $pcf_opsman_image_vhd > opsman-metadata/uri
