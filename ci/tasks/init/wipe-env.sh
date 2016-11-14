@@ -17,7 +17,7 @@ azure login --service-principal -u ${azure_service_principal_id} -p ${azure_serv
 
 get_res_group_cmd="azure group list --json | jq '.[] | select(.name == \"${azure_terraform_prefix}\") | .' | jq .name | tr -d '\"'"
 get_res_group=$(eval ${get_res_group_cmd})
-if [[ ! ${get_res_groups} = ${azure_terraform_prefix} ]]; then
+if [[ ${get_res_groups} = ${azure_terraform_prefix} ]]; then
     echo "Found Resource Group to Remove ....."
     azure group delete --subscription ${azure_subscription_id} --name ${azure_terraform_prefix} --quiet
 fi
