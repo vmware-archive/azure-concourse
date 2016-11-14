@@ -18,7 +18,7 @@ export PATH=/opt/terraform/terraform:$PATH
   -var "client_secret=${azure_service_principal_password}" \
   -var "tenant_id=${azure_tenant_id}" \
   -var "location=${azure_region}" \
-  -var "env_name=${azure_terraform_prefix}"
+  -var "env_name=${azure_terraform_prefix}" \
   azure-concourse/terraform/${azure_pcf_terraform_template}/init
 
 exit 1
