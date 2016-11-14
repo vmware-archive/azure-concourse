@@ -21,25 +21,24 @@ export PATH=/opt/terraform/terraform:$PATH
   -var "env_name=${azure_terraform_prefix}" \
   azure-concourse/terraform/${azure_pcf_terraform_template}/init
 
+
+  /opt/terraform/terraform apply \
+    -var "subscription_id=${azure_subscription_id}" \
+    -var "client_id=${azure_service_principal_id}" \
+    -var "client_secret=${azure_service_principal_password}" \
+    -var "tenant_id=${azure_tenant_id}" \
+    -var "location=${azure_region}" \
+    -var "env_name=${azure_terraform_prefix}" \
+    azure-concourse/terraform/${azure_pcf_terraform_template}/init
+
 exit 1
-
-/opt/terraform/terraform apply \
-  -var "gcp_proj_id=$gcp_proj_id" \
-  -var "gcp_region=$gcp_region" \
-  -var "gcp_terraform_prefix=$gcp_terraform_prefix" \
-  gcp-concourse/terraform/$gcp_pcf_terraform_template/init
-
 
 
 echo "=============================================================================================="
 echo "This gcp_pcf_terraform_template has an 'Init' set of terraform that has pre-created IPs..."
 echo "=============================================================================================="
-echo $gcp_svc_acct_key > /tmp/blah
-gcloud auth activate-service-account --key-file /tmp/blah
-rm -rf /tmp/blah
 
-gcloud config set project $gcp_proj_id
-gcloud config set compute/region $gcp_region
+
 
 function fn_get_ip {
      gcp_cmd="gcloud compute addresses list  --format json | jq '.[] | select (.name == \"$gcp_terraform_prefix-$1\") | .address '"
