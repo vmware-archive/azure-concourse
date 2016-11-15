@@ -27,7 +27,7 @@ resource "azurerm_virtual_machine" "ops_manager_vm" {
 
   storage_os_disk {
     name          = "opsman-disk.vhd"
-    vhd_uri       = "${var.pcf_opsman_image_uri}"
+    vhd_uri       = "${var.ops_manager_image_uri}"
     image_uri     = "${azurerm_storage_blob.ops_manager_image.url}"
     caching       = "ReadWrite"
     os_type       = "linux"
