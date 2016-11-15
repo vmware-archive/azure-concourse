@@ -1,45 +1,36 @@
 #!/bin/bash
 set -e
+exit 1
+# Get Opsman VHD from previous task
+pcf_opsman_image_uri=$(cat opsman-metadata/uri)
+
+# Get Public IPs
+function fn_get_ip {
+     azure_cmd="azure network public-ip list -g c0-opsman-validation --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
+     pub_ip=$(eval $azure_cmd)
+     echo $pub_ip
+}
+
+pub_ip_pcf=$(fn_get_ip "web-lb")
+pub_ip_tcp_lb=$(fn_get_ip "tcp-lb")
+pub_ip_ssh_and_doppler=$(fn_get_ip "web-lb")
+pub_ip_jumpbox=$(fn_get_ip "jumpbox")
+pub_ip_opsman=$(fn_get_ip "opsman")
 
 echo "=============================================================================================="
 echo "Executing Terraform ...."
 echo "=============================================================================================="
 
-exit 1
-
-pcf_opsman_image_name=$(cat opsman-metadata/name)
-
 export PATH=/opt/terraform/terraform:$PATH
-echo $gcp_svc_acct_key > /tmp/svc-acct.json
 
 /opt/terraform/terraform plan \
-  -var "gcp_proj_id=$gcp_proj_id" \
-  -var "gcp_region=$gcp_region" \
-  -var "gcp_zone_1=$gcp_zone_1" \
-  -var "gcp_zone_2=$gcp_zone_2" \
-  -var "gcp_zone_3=$gcp_zone_3" \
-  -var "gcp_terraform_prefix=$gcp_terraform_prefix" \
-  -var "gcp_terraform_subnet_ops_manager=$gcp_terraform_subnet_ops_manager" \
-  -var "gcp_terraform_subnet_ert=$gcp_terraform_subnet_ert" \
-  -var "gcp_terraform_subnet_services_1=$gcp_terraform_subnet_services_1" \
-  -var "pcf_opsman_image_name=$pcf_opsman_image_name" \
-  -var "pcf_ert_domain=$pcf_ert_domain" \
-  -var "pcf_ert_ssl_cert=$pcf_ert_ssl_cert" \
-  -var "pcf_ert_ssl_key=$pcf_ert_ssl_key" \
-  gcp-concourse/terraform/$gcp_pcf_terraform_template
-
-/opt/terraform/terraform apply \
-  -var "gcp_proj_id=$gcp_proj_id" \
-  -var "gcp_region=$gcp_region" \
-  -var "gcp_zone_1=$gcp_zone_1" \
-  -var "gcp_zone_2=$gcp_zone_2" \
-  -var "gcp_zone_3=$gcp_zone_3" \
-  -var "gcp_terraform_prefix=$gcp_terraform_prefix" \
-  -var "gcp_terraform_subnet_ops_manager=$gcp_terraform_subnet_ops_manager" \
-  -var "gcp_terraform_subnet_ert=$gcp_terraform_subnet_ert" \
-  -var "gcp_terraform_subnet_services_1=$gcp_terraform_subnet_services_1" \
-  -var "pcf_opsman_image_name=$pcf_opsman_image_name" \
-  -var "pcf_ert_domain=$pcf_ert_domain" \
-  -var "pcf_ert_ssl_cert=$pcf_ert_ssl_cert" \
-  -var "pcf_ert_ssl_key=$pcf_ert_ssl_key" \
-  gcp-concourse/terraform/$gcp_pcf_terraform_template
+  -var "subscription_id=${azure_subscription_id}" \
+  -var "client_id=${azure_service_principal_id}" \
+  -var "client_secret=${azure_service_principal_password}" \
+  -var "tenant_id=${azure_tenant_id}" \
+  -var "location=${azure_region}" \
+  -var "env_name=${azure_terraform_prefix}" \
+  -var "dns_suffix=${pcf_ert_domain}" \
+  -var "pub_ip_opsman=${pub_ip_opsman}" \
+  -var "pub_ip_pcf=${pub_ip_pcf}" \
+  azure-concourse/terraform/$azure_pcf_terraform_template
