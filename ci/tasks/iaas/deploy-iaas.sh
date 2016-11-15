@@ -30,7 +30,7 @@ pub_ip_ssh_and_doppler=$(fn_get_ip "web-lb")
 pub_ip_jumpbox=$(fn_get_ip "jumpbox")
 
 pub_ip_opsman=$(fn_get_ip "opsman")
-pub_ip_id_opsman=$(n_get_ip_ref_id "opsman")
+pub_ip_id_opsman=$(fn_get_ip_ref_id "opsman")
 
 env_shortname=$(echo ${azure_terraform_prefix} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
 env_shortname=$(echo ${env_shortname:0:10})
