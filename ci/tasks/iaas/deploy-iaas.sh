@@ -3,7 +3,7 @@ set -e
 
 
 echo "=============================================================================================="
-echo "Collecting Terraform Variables ...."
+echo "Collecting Terraform Variables from Deployed Azure Objects ...."
 echo "=============================================================================================="
 
 # Get Opsman VHD from previous task
@@ -55,10 +55,12 @@ export PATH=/opt/terraform/terraform:$PATH
   -var "env_short_name=${env_short_name}" \
   -var "dns_suffix=${pcf_ert_domain}" \
   -var "pub_ip_opsman=${pub_ip_opsman}" \
+  -var "pub_ip_id_opsman=${pub_ip_id_opsman}" \
   -var "pub_ip_pcf=${pub_ip_pcf}" \
   -var "pub_ip_id_pcf=${pub_ip_id_pcf}" \
   -var "pub_ip_id_tcp_lb=${pub_ip_id_tcp_lb}" \
-  -var "pcf_opsman_image_uri=${pcf_opsman_image_uri}" \
+  -var "pub_ip_tcp_lb=${pub_ip_tcp_lb}" \
+  -var "ops_manager_image_uri=${pcf_opsman_image_uri}" \
   -var "vm_admin_username=${pcf_opsman_admin}" \
   -var "vm_admin_password=${pcf_opsman_admin_passwd}" \
   -var "vm_admin_public_key=${vm_admin_public_key}" \
