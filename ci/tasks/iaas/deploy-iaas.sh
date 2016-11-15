@@ -5,6 +5,8 @@ set -e
 pcf_opsman_image_uri=$(cat opsman-metadata/uri)
 
 # Get Public IPs
+azure login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
+
 function fn_get_ip {
      azure_cmd="azure network public-ip list -g c0-opsman-validation --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
      pub_ip=$(eval $azure_cmd)
