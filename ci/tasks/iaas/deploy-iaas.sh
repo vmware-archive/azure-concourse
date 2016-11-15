@@ -49,9 +49,9 @@ function fn_exec_tf {
   echo "Executing Terraform ${1} ..."
   echo "=============================================================================================="
 
-  read -d '' terra_cmd << EOL
+  read terra_cmd <<EOL
 /opt/terraform/terraform ${1} \
--var \"subscription_id=${azure_subscription_id}\" \
+-var "subscription_id=${azure_subscription_id}" \
 -var \"client_id=${azure_service_principal_id}\" \
 -var \"client_secret=${azure_service_principal_password}\" \
 -var \"tenant_id=${azure_tenant_id}\" \
@@ -71,7 +71,6 @@ function fn_exec_tf {
 -var \"vm_admin_public_key=${vm_admin_public_key}\" \
 -var \"vm_admin_private_key=${vm_admin_private_key}\" \
 azure-concourse/terraform/$azure_pcf_terraform_template
-
 EOL
 echo ${terra_cmd} > /tmp/tf_exec_cmd
 eval ${terra_cmd} > /tmp/tf_exec_out}
