@@ -57,4 +57,7 @@ export PATH=/opt/terraform/terraform:$PATH
   -var "pcf_opsman_image_uri=${pcf_opsman_image_uri}" \
   -var "vm_admin_username=${pcf_opsman_admin}" \
   -var "vm_admin_password=${pcf_opsman_admin_passwd}" \
+  -var "vm_admin_public_key=${vm_admin_public_key}" \
+  -var "vm_admin_private_key=${vm_admin_private_key}" \
+  -var "pcf_opsman_image_uri=${pcf_opsman_image_uri}" \
   azure-concourse/terraform/$azure_pcf_terraform_template
