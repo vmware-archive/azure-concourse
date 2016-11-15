@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+
+echo "=============================================================================================="
+echo "Collecting Terraform Variables ...."
+echo "=============================================================================================="
+
 # Get Opsman VHD from previous task
 pcf_opsman_image_uri=$(cat opsman-metadata/uri)
 
@@ -19,19 +24,18 @@ function fn_get_ip_ref_id {
      echo $pub_ip
 }
 
+# Collect Public IPs
 pub_ip_pcf=$(fn_get_ip "web-lb")
-pub_ip_id_pcf=$(fn_get_ip_ref_id "web-lb")
-
 pub_ip_tcp_lb=$(fn_get_ip "tcp-lb")
-pub_ip_id_tcp_lb=$(fn_get_ip_ref_id "tcp-lb")
-
-pub_ip_ssh_and_doppler=$(fn_get_ip "web-lb")
-
-pub_ip_jumpbox=$(fn_get_ip "jumpbox")
-
 pub_ip_opsman=$(fn_get_ip "opsman")
+pub_ip_ssh_and_doppler=$(fn_get_ip "web-lb")
+pub_ip_jumpbox=$(fn_get_ip "jumpbox")
+# Collect Public IPs reference IDs for Terraform
+pub_ip_id_pcf=$(fn_get_ip_ref_id "web-lb")
+pub_ip_id_tcp_lb=$(fn_get_ip_ref_id "tcp-lb")
 pub_ip_id_opsman=$(fn_get_ip_ref_id "opsman")
 
+# Use prefix to strip down a Storage Account Prefix String
 env_shortname=$(echo ${azure_terraform_prefix} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
 env_shortname=$(echo ${env_shortname:0:10})
 
@@ -59,5 +63,4 @@ export PATH=/opt/terraform/terraform:$PATH
   -var "vm_admin_password=${pcf_opsman_admin_passwd}" \
   -var "vm_admin_public_key=${vm_admin_public_key}" \
   -var "vm_admin_private_key=${vm_admin_private_key}" \
-  -var "pcf_opsman_image_uri=${pcf_opsman_image_uri}" \
   azure-concourse/terraform/$azure_pcf_terraform_template
