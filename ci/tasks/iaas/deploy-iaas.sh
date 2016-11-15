@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-exit 1
+
 # Get Opsman VHD from previous task
 pcf_opsman_image_uri=$(cat opsman-metadata/uri)
 
