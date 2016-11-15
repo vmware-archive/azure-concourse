@@ -20,3 +20,6 @@ variable "vm_admin_password" {}
 variable "vm_admin_public_key" {}
 variable "vm_admin_private_key" {}
 variable "dns_suffix" {}
+variable "pub_ip_opsman" {}
+variable "pub_ip_pcf" {}
+variable "pub_ip_tcp" {}
