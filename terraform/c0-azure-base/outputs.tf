@@ -119,10 +119,6 @@ output "ops_manager_ssh_public_key" {
   value = "${var.vm_admin_public_key}"
 }
 
-output "ops_manager_ssh_private_key" {
-  value = "${var.vm_admin_private_key}"
-}
-
 output "ops_manager_public_ip" {
   value = "${var.pub_ip_opsman}"
 }
