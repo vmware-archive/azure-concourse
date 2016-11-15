@@ -71,9 +71,9 @@ function fn_exec_tf {
 -var \"vm_admin_public_key=${vm_admin_public_key}\" \
 -var \"vm_admin_private_key=${vm_admin_private_key}\" \
 azure-concourse/terraform/$azure_pcf_terraform_template
+
 EOL
 echo ${terra_cmd} > /tmp/tf_exec_cmd
 eval ${terra_cmd} > /tmp/tf_exec_out}
 
 fn_exec_tf "plan"
-cat /tmp/tf_exec_out
