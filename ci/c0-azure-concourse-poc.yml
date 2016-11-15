@@ -139,6 +139,7 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
+      passed: [init-env]
     - get: pivnet-opsmgr
       trigger: false
       params:
@@ -185,16 +186,6 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
-    - get: pivnet-opsmgr
-      trigger: false
-      params:
-        globs:
-        - "*GCP*"
-    - get: pivnet-elastic-runtime
-      trigger: false
-      params:
-        globs:
-        - "*pivotal"
     - get: tool-om
       params:
         globs:
@@ -209,8 +200,9 @@ jobs:
       run:
         path: azure-concourse/ci/tasks/iaas/config-opsman.sh
       params:
-
-
+        pcf_ert_domain: {{pcf_ert_domain}}
+        pcf_opsman_admin: {{pcf_opsman_admin}}
+        pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
 - name: deploy-director
   serial: true
   max_in_flight: 1
@@ -219,16 +211,6 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
-    - get: pivnet-opsmgr
-      trigger: false
-      params:
-        globs:
-        - "*GCP*"
-    - get: pivnet-elastic-runtime
-      trigger: false
-      params:
-        globs:
-        - "*pivotal"
     - get: tool-om
       params:
         globs:
@@ -243,7 +225,9 @@ jobs:
       run:
         path: azure-concourse/ci/tasks/iaas/deploy-director.sh
       params:
-
+        pcf_ert_domain: {{pcf_ert_domain}}
+        pcf_opsman_admin: {{pcf_opsman_admin}}
+        pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
 
 - name: upload-ert
   serial: true

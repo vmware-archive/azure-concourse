@@ -10,7 +10,7 @@ echo "==========================================================================
 
 
 # Exec bash scripts to config Opsman Director Tile
-./gcp-concourse/json-opsman/config-director-json.sh gcp director
+./gcp-concourse/json-opsman/config-director-json.sh azure director
 
 # Apply Changes in Opsman
 
