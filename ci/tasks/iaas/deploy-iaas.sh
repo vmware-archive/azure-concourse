@@ -48,28 +48,28 @@ export PATH=/opt/terraform/terraform:$PATH
 
 function fn_exec_tf {
 read -d '' terra_cmd << EOL
-    /opt/terraform/terraform ${1} \
-      -var "subscription_id=${azure_subscription_id}" \
-      -var "client_id=${azure_service_principal_id}" \
-      -var "client_secret=${azure_service_principal_password}" \
-      -var "tenant_id=${azure_tenant_id}" \
-      -var "location=${azure_region}" \
-      -var "env_name=${azure_terraform_prefix}" \
-      -var "env_short_name=${env_short_name}" \
-      -var "dns_suffix=${pcf_ert_domain}" \
-      -var "pub_ip_opsman=${pub_ip_opsman}" \
-      -var "pub_ip_id_opsman=${pub_ip_id_opsman}" \
-      -var "pub_ip_pcf=${pub_ip_pcf}" \
-      -var "pub_ip_id_pcf=${pub_ip_id_pcf}" \
-      -var "pub_ip_id_tcp_lb=${pub_ip_id_tcp_lb}" \
-      -var "pub_ip_tcp=${pub_ip_tcp_lb}" \
-      -var "ops_manager_image_uri=${pcf_opsman_image_uri}" \
-      -var "vm_admin_username=${pcf_opsman_admin}" \
-      -var "vm_admin_password=${pcf_opsman_admin_passwd}" \
-      -var "vm_admin_public_key=${vm_admin_public_key}" \
-      -var "vm_admin_private_key=${vm_admin_private_key}" \
-      azure-concourse/terraform/$azure_pcf_terraform_template
-      EOL
+/opt/terraform/terraform ${1} \
+  -var "subscription_id=${azure_subscription_id}" \
+  -var "client_id=${azure_service_principal_id}" \
+  -var "client_secret=${azure_service_principal_password}" \
+  -var "tenant_id=${azure_tenant_id}" \
+  -var "location=${azure_region}" \
+  -var "env_name=${azure_terraform_prefix}" \
+  -var "env_short_name=${env_short_name}" \
+  -var "dns_suffix=${pcf_ert_domain}" \
+  -var "pub_ip_opsman=${pub_ip_opsman}" \
+  -var "pub_ip_id_opsman=${pub_ip_id_opsman}" \
+  -var "pub_ip_pcf=${pub_ip_pcf}" \
+  -var "pub_ip_id_pcf=${pub_ip_id_pcf}" \
+  -var "pub_ip_id_tcp_lb=${pub_ip_id_tcp_lb}" \
+  -var "pub_ip_tcp=${pub_ip_tcp_lb}" \
+  -var "ops_manager_image_uri=${pcf_opsman_image_uri}" \
+  -var "vm_admin_username=${pcf_opsman_admin}" \
+  -var "vm_admin_password=${pcf_opsman_admin_passwd}" \
+  -var "vm_admin_public_key=${vm_admin_public_key}" \
+  -var "vm_admin_private_key=${vm_admin_private_key}" \
+  azure-concourse/terraform/$azure_pcf_terraform_template
+EOL
 eval ${tearra_cmd}
 }
 
