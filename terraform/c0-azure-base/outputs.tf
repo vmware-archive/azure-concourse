@@ -96,7 +96,7 @@ output "services_subnet_gateway" {
 }
 
 output "pcf_resource_group_name" {
-  value = "${azurerm_resource_group.pcf_resource_group.name}"
+  value = "${var.env_name}"
 }
 
 output "ops_manager_security_group_name" {

@@ -6,7 +6,7 @@
 resource "azurerm_public_ip" "ops_manager_public_ip" {
   name                         = "${var.env_name}-ops-manager-public-ip"
   location                     = "${var.location}"
-  resource_group_name          = "${azurerm_resource_group.pcf_resource_group.name}"
+  resource_group_name          = "${var.env_name}"
   public_ip_address_allocation = "static"
 }
 
@@ -14,7 +14,7 @@ resource "azurerm_network_interface" "ops_manager_nic" {
   name                = "${var.env_name}-ops-manager-nic"
   depends_on          = ["azurerm_public_ip.ops_manager_public_ip"]
   location            = "${var.location}"
-  resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
+  resource_group_name = "${var.env_name}"
 
   ip_configuration {
     name                          = "${var.env_name}-ops-manager-ip-config"
@@ -29,7 +29,7 @@ resource "azurerm_virtual_machine" "ops_manager_vm" {
   name                  = "${var.env_name}-ops-manager-vm"
   depends_on            = ["azurerm_network_interface.ops_manager_nic", "azurerm_storage_blob.ops_manager_image"]
   location              = "${var.location}"
-  resource_group_name   = "${azurerm_resource_group.pcf_resource_group.name}"
+  resource_group_name   = "${var.env_name}"
   network_interface_ids = ["${azurerm_network_interface.ops_manager_nic.id}"]
   vm_size               = "Standard_DS2_v2"
 
