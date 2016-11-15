@@ -55,4 +55,6 @@ export PATH=/opt/terraform/terraform:$PATH
   -var "pub_ip_id_pcf=${pub_ip_id_pcf}" \
   -var "pub_ip_id_tcp_lb=${pub_ip_id_tcp_lb}" \
   -var "pcf_opsman_image_uri=${pcf_opsman_image_uri}" \
+  -var "vm_admin_username=${pcf_opsman_admin}" \
+  -var "vm_admin_password=${pcf_opsman_admin_passwd}" \
   azure-concourse/terraform/$azure_pcf_terraform_template
