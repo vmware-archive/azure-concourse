@@ -5,6 +5,8 @@ echo "==========================================================================
 echo "Executing Terraform ...."
 echo "=============================================================================================="
 
+exit 1
+
 pcf_opsman_image_name=$(cat opsman-metadata/name)
 
 export PATH=/opt/terraform/terraform:$PATH
