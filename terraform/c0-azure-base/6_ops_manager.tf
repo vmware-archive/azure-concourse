@@ -3,16 +3,8 @@
 //////// Set Ops Mgr //////////////////////////
 ///////////////////////////////////////////////
 
-resource "azurerm_public_ip" "ops_manager_public_ip" {
-  name                         = "${var.env_name}-ops-manager-public-ip"
-  location                     = "${var.location}"
-  resource_group_name          = "${var.env_name}"
-  public_ip_address_allocation = "static"
-}
-
 resource "azurerm_network_interface" "ops_manager_nic" {
   name                = "${var.env_name}-ops-manager-nic"
-  depends_on          = ["azurerm_public_ip.ops_manager_public_ip"]
   location            = "${var.location}"
   resource_group_name = "${var.env_name}"
 
@@ -20,8 +12,8 @@ resource "azurerm_network_interface" "ops_manager_nic" {
     name                          = "${var.env_name}-ops-manager-ip-config"
     subnet_id                     = "${azurerm_subnet.opsman_and_director_subnet.id}"
     private_ip_address_allocation = "static"
-    private_ip_address            = "10.0.8.4"
-    public_ip_address_id          = "${azurerm_public_ip.ops_manager_public_ip.id}"
+    private_ip_address            = "192.168.100.9"
+    public_ip_address_id          = "${var.pub_ip_id_opsman}"
   }
 }
 
@@ -35,7 +27,7 @@ resource "azurerm_virtual_machine" "ops_manager_vm" {
 
   storage_os_disk {
     name          = "opsman-disk.vhd"
-    vhd_uri       = "${azurerm_storage_account.ops_manager_storage_account.primary_blob_endpoint}${azurerm_storage_container.ops_manager_storage_container.name}/opsman-disk.vhd"
+    vhd_uri       = "${var.pcf_opsman_image_uri}"
     image_uri     = "${azurerm_storage_blob.ops_manager_image.url}"
     caching       = "ReadWrite"
     os_type       = "linux"

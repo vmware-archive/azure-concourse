@@ -10,7 +10,7 @@ resource "azurerm_lb" "tcp" {
 
   frontend_ip_configuration = {
     name                 = "frontendip"
-    public_ip_address_id = "${azurerm_public_ip.tcp-lb-public-ip.id}"
+    public_ip_address_id = "${var.pub_ip_id_tcp_lb}"
   }
 }
 

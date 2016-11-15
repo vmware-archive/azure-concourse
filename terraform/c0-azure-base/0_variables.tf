@@ -23,3 +23,7 @@ variable "dns_suffix" {}
 variable "pub_ip_opsman" {}
 variable "pub_ip_pcf" {}
 variable "pub_ip_tcp" {}
+variable "pub_ip_id_pcf" {}
+variable "pub_ip_id_tcp_lb" {}
+variable "pub_ip_id_opsman" {}
+variable "pcf_opsman_image_uri" {}
