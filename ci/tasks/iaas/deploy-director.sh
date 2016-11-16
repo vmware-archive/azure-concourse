@@ -13,7 +13,7 @@ json_file_path="azure-concourse/json-opsman/${azure_pcf_terraform_template}"
 json_file_template="${json_file_path}/opsman-template.json"
 json_file="${json_file_path}/opsman.json"
 
-pcf_ssh_key_priv=$(echo ${pcf_ssh_key_priv} | sed 's/\s\+/\\r\\n/g')
+pcf_ssh_key_priv=$(echo ${pcf_ssh_key_priv} | sed 's/\s\+/\r\n/g')
 
 cp ${json_file_template} ${json_file}
 
