@@ -37,7 +37,7 @@ pub_ip_id_opsman=$(fn_get_ip_ref_id "opsman")
 
 # Use prefix to strip down a Storage Account Prefix String
 env_short_name=$(echo ${azure_terraform_prefix} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
-env_short_name=$(echo ${env_shortname:0:10})
+env_short_name=$(echo ${env_short_name:0:10})
 
 ##########################################################
 # Terraforming
