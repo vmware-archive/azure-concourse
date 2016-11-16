@@ -65,8 +65,8 @@ function fn_exec_tf {
     -var "pub_ip_id_tcp_lb=${pub_ip_id_tcp_lb}" \
     -var "pub_ip_tcp=${pub_ip_tcp_lb}" \
     -var "ops_manager_image_uri=${pcf_opsman_image_uri}" \
-    -var "vm_admin_username=${pcf_opsman_admin}" \
-    -var "vm_admin_password=${pcf_opsman_admin_passwd}" \
+    -var "vm_admin_username=${azure_vm_admin}" \
+    -var "vm_admin_password=${azure_vm_password}" \
     -var "vm_admin_public_key=${pcf_ssh_key_pub}" \
     azure-concourse/terraform/$azure_pcf_terraform_template
 }

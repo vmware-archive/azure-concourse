@@ -37,7 +37,7 @@ exec_mode="CONCOURSE" # LOCAL|CONCOURSE
      fi
   fi
 
-  json_file_path="${exec_mode_root}/${gcp_pcf_terraform_template}"
+  json_file_path="${exec_mode_root}/${azure_pcf_terraform_template}"
   opsman_host="opsman.${pcf_ert_domain}"
 
 

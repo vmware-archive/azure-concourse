@@ -228,7 +228,8 @@ jobs:
         pcf_ert_domain: {{pcf_ert_domain}}
         pcf_opsman_admin: {{pcf_opsman_admin}}
         pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
-
+        azure_vm_admin: {{azure_vm_admin}}
+        azure_vm_password: {{azure_vm_password}}
 - name: upload-ert
   serial: true
   max_in_flight: 1
