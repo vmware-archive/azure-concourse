@@ -214,6 +214,7 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
+      passed: [config-opsman]
     - get: tool-om
       params:
         globs:

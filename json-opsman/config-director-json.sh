@@ -17,20 +17,27 @@ provider_type=${1}
 config_target=${2}
 
 # Setting exec_mode=LOCAL for debugging, otherise vars get pulled from Concourse
-exec_mode="CONCOURSE" # LOCAL|CONCOURSE
-  if [[ $exec_mode == "LOCAL" ]]; then
+exec_mode="LOCAL" # LOCAL|CONCOURSE
+  if [[ $exec_mode == "CONCOURSE" ]]; then
      exec_mode_root="."
      pcf_opsman_admin="admin"
      pcf_opsman_admin_passwd='P1v0t4l!'
-     pcf_ert_domain="gcp.customer0.net"
-     if [[ $provider_type == "gcp" ]]; then
-       gcp_pcf_terraform_template="c0-gcp-base"
-       gcp_proj_id="google.com:pcf-demos"
-       gcp_terraform_prefix="kryten"
-       gcp_svc_acct_key='{}'
+     pcf_ert_domain="azure.customer0.net"
+     if [[ $provider_type == "azure" ]]; then
+       azure_pcf_terraform_template="c0-azure-base"
+       azure_subscription_id=""
+       azure_tenant_id=""
+       azure_service_principal_id=""
+       azure_service_principal_password=""
+       azure_terraform_prefix=""
+       azure_bosh_stg_acct=""
+       azure_deployment_stg_acct_wildcard=""
+       azure_default_security_group=""
+       azure_ssh_public_key=""
+       azure_ssh_private_key=""
      fi
   else
-     exec_mode_root="./gcp-concourse/json-opsman"
+     exec_mode_root="./azure-concourse/json-opsman"
      if [[ -z ${pcf_opsman_admin} || -z ${pcf_opsman_admin} ]]; then
        echo "config-director-json_err: Missing Key Variables!!!!"
        exit 1
@@ -55,18 +62,24 @@ source ${exec_mode_root}/config-director-json-fn-opsman-config-director.sh
 ###### Create iaas_configuration JSON                                                                 ######
 ############################################################################################################
 
-if [[ $provider_type == "gcp" ]]; then
+if [[ $provider_type == "azure" ]]; then
   iaas_configuration_json=$(echo "{
-    \"iaas_configuration[project]\": \"${gcp_proj_id}\",
-    \"iaas_configuration[default_deployment_tag]\": \"${gcp_terraform_prefix}\",
-    \"access_type\": \"keys\",
-    \"iaas_configuration[auth_json]\":
-      $(echo ${gcp_svc_acct_key})
+    \"iaas_configuration[subscription_id]\": \"${azure_subscription_id}\",
+    \"iaas_configuration[tenant_id]\": \"${azure_tenant_id}\",
+    \"iaas_configuration[client_id]\": \"${azure_service_principal_id}\",
+    \"iaas_configuration[client_secret]\": \"${azure_service_principal_password}\",
+    \"iaas_configuration[resource_group_name]\": \"${azure_terraform_prefix}\",
+    \"iaas_configuration[bosh_storage_account_name]\": \"${azure_bosh_stg_acct}\",
+    \"iaas_configuration[deployments_storage_account_name]\": \"${azure_deployment_stg_acct_wildcard}\",
+    \"iaas_configuration[default_security_group]\": \"${azure_default_security_group}\",
+    \"iaas_configuration[ssh_public_key]\": \"${azure_ssh_public_key}\",
+    \"iaas_configuration[ssh_private_key]\": \"${azure_ssh_private_key}\"
   }")
 else
   echo "config-director-json_err: Provider Type ${provider_type} not yet supported"
   exit 1
 fi
+
 
 ############################################################################################################
 ############################################# Functions  ###################################################

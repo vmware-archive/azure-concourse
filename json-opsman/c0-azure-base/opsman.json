@@ -1,4 +1,4 @@
-[{
+ [{
   "director_configuration": {
     "director_configuration[ntp_servers_string]": "0.pool.ntp.org",
     "director_configuration[metrics_ip]": "",
@@ -13,43 +13,37 @@
     "director_configuration[max_threads]": "",
     "director_configuration[director_hostname]": ""
   },
-  "availability_zones": {
-    "availability_zones": ["us-east1-b","us-east1-c","us-east1-d"],
-    "pipeline_extension": "fn_form_gen_availability_zones"
-  },
   "networks": {
     "infrastructure[icmp_checks_enabled]": "0",
     "network_collection[networks_attributes][0][guid]": "0",
     "network_collection[networks_attributes][0][name]": "infrastructure",
     "network_collection[networks_attributes][0][service_network]": "0",
-    "network_collection[networks_attributes][0][subnets][0][iaas_identifier]": "c0-opsman-validation-virt-net/c0-opsman-validation-subnet-infrastructure-us-east1/us-east1",
+    "network_collection[networks_attributes][0][subnets][0][iaas_identifier]": "c0-opsman-validation-virtual-network/c0-opsman-validation-opsman-and-director-subnet",
     "network_collection[networks_attributes][0][subnets][0][cidr]": "192.168.100.0/26",
     "network_collection[networks_attributes][0][subnets][0][reserved_ip_ranges]": "192.168.100.1-192.168.100.9",
     "network_collection[networks_attributes][0][subnets][0][dns]": "8.8.8.8",
     "network_collection[networks_attributes][0][subnets][0][gateway]": "192.168.100.1",
-    "network_collection[networks_attributes][0][subnets][0][availability_zone_references][]": ["us-east1-b","us-east1-c","us-east1-d"],
+    "network_collection[networks_attributes][0][subnets][0][availability_zone_references][]": "null-az",
     "network_collection[networks_attributes][1][guid]": "1",
     "network_collection[networks_attributes][1][name]": "ert",
     "network_collection[networks_attributes][1][service_network]": "0",
-    "network_collection[networks_attributes][1][subnets][0][iaas_identifier]": "c0-opsman-validation-virt-net/c0-opsman-validation-subnet-ert-us-east1/us-east1",
+    "network_collection[networks_attributes][1][subnets][0][iaas_identifier]": "c0-opsman-validation-virtual-network/c0-opsman-validation-ert-subnet",
     "network_collection[networks_attributes][1][subnets][0][cidr]": "192.168.8.0/22",
     "network_collection[networks_attributes][1][subnets][0][reserved_ip_ranges]": "192.168.8.1-192.168.8.9",
     "network_collection[networks_attributes][1][subnets][0][dns]": "8.8.8.8",
     "network_collection[networks_attributes][1][subnets][0][gateway]": "192.168.8.1",
-    "network_collection[networks_attributes][1][subnets][0][availability_zone_references][]": ["us-east1-b","us-east1-c","us-east1-d"],
+    "network_collection[networks_attributes][1][subnets][0][availability_zone_references][]": "null-az",
     "network_collection[networks_attributes][2][guid]": "2",
     "network_collection[networks_attributes][2][name]": "services-1",
     "network_collection[networks_attributes][2][service_network]": "1",
-    "network_collection[networks_attributes][2][subnets][0][iaas_identifier]": "c0-opsman-validation-virt-net/c0-opsman-validation-subnet-services-1-us-east1/us-east1",
+    "network_collection[networks_attributes][2][subnets][0][iaas_identifier]": "c0-opsman-validation-virtual-network/c0-opsman-validation-services-01-subnet",
     "network_collection[networks_attributes][2][subnets][0][cidr]": "192.168.12.0/22",
     "network_collection[networks_attributes][2][subnets][0][reserved_ip_ranges]": "192.168.12.1-192.168.12.9",
     "network_collection[networks_attributes][2][subnets][0][dns]": "8.8.8.8",
     "network_collection[networks_attributes][2][subnets][0][gateway]": "192.168.12.1",
-    "network_collection[networks_attributes][2][subnets][0][availability_zone_references][]": ["us-east1-b","us-east1-c","us-east1-d"],
-    "pipeline_extension": "fn_form_gen_networks"
+    "network_collection[networks_attributes][2][subnets][0][availability_zone_references][]": "null-az"
   },
   "az_and_network_assignment": {
-    "bosh_product[singleton_availability_zone_reference]": "us-east1-b",
     "bosh_product[network_reference]": "infrastructure",
     "pipeline_extension": "fn_form_gen_az_and_network_assignment"
   },

@@ -5,10 +5,8 @@ function fn_config_director {
   declare -a POSTS_DIRECTOR=(
   "iaas_configuration:var"
   "director_configuration:file"
-  "availability_zones:file"
   "networks:file"
   "az_and_network_assignment:file"
-  "resources:file"
   )
 
   for x in ${POSTS_DIRECTOR[@]}; do
