@@ -63,9 +63,9 @@ source ${exec_mode_root}/config-director-json-fn-opsman-config-director.sh
 
 # Set Stg Acct Name Prefix and other Azure constants
   env_short_name=$(echo ${azure_terraform_prefix} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
-  env_short_name=$(echo ${env_shortname:0:10})
+  env_short_name=$(echo ${env_short_name:0:10})
 
-  azure_bosh_stg_acct="${env_shortname}root"
+  azure_bosh_stg_acct="${env_short_name}root"
   azure_deployment_stg_acct_wildcard="*boshvms*"
   azure_default_security_group="pcf-default-security-group"
 
