@@ -4,14 +4,14 @@
 ///////////////////////////////////////////////
 
 resource "azurerm_storage_account" "bosh_root_storage_account" {
-  name                = "${var.env_short_name}director"
+  name                = "${var.env_short_name}root"
   resource_group_name = "${var.env_name}"
   location            = "${var.location}"
   account_type        = "Standard_LRS"
 }
 
 resource "azurerm_storage_account" "ops_manager_storage_account" {
-  name                = "${var.env_short_name}opsmanager"
+  name                = "${var.env_short_name}infra"
   resource_group_name = "${var.env_name}"
   location            = "${var.location}"
   account_type        = "Standard_LRS"

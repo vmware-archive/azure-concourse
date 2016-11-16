@@ -33,7 +33,7 @@ exec_mode="LOCAL" # LOCAL|CONCOURSE
        azure_bosh_stg_acct=""
        azure_deployment_stg_acct_wildcard=""
        azure_default_security_group=""
-       azure_ssh_public_key=""
+       pcf_ssh_key_pub=""
        azure_ssh_private_key=""
      fi
   else
@@ -46,7 +46,6 @@ exec_mode="LOCAL" # LOCAL|CONCOURSE
 
   json_file_path="${exec_mode_root}/${azure_pcf_terraform_template}"
   opsman_host="opsman.${pcf_ert_domain}"
-
 
 # Import reqd BASH functions
 
@@ -62,6 +61,14 @@ source ${exec_mode_root}/config-director-json-fn-opsman-config-director.sh
 ###### Create iaas_configuration JSON                                                                 ######
 ############################################################################################################
 
+# Set Stg Acct Name Prefix and other Azure constants
+  env_short_name=$(echo ${azure_terraform_prefix} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
+  env_short_name=$(echo ${env_shortname:0:10})
+
+  azure_bosh_stg_acct="${env_shortname}root"
+  azure_deployment_stg_acct_wildcard="*boshvms*"
+  azure_default_security_group="pcf-default-security-group"
+
 if [[ $provider_type == "azure" ]]; then
   iaas_configuration_json=$(echo "{
     \"iaas_configuration[subscription_id]\": \"${azure_subscription_id}\",
@@ -72,8 +79,8 @@ if [[ $provider_type == "azure" ]]; then
     \"iaas_configuration[bosh_storage_account_name]\": \"${azure_bosh_stg_acct}\",
     \"iaas_configuration[deployments_storage_account_name]\": \"${azure_deployment_stg_acct_wildcard}\",
     \"iaas_configuration[default_security_group]\": \"${azure_default_security_group}\",
-    \"iaas_configuration[ssh_public_key]\": \"${azure_ssh_public_key}\",
-    \"iaas_configuration[ssh_private_key]\": \"${azure_ssh_private_key}\"
+    \"iaas_configuration[ssh_public_key]\": \"${pcf_ssh_key_pub}\",
+    \"iaas_configuration[ssh_private_key]\": \"${pcf_ssh_key_priv}\"
   }")
 else
   echo "config-director-json_err: Provider Type ${provider_type} not yet supported"

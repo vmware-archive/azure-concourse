@@ -4,7 +4,7 @@
 ///////////////////////////////////////////////
 
 resource "azurerm_network_security_group" "ops_manager_security_group" {
-  name                = "${var.env_name}-ops-manager-security-group"
+  name                = "pcf-default-security-group"
   location            = "${var.location}"
   resource_group_name = "${var.env_name}"
 
