@@ -122,6 +122,7 @@ fi
 case $config_target in
   "director")
     echo "Starting $config_target config ...."
+    echo $iaas_configuration_json | jq .
     fn_config_director
   ;;
   *)
