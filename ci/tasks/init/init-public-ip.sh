@@ -10,7 +10,7 @@ if [[ ! ${azure_pcf_terraform_template} == "c0-azure-base" ]]; then
   cp -rn azure-concourse/terraform/c0-azure-base/* azure-concourse/terraform/${azure_pcf_terraform_template}/
 fi
 
-export PATH=/opt/terraform/terraform:$PATH
+export PATH=/opt/terraform:$PATH
 
 /opt/terraform/terraform plan \
   -var "subscription_id=${azure_subscription_id}" \
@@ -22,14 +22,14 @@ export PATH=/opt/terraform/terraform:$PATH
   azure-concourse/terraform/${azure_pcf_terraform_template}/init
 
 
-  /opt/terraform/terraform apply \
-    -var "subscription_id=${azure_subscription_id}" \
-    -var "client_id=${azure_service_principal_id}" \
-    -var "client_secret=${azure_service_principal_password}" \
-    -var "tenant_id=${azure_tenant_id}" \
-    -var "location=${azure_region}" \
-    -var "env_name=${azure_terraform_prefix}" \
-    azure-concourse/terraform/${azure_pcf_terraform_template}/init
+/opt/terraform/terraform apply \
+  -var "subscription_id=${azure_subscription_id}" \
+  -var "client_id=${azure_service_principal_id}" \
+  -var "client_secret=${azure_service_principal_password}" \
+  -var "tenant_id=${azure_tenant_id}" \
+  -var "location=${azure_region}" \
+  -var "env_name=${azure_terraform_prefix}" \
+  azure-concourse/terraform/${azure_pcf_terraform_template}/init
 
 
 echo "=============================================================================================="

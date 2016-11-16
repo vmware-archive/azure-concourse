@@ -180,7 +180,6 @@ jobs:
         pcf_opsman_admin: {{pcf_opsman_admin}}
         pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
         pcf_ssh_key_pub: {{pcf_ssh_key_pub}}
-
 - name: config-opsman
   serial: true
   max_in_flight: 1
@@ -188,7 +187,8 @@ jobs:
   plan:
   - aggregate:
     - get: azure-concourse
-      trigger: false
+      trigger: true
+      passed: [deploy-iaas]
     - get: tool-om
       params:
         globs:
