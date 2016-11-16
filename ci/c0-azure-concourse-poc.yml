@@ -8,7 +8,6 @@ groups:
   - deploy-director
   - upload-ert
   - deploy-ert
-  - run-cats
 
 - name: init
   jobs:
@@ -27,7 +26,6 @@ groups:
 
 - name: cats
   jobs:
-  - run-cats
 
 resource_types:
 
@@ -214,7 +212,6 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
-      passed: [config-opsman]
     - get: tool-om
       params:
         globs:

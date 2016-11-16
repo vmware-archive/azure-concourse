@@ -42,6 +42,12 @@ env_short_name=$(echo ${env_short_name:0:10})
 ##########################################################
 # Terraforming
 ##########################################################
+
+# Install Terraform cli until we can update the Docker image
+wget $(wget -q -O- https://www.terraform.io/downloads.html | grep linux_amd64 | awk -F '"' '{print$2}') -O /tmp/terraform.zip
+mkdir -p /opt/terraform && cd /opt/terraform && unzip /tmp/terraform.zip
+sudo cp /opt/terraform/terraform /usr/local/bin
+
 export PATH=/opt/terraform/terraform:$PATH
 
 function fn_exec_tf {
