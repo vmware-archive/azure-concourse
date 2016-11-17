@@ -68,12 +68,13 @@ echo "==========================================================================
 json_net_and_az=$(cat ${json_file} | jq .networks_and_azs)
 fn_om_linux_curl "PUT" "/api/v0/staged/products/${guid_cf}/networks_and_azs" "${json_net_and_az}"
 
-exit 0
-
 # Set ERT Properties
 echo "=============================================================================================="
 echo "Setting Properties for: ${guid_cf}"
 echo "=============================================================================================="
+
+perl -pi -e "s/{{pcf_ert_domain}}/${pcf_ert_domain}/g" ${json_file}
+perl -pi -e "s/{{azure_terraform_prefix}}/${azure_terraform_prefix}/g" ${json_file}
 
 json_properties=$(cat ${json_file} | jq .properties)
 fn_om_linux_curl "PUT" "/api/v0/staged/products/${guid_cf}/properties" "${json_properties}"
@@ -97,6 +98,7 @@ for job in $(echo ${json_jobs_configs} | jq . | jq 'keys' | jq .[] | tr -d '"');
 
 done
 
+exit 0
 
 # Apply Changes in Opsman
 echo "=============================================================================================="
