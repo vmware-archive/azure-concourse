@@ -137,6 +137,7 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
+      passed: [init-env]
     - get: pivnet-opsmgr
       trigger: false
       params:
@@ -185,6 +186,7 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
+      passed: [deploy-iaas]
     - get: tool-om
       params:
         globs:
@@ -210,6 +212,7 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
+      passed: [config-opsman]
     - get: tool-om
       params:
         globs:
@@ -256,11 +259,7 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
-    - get: pivnet-opsmgr
-      trigger: false
-      params:
-        globs:
-        - "*GCP*"
+      passed: [deploy-director]
     - get: pivnet-elastic-runtime
       trigger: false
       params:
