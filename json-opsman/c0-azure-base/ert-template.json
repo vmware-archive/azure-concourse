@@ -1,6 +1,14 @@
 {
   "networks_and_azs":{
     "networks_and_azs": {
+      "singleton_availability_zone": {
+      "name": "null"
+    },
+    "other_availability_zones": [
+      {
+        "name": "null"
+      }
+    ],
       "network": {
         "name": "ert"
       }
