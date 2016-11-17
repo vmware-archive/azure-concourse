@@ -6,7 +6,7 @@ sudo cp tool-om/om-linux /usr/local/bin
 sudo chmod 755 /usr/local/bin/om-linux
 
 # Set Vars
-json_file_path="azure-concourse/json-opsman/${gcp_pcf_terraform_template}"
+json_file_path="azure-concourse/json-opsman/${azure_pcf_terraform_template}"
 json_file_template="${json_file_path}/ert-template.json"
 json_file="${json_file_path}/ert.json"
 
