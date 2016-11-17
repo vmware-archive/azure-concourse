@@ -185,7 +185,7 @@ jobs:
   plan:
   - aggregate:
     - get: azure-concourse
-      trigger: false
+      trigger: true
       passed: [deploy-iaas]
     - get: tool-om
       params:
@@ -211,7 +211,7 @@ jobs:
   plan:
   - aggregate:
     - get: azure-concourse
-      trigger: false
+      trigger: true
       passed: [config-opsman]
     - get: tool-om
       params:
@@ -258,7 +258,7 @@ jobs:
   plan:
   - aggregate:
     - get: azure-concourse
-      trigger: false
+      trigger: true
       passed: [deploy-director]
     - get: pivnet-elastic-runtime
       trigger: false
@@ -291,7 +291,7 @@ jobs:
   plan:
   - aggregate:
     - get: azure-concourse
-      trigger: false
+      trigger: true
     - get: tool-om
       params:
         globs:
