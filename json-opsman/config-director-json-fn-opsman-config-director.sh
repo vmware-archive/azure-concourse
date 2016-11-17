@@ -26,7 +26,7 @@ function fn_config_director {
     echo "GETTING JSON FOR: DIRECTOR -> $POSTS_PAGE <- $POSTS_JSON_TYPE ..."
     echo "####################################################################"
     post_data=$(fn_json_to_post_data $POSTS_PAGE $POSTS_JSON_TYPE "opsman")
-    post_data=$(fn_urlencode ${post_data})
+    post_data=$(fn_urlencode $(echo "${post_data}" | perl -p -e 's/\\\\n/\n/g'))
 
     # Auth to Opsman
     fn_opsman_auth
