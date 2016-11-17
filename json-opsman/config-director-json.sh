@@ -82,7 +82,7 @@ if [[ $provider_type == "azure" ]]; then
     \"iaas_configuration[deployments_storage_account_name]\": \"${azure_deployment_stg_acct_wildcard}\",
     \"iaas_configuration[default_security_group]\": \"${azure_default_security_group}\",
     \"iaas_configuration[ssh_public_key]\": \"${pcf_ssh_key_pub}\",
-    \"iaas_configuration[ssh_private_key]\": \"$(echo "${pcf_ssh_key_priv}" | sed 's/$/\\\\n/g')\"
+    \"iaas_configuration[ssh_private_key]\": \"$(echo "${pcf_ssh_key_priv}")\"
   }")
 else
   echo "config-director-json_err: Provider Type ${provider_type} not yet supported"
