@@ -6,9 +6,11 @@ sudo cp tool-om/om-linux /usr/local/bin
 sudo chmod 755 /usr/local/bin/om-linux
 
 # Set Vars
-
-json_file_path="gcp-concourse/json-opsman/${gcp_pcf_terraform_template}"
+json_file_path="azure-concourse/json-opsman/${gcp_pcf_terraform_template}"
+json_file_template="${json_file_path}/ert-template.json"
 json_file="${json_file_path}/ert.json"
+
+cp ${json_file_template} ${json_file}
 
 if [[ ! -f ${json_file} ]]; then
   echo "Error: cant find file=[${json_file}]"
@@ -65,6 +67,8 @@ echo "==========================================================================
 
 json_net_and_az=$(cat ${json_file} | jq .networks_and_azs)
 fn_om_linux_curl "PUT" "/api/v0/staged/products/${guid_cf}/networks_and_azs" "${json_net_and_az}"
+
+exit 0
 
 # Set ERT Properties
 echo "=============================================================================================="

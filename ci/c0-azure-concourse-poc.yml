@@ -292,16 +292,6 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
-    - get: pivnet-opsmgr
-      trigger: false
-      params:
-        globs:
-        - "*GCP*"
-    - get: pivnet-elastic-runtime
-      trigger: false
-      params:
-        globs:
-        - "*pivotal"
     - get: tool-om
       params:
         globs:
