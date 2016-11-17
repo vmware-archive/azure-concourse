@@ -19,8 +19,8 @@ function fn_json_to_post_data {
            if [[ $(echo $key | tr -d '"') != "pipeline_extension" ]]; then
              fn_metadata_key_value=$(eval $fn_metadata_cmd | jq .${key})
              key=$(echo $key | tr -d '"')
-             echo "$fn_metadata_key_value" | sed 's/^"//' | sed 's/"$//' | perl -p -e 's/\\\\n/\n/g' > /tmp/fn_metadata_key_value
-             return_var="${return_var}&$key=$(cat /tmp/fn_metadata_key_value)"
+             fn_metadata_key_value=(echo "$fn_metadata_key_value" | sed 's/^"//' | sed 's/"$//' | perl -p -e 's/\\\\n/\n/g')
+             return_var=$(echo "${return_var}&$key=$fn_metadata_key_value")
           else
              echo ""
           fi
