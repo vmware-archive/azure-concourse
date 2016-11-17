@@ -137,7 +137,6 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
-      passed: [init-env]
     - get: pivnet-opsmgr
       trigger: false
       params:
@@ -185,8 +184,7 @@ jobs:
   plan:
   - aggregate:
     - get: azure-concourse
-      trigger: true
-      passed: [deploy-iaas]
+      trigger: false
     - get: tool-om
       params:
         globs:
