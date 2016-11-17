@@ -28,8 +28,8 @@ function fn_config_director {
     post_data=$(fn_json_to_post_data $POSTS_PAGE $POSTS_JSON_TYPE "opsman")
     echo "${post_data}" > /tmp/post_data
     fn_urlencode $(cat /tmp/post_data) > /tmp/post_data_encoded
-    perl -pi -e 's/\\\\n/%0D%0A/g' /tmp/post_data_encoded
-    post_data=$(cat /tmp/post_data)
+    perl -pi -e 's/%5C%5C/%0D%0A/g' /tmp/post_data_encoded
+    post_data=$(cat /tmp/post_data_encoded)
     #post_data=$(fn_urlencode $(echo "${post_data}"))
 
     # Auth to Opsman
