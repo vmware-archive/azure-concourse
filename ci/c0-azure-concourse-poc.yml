@@ -291,6 +291,7 @@ jobs:
   plan:
   - aggregate:
     - get: azure-concourse
+      passed: [upload-ert]
       trigger: true
     - get: tool-om
       params:
