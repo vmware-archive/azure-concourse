@@ -27,6 +27,7 @@ function fn_config_director {
     echo "####################################################################"
     post_data=$(fn_json_to_post_data $POSTS_PAGE $POSTS_JSON_TYPE "opsman")
     echo "${post_data}" > /tmp/post_data
+    perl -pi -e 's/\\\\n/\n/g' /tmp/post_data
     fn_urlencode $(cat /tmp/post_data) > /tmp/post_data_encoded
     post_data=$(fn_urlencode $(echo "${post_data}"))
 
