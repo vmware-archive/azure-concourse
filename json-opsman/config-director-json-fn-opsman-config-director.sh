@@ -4,9 +4,9 @@ function fn_config_director {
 
   declare -a POSTS_DIRECTOR=(
   "iaas_configuration:var"
-  #"director_configuration:file"
-  #"networks:file"
-  #"az_and_network_assignment:file"
+  "director_configuration:file"
+  "networks:file"
+  "az_and_network_assignment:file"
   )
 
   for x in ${POSTS_DIRECTOR[@]}; do
@@ -26,11 +26,14 @@ function fn_config_director {
     echo "GETTING JSON FOR: DIRECTOR -> $POSTS_PAGE <- $POSTS_JSON_TYPE ..."
     echo "####################################################################"
     post_data=$(fn_json_to_post_data $POSTS_PAGE $POSTS_JSON_TYPE "opsman")
-    echo "${post_data}" > /tmp/post_data
-    fn_urlencode $(cat /tmp/post_data) > /tmp/post_data_encoded
-    perl -pi -e 's/%5C%5C/%0D%0A/g' /tmp/post_data_encoded
-    post_data=$(cat /tmp/post_data_encoded)
-    #post_data=$(fn_urlencode $(echo "${post_data}"))
+    if [[ ${POSTS_PAGE} == "iaas_configuration" ]]; then
+      echo "${post_data}" > /tmp/post_data
+      fn_urlencode $(cat /tmp/post_data) > /tmp/post_data_encoded
+      perl -pi -e 's/%5C%5Cn/%0D%0A/g' /tmp/post_data_encoded
+      post_data=$(cat /tmp/post_data_encoded)
+    else
+      post_data=$(fn_urlencode $(echo "${post_data}"))
+    fi
 
     # Auth to Opsman
     fn_opsman_auth
