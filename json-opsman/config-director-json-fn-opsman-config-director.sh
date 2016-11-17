@@ -4,9 +4,9 @@ function fn_config_director {
 
   declare -a POSTS_DIRECTOR=(
   "iaas_configuration:var"
-  "director_configuration:file"
-  "networks:file"
-  "az_and_network_assignment:file"
+  #"director_configuration:file"
+  #"networks:file"
+  #"az_and_network_assignment:file"
   )
 
   for x in ${POSTS_DIRECTOR[@]}; do
@@ -27,6 +27,7 @@ function fn_config_director {
     echo "####################################################################"
     post_data=$(fn_json_to_post_data $POSTS_PAGE $POSTS_JSON_TYPE "opsman")
     post_data=$(fn_urlencode $(echo "${post_data}" | perl -p -e 's/\\\\n/\n/g'))
+    echo "${post_data}" > /tmp/post_data
 
     # Auth to Opsman
     fn_opsman_auth
