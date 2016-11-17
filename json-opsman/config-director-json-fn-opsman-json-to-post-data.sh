@@ -20,7 +20,7 @@ function fn_json_to_post_data {
              fn_metadata_key_value=$(eval $fn_metadata_cmd | jq .${key})
              key=$(echo $key | tr -d '"')
              fn_metadata_key_value=$(echo "$fn_metadata_key_value" | sed 's/^"//' | sed 's/"$//')
-             fn_metadata_key_value=$(echo $fn_metadata_key_value | perl -pi -e 's/\\\\n/\n/g')
+             fn_metadata_key_value=$(echo $fn_metadata_key_value | perl -p -e 's/\\\\n/\n/g')
              return_var="${return_var}&$key=$fn_metadata_key_value"
           else
              echo ""
