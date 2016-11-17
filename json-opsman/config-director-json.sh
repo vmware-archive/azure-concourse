@@ -69,7 +69,7 @@ source ${exec_mode_root}/config-director-json-fn-opsman-config-director.sh
   azure_deployment_stg_acct_wildcard="*boshvms*"
   azure_default_security_group="pcf-default-security-group"
 
-pcf_ssh_key_priv=$(echo ${pcf_ssh_key_priv} | sed 's/$/\\\\n/g')
+pcf_ssh_key_priv=$(echo "${pcf_ssh_key_priv}" | sed 's/$/\\\\n/g')
 
 if [[ $provider_type == "azure" ]]; then
   iaas_configuration_json=$(echo "{
