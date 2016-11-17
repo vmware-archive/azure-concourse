@@ -27,7 +27,8 @@ function fn_config_director {
     echo "####################################################################"
     post_data=$(fn_json_to_post_data $POSTS_PAGE $POSTS_JSON_TYPE "opsman")
     echo "${post_data}" > /tmp/post_data
-    post_data=$(fn_urlencode $(echo "${post_data}" | perl -p -e 's/\\\\n/\n/g'))
+    fn_urlencode $(cat /tmp/post_data) > /tmp/post_data_encoded
+    post_data=$(fn_urlencode $(echo "${post_data}"))
 
     # Auth to Opsman
     fn_opsman_auth

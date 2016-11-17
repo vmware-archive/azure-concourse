@@ -96,7 +96,7 @@ fi
 
   function fn_urlencode {
      local unencoded=${@}
-     encoded=$(echo $unencoded | perl -pe's/([^-_.~A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg')
+     encoded=$(echo $unencoded | perl -pe 's/([^-_.~A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg')
      #opsman "=,&,\crlf"" fixes, calls fail with these strings encoded
      encoded=$(echo ${encoded} | sed s'/%3D/=/g')
      encoded=$(echo ${encoded} | sed s'/%26/\&/g')
