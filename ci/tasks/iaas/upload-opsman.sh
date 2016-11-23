@@ -6,7 +6,7 @@ set -e
 #############################################################
 
 
-### For GCP, grab the OpsManager image name from the Pivent PDF
+### Grab the OpsManager image name from the PivNet PDF
 echo "=============================================================================================="
 echo "Getting Azure Ops Manager VHD URI ...."
 echo "=============================================================================================="

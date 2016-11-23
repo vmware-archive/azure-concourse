@@ -33,7 +33,7 @@ export PATH=/opt/terraform:$PATH
 
 
 echo "=============================================================================================="
-echo "This gcp_pcf_terraform_template has an 'Init' set of terraform that has pre-created IPs..."
+echo "This azure_pcf_terraform_template has an 'Init' set of terraform that has pre-created IPs..."
 echo "=============================================================================================="
 
 
@@ -53,7 +53,7 @@ pub_ip_ssh_and_doppler=$(fn_get_ip "web-lb")
 pub_ip_jumpbox=$(fn_get_ip "jumpbox")
 pub_ip_opsman=$(fn_get_ip "opsman")
 
-echo "You have now deployed Public IPs to GCP that must be resolvable to:"
+echo "You have now deployed Public IPs to azure that must be resolvable to:"
 echo "----------------------------------------------------------------------------------------------"
 echo "*.sys.${pcf_ert_domain} == ${pub_ip_pcf}"
 echo "*.cfapps.${pcf_ert_domain} == ${pub_ip_pcf}"
