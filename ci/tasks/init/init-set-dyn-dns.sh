@@ -18,7 +18,7 @@ azure login --service-principal -u ${azure_service_principal_id} -p ${azure_serv
 
 
 function fn_get_ip {
-     azure_cmd="azure network public-ip list -g c0-opsman-validation --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
+     azure_cmd="azure network public-ip list -g ${azure_terraform_prefix} --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
      pub_ip=$(eval $azure_cmd)
      echo $pub_ip
 }
