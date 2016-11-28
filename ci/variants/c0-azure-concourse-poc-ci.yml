@@ -169,9 +169,15 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
+    - get: pivnet-elastic-runtime
+      trigger: false
       passed: [init-env]
+      params:
+        globs:
+        - "*pivotal"
     - get: pivnet-opsmgr
       trigger: false
+      passed: [init-env]
       params:
         globs:
         - "*Azure.pdf"
@@ -217,8 +223,19 @@ jobs:
   plan:
   - aggregate:
     - get: azure-concourse
-      trigger: true
+      trigger: false
+    - get: pivnet-elastic-runtime
+      trigger: false
       passed: [deploy-iaas]
+      params:
+        globs:
+        - "*pivotal"
+    - get: pivnet-opsmgr
+      trigger: false
+      passed: [deploy-iaas]
+      params:
+        globs:
+        - "*Azure.pdf"
     - get: tool-om
       params:
         globs:
