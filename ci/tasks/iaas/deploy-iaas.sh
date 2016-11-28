@@ -13,13 +13,13 @@ pcf_opsman_image_uri=$(cat opsman-metadata/uri)
 azure login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
 
 function fn_get_ip {
-     azure_cmd="azure network public-ip list -g c0-opsman-validation --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
+     azure_cmd="azure network public-ip list -g ${azure_terraform_prefix} --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
      pub_ip=$(eval $azure_cmd)
      echo $pub_ip
 }
 
 function fn_get_ip_ref_id {
-     azure_cmd="azure network public-ip list -g c0-opsman-validation --json | jq '.[] | select( .name | contains(\"${1}\")) | .id' | tr -d '\"'"
+     azure_cmd="azure network public-ip list -g ${azure_terraform_prefix} --json | jq '.[] | select( .name | contains(\"${1}\")) | .id' | tr -d '\"'"
      pub_ip=$(eval $azure_cmd)
      echo $pub_ip
 }
