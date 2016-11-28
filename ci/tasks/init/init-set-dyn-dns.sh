@@ -16,12 +16,11 @@ azure login --service-principal -u ${azure_service_principal_id} -p ${azure_serv
 ############### Set C0 Dyn DNS             ##################
 #############################################################
 
-exit 1
 
 function fn_get_ip {
-     gcp_cmd="gcloud compute addresses list  --format json | jq '.[] | select (.name == \"$gcp_terraform_prefix-$1\") | .address '"
-     api_ip=$(eval $gcp_cmd | tr -d '"')
-     echo $api_ip
+     azure_cmd="azure network public-ip list -g c0-opsman-validation --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
+     pub_ip=$(eval $azure_cmd)
+     echo $pub_ip
 }
 
 function fn_set_dyn_dns {
@@ -30,18 +29,18 @@ function fn_set_dyn_dns {
      eval $curl_cmd
 }
 
-pub_ip_global_pcf=$(fn_get_ip "global-pcf")
-pub_ip_ssh_tcp_lb=$(fn_get_ip "tcp-lb")
-pub_ip_ssh_and_doppler=$(fn_get_ip "ssh-and-doppler")
+pub_ip_pcf=$(fn_get_ip "web-lb")
+pub_ip_tcp_lb=$(fn_get_ip "tcp-lb")
+pub_ip_ssh_and_doppler=$(fn_get_ip "web-lb")
 pub_ip_jumpbox=$(fn_get_ip "jumpbox")
 pub_ip_opsman=$(fn_get_ip "opsman")
 
-fn_set_dyn_dns "api" "$pub_ip_global_pcf"
+fn_set_dyn_dns "api" "$pub_ip_pcf"
 fn_set_dyn_dns "opsman" "$pub_ip_opsman"
 fn_set_dyn_dns "ssh.sys" "$pub_ip_ssh_and_doppler"
 fn_set_dyn_dns "doppler.sys" "$pub_ip_ssh_and_doppler"
 fn_set_dyn_dns "loggregator.sys" "$pub_ip_ssh_and_doppler"
-fn_set_dyn_dns "tcp" "$pub_ip_ssh_tcp_lb"
+fn_set_dyn_dns "tcp" "$pub_ip_tcp_lb"
 
 echo
 echo "----------------------------------------------------------------------------------------------"
