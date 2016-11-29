@@ -7,6 +7,7 @@ function fn_config_director {
   "director_configuration:file"
   "networks:file"
   "az_and_network_assignment:file"
+  "resources:file"
   )
 
   for x in ${POSTS_DIRECTOR[@]}; do

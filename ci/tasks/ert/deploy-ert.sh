@@ -17,6 +17,10 @@ if [[ ! -f ${json_file} ]]; then
   exit 1
 fi
 
+
+
+
+
 function fn_om_linux_curl {
 
     local curl_method=${1}
@@ -73,6 +77,21 @@ echo "==========================================================================
 echo "Setting Properties for: ${guid_cf}"
 echo "=============================================================================================="
 
+# Test if the ssl cert var from concourse is set to 'genrate'.  If so, script will gen a self signed, otherwise will assume its a cert
+if [[ ${pcf_ert_ssl_cert} == "generate" || ${pcf_ert_ssl_key} == "generate" ]]; then
+  echo "=============================================================================================="
+  echo "Generating Self Signed Certs for sys.${pcf_ert_domain} & cfapps.${pcf_ert_domain} ..."
+  echo "=============================================================================================="
+  azure-concourse/scripts/ssl/gen_ssl_certs.sh "sys.${pcf_ert_domain}" "cfapps.${pcf_ert_domain}"
+  export pcf_ert_ssl_cert=$(cat sys.${pcf_ert_domain}.crt)
+  export pcf_ert_ssl_key=$(cat sys.${pcf_ert_domain}.key)
+fi
+
+my_pcf_ert_ssl_cert=$(echo ${pcf_ert_ssl_cert} | sed 's/\s\+/\\\\r\\\\n/g' | sed 's/\\\\r\\\\nCERTIFICATE/ CERTIFICATE/g')
+my_pcf_ert_ssl_key=$(echo ${pcf_ert_ssl_key} | sed 's/\s\+/\\\\r\\\\n/g' | sed 's/\\\\r\\\\nRSA\\\\r\\\\nPRIVATE\\\\r\\\\nKEY/ RSA PRIVATE KEY/g')
+
+perl -pi -e "s|{{pcf_ert_ssl_cert}}|${my_pcf_ert_ssl_cert}|g" ${json_file}
+perl -pi -e "s|{{pcf_ert_ssl_key}}|${my_pcf_ert_ssl_key}|g" ${json_file}
 perl -pi -e "s/{{pcf_ert_domain}}/${pcf_ert_domain}/g" ${json_file}
 perl -pi -e "s/{{azure_terraform_prefix}}/${azure_terraform_prefix}/g" ${json_file}
 
@@ -98,7 +117,7 @@ for job in $(echo ${json_jobs_configs} | jq . | jq 'keys' | jq .[] | tr -d '"');
 
 done
 
-exit 0
+exit 1
 
 # Apply Changes in Opsman
 echo "=============================================================================================="

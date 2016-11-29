@@ -260,8 +260,19 @@ jobs:
   plan:
   - aggregate:
     - get: azure-concourse
-      trigger: true
+      trigger: false
+    - get: pivnet-elastic-runtime
+      trigger: false
       passed: [config-opsman]
+      params:
+        globs:
+        - "*pivotal"
+    - get: pivnet-opsmgr
+      trigger: false
+      passed: [config-opsman]
+      params:
+        globs:
+        - "*Azure.pdf"
     - get: tool-om
       params:
         globs:
@@ -307,13 +318,19 @@ jobs:
   plan:
   - aggregate:
     - get: azure-concourse
-      trigger: true
-      passed: [deploy-director]
+      trigger: false
     - get: pivnet-elastic-runtime
       trigger: false
+      passed: [deploy-director]
       params:
         globs:
         - "*pivotal"
+    - get: pivnet-opsmgr
+      trigger: false
+      passed: [deploy-director]
+      params:
+        globs:
+        - "*Azure.pdf"
     - get: tool-om
       params:
         globs:
@@ -340,8 +357,19 @@ jobs:
   plan:
   - aggregate:
     - get: azure-concourse
+      trigger: false
+    - get: pivnet-elastic-runtime
+      trigger: false
       passed: [upload-ert]
-      trigger: true
+      params:
+        globs:
+        - "*pivotal"
+    - get: pivnet-opsmgr
+      trigger: false
+      passed: [upload-ert]
+      params:
+        globs:
+        - "*Azure.pdf"
     - get: tool-om
       params:
         globs:
