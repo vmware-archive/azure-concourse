@@ -4,7 +4,7 @@ groups:
   jobs:
   - init-env
   - deploy-iaas
-  - config-opsman
+  - config-opsman-auth
   - deploy-director
   - upload-ert
   - deploy-ert
@@ -17,7 +17,7 @@ groups:
 - name: iaas
   jobs:
   - deploy-iaas
-  - config-opsman
+  - config-opsman-auth
   - deploy-director
 
 - name: ert
@@ -253,7 +253,7 @@ jobs:
         text: |
           :deadpool: Job ${BUILD_JOB_NAME} Failed!!!
           Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
-- name: config-opsman
+- name: config-opsman-auth
   serial: true
   max_in_flight: 1
   serial_groups: [full]
@@ -306,13 +306,13 @@ jobs:
       trigger: false
     - get: pivnet-elastic-runtime
       trigger: false
-      passed: [config-opsman]
+      passed: [config-opsman-auth]
       params:
         globs:
         - "*pivotal"
     - get: pivnet-opsmgr
       trigger: false
-      passed: [config-opsman]
+      passed: [config-opsman-auth]
       params:
         globs:
         - "*Azure.pdf"
