@@ -17,9 +17,9 @@
   "properties": {
     "properties": {
       ".properties.networking_point_of_entry": {
-        "value": "external_ssl"
+        "value": "haproxy"
         },
-      ".properties.networking_point_of_entry.external_ssl.ssl_rsa_certificate": {
+      ".properties.networking_point_of_entry.haproxy.ssl_rsa_certificate": {
         "value": {
           "cert_pem": "{{pcf_ert_ssl_cert}}",
           "private_key_pem": "{{pcf_ert_ssl_key}}"
