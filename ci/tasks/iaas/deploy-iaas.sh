@@ -48,10 +48,28 @@ wget $(wget -q -O- https://www.terraform.io/downloads.html | grep linux_amd64 | 
 if [ -d /opt/terraform ]; then
   rm -rf /opt/terraform
 fi
+
 unzip /tmp/terraform.zip
 sudo cp terraform /usr/local/bin
-
 export PATH=/opt/terraform/terraform:$PATH
+
+##########################################################
+# Detect generate for ssh keys
+##########################################################
+
+if [[ ${pcf_ssh_key_pub} == 'generate' ]]; then
+  echo "Generating SSH keys for Opsman"
+  ssh-keygen -t rsa -f opsman -C ubuntu -q -P ""
+  pcf_ssh_key_pub=$(cat opsman.pub)
+  pcf_ssh_key_priv=$(cat opsman)
+  echo "******************************"
+  echo "******************************"
+  echo "pcf_ssh_key_pub = ${pcf_ssh_key_pub}"
+  echo "******************************"
+  echo "pcf_ssh_key_priv = ${pcf_ssh_key_priv}"
+  echo "******************************"
+  echo "******************************"
+fi
 
 function fn_exec_tf {
   echo "=============================================================================================="
@@ -81,4 +99,4 @@ function fn_exec_tf {
 }
 
 fn_exec_tf "plan"
-fn_exec_tf "apply"
+#fn_exec_tf "apply"
