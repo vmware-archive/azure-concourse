@@ -99,4 +99,4 @@ function fn_exec_tf {
 }
 
 fn_exec_tf "plan"
-#fn_exec_tf "apply"
+fn_exec_tf "apply"
