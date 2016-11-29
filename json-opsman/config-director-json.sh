@@ -60,6 +60,21 @@ source ${exec_mode_root}/config-director-json-fn-opsman-config-director.sh
 ############################################################################################################
 ###### Create iaas_configuration JSON                                                                 ######
 ############################################################################################################
+# Detect if SSH keys are set to autogen
+if [[ ${pcf_ssh_key_pub} == 'generate' ]]; then
+  echo "Generating SSH keys for BOSH deployed VMs"
+  ssh-keygen -t rsa -f bosh -C ubuntu -q -P ""
+  pcf_ssh_key_pub=$(cat bosh.pub)
+  pcf_ssh_key_priv=$(cat bosh)
+  echo "******************************"
+  echo "******************************"
+  echo "pcf_ssh_key_pub = ${pcf_ssh_key_pub}"
+  echo "******************************"
+  echo "pcf_ssh_key_priv = ${pcf_ssh_key_priv}"
+  echo "******************************"
+  echo "******************************"
+fi
+
 
 # Set Stg Acct Name Prefix and other Azure constants
   env_short_name=$(echo ${azure_terraform_prefix} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
