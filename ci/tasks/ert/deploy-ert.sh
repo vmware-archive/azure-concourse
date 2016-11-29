@@ -117,7 +117,6 @@ for job in $(echo ${json_jobs_configs} | jq . | jq 'keys' | jq .[] | tr -d '"');
 
 done
 
-exit 0
 
 # Apply Changes in Opsman
 echo "=============================================================================================="
