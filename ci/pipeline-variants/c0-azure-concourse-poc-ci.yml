@@ -49,6 +49,12 @@ resources:
   type: git
   source:
     uri: https://github.com/c0-ops/azure-concourse.git
+    branch: mglynn-dev
+
+- name: ert-concourse
+  type: git
+  source:
+    uri: https://github.com/c0-ops/ert-concourse.git
     branch: master
 
 - name: tool-om
@@ -366,6 +372,8 @@ jobs:
   serial_groups: [full]
   plan:
   - aggregate:
+    - get: ert-concourse
+      trigger: false
     - get: azure-concourse
       trigger: false
     - get: pivnet-elastic-runtime
@@ -385,19 +393,11 @@ jobs:
         globs:
         - "om-linux"
   - task: upload-ert
-    config:
-      platform: linux
-      image: docker:///virtmerlin/c0-worker
-      inputs:
-        - name: azure-concourse
-        - name: tool-om
-        - name: pivnet-elastic-runtime
-      run:
-        path: azure-concourse/ci/tasks/ert/upload-ert.sh
-      params:
-        pcf_ert_domain: {{pcf_ert_domain}}
-        pcf_opsman_admin: {{pcf_opsman_admin}}
-        pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
+    file: ert-concourse/ci/tasks/ert/upload-ert.yml
+    params:
+      pcf_ert_domain: {{pcf_ert_domain}}
+      pcf_opsman_admin: {{pcf_opsman_admin}}
+      pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
     on_failure:
       put: slack-c0-coreteam
       params:
