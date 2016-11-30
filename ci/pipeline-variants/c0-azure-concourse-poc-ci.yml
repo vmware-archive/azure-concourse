@@ -378,13 +378,13 @@ jobs:
       trigger: false
     - get: pivnet-elastic-runtime
       trigger: false
-      passed: [deploy-director]
+#      passed: [deploy-director]
       params:
         globs:
         - "*pivotal"
     - get: pivnet-opsmgr
       trigger: false
-      passed: [deploy-director]
+#      passed: [deploy-director]
       params:
         globs:
         - "*Azure.pdf"
@@ -393,7 +393,7 @@ jobs:
         globs:
         - "om-linux"
   - task: upload-ert
-    file: ert-concourse/ci/tasks/ert/upload-ert.yml
+    file: ert-concourse/ci/tasks/upload-ert.yml
     params:
       pcf_ert_domain: {{pcf_ert_domain}}
       pcf_opsman_admin: {{pcf_opsman_admin}}
@@ -402,7 +402,7 @@ jobs:
       put: slack-c0-coreteam
       params:
         text: |
-          :deadpool: Job ${BUILD_JOB_NAME} Failed!!!
+          :bomb: Job ${BUILD_JOB_NAME} Failed!!!
           Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
 
 - name: deploy-ert
