@@ -490,7 +490,7 @@ jobs:
       outputs:
         - name: pipeline-metadata
       run:
-        path: gcp-concourse/ci/tasks/cats/run-cats.sh
+        path: azure-concourse/ci/tasks/cats/run-cats.sh
       params:
         pcf_ert_domain: {{pcf_ert_domain}}
         pcf_opsman_admin: {{pcf_opsman_admin}}
