@@ -29,8 +29,6 @@ groups:
   - deploy-ert
 
 
-- name: services
-
 resource_types:
 
 - name: pivnet
@@ -161,7 +159,6 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
-      passed: [init-env]
     - get: pivnet-elastic-runtime
       trigger: false
       params:
