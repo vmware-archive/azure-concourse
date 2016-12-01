@@ -402,7 +402,7 @@ jobs:
   serial_groups: [full]
   plan:
   - aggregate:
-    - get: gcp-concourse
+    - get: azure-concourse
       trigger: false
     - get: tool-om
       params:
@@ -410,13 +410,13 @@ jobs:
         - "om-linux"
     - get: pivnet-elastic-runtime
       trigger: false
-      passed: [config-opsman-auth]
+      passed: [config-director]
       params:
         globs:
         - "*pivotal"
     - get: pivnet-opsmgr
       trigger: false
-      passed: [config-opsman-auth]
+      passed: [config-director]
       params:
         globs:
         - "*Azure.pdf"
@@ -429,10 +429,10 @@ jobs:
         source:
           repository: virtmerlin/c0-worker-gcp
       inputs:
-        - name: gcp-concourse
+        - name: azure-concourse
         - name: tool-om
       run:
-        path: gcp-concourse/ci/tasks/iaas/deploy-director.sh
+        path: azure-concourse/ci/tasks/iaas/deploy-director.sh
       params:
         pcf_ert_domain: {{pcf_ert_domain}}
         pcf_opsman_admin: {{pcf_opsman_admin}}
@@ -485,6 +485,7 @@ jobs:
         text: |
           :bomb: Job ${BUILD_JOB_NAME} Failed!!!
           Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
+
 ###########################
 ## Job - Configure ERT   ##
 ###########################
@@ -549,6 +550,9 @@ jobs:
           :bomb: Job ${BUILD_JOB_NAME} Failed!!!
           Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
 
+###########################
+## Job - Deploy    ERT   ##
+###########################
 - name: deploy-ert
   serial: true
   max_in_flight: 1
