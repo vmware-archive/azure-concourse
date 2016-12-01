@@ -5,6 +5,7 @@ groups:
   - init-env
   - deploy-iaas
   - config-opsman-auth
+  - config-director
   - deploy-director
   - upload-ert
   - configure-ert
@@ -19,6 +20,7 @@ groups:
   jobs:
   - deploy-iaas
   - config-opsman-auth
+  - config-director
   - deploy-director
 
 - name: ert
@@ -30,6 +32,8 @@ groups:
 - name: cats
   jobs:
   - run-cats
+
+- name: services
 
 resource_types:
 
@@ -91,7 +95,9 @@ resources:
     insecure: true
 
 jobs:
-
+#####################
+## Job - Init Env  ##
+#####################
 - name: init-env
   serial: true
   max_in_flight: 1
@@ -110,6 +116,7 @@ jobs:
       params:
         globs:
         - "*Azure.pdf"
+
   - task: wipe-env
     config:
       platform: linux
@@ -141,7 +148,8 @@ jobs:
         text: |
           :deadpool: Job ${BUILD_JOB_NAME} Failed!!!
           Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
-  - task: init-public-ip
+
+  - task: init-public-ips
     config:
       platform: linux
       image: docker:///virtmerlin/c0-worker
@@ -167,6 +175,7 @@ jobs:
         text: |
           :deadpool: Job ${BUILD_JOB_NAME} Failed!!!
           Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
+
   - task: init-set-dyn-dns
     config:
       platform: linux
@@ -195,6 +204,10 @@ jobs:
         text: |
           :deadpool: Job ${BUILD_JOB_NAME} Failed!!!
           Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
+
+#######################
+## Job - Deploy-Iaas ##
+#######################
 - name: deploy-iaas
   serial: true
   max_in_flight: 1
@@ -215,6 +228,7 @@ jobs:
       params:
         globs:
         - "*Azure.pdf"
+
   - task: upload-opsman
     config:
       platform: linux
@@ -232,6 +246,7 @@ jobs:
         text: |
           :deadpool: Job ${BUILD_JOB_NAME} Failed!!!
           Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
+
   - task: deploy-iaas
     config:
       platform: linux
@@ -261,6 +276,10 @@ jobs:
         text: |
           :deadpool: Job ${BUILD_JOB_NAME} Failed!!!
           Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
+
+##############################
+## Job - Config OpsMan Auth ##
+##############################
 - name: config-opsman-auth
   serial: true
   max_in_flight: 1
@@ -285,6 +304,7 @@ jobs:
       params:
         globs:
         - "om-linux"
+
   - task: config-opsman
     config:
       platform: linux
@@ -304,7 +324,11 @@ jobs:
         text: |
           :deadpool: Job ${BUILD_JOB_NAME} Failed!!!
           Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
-- name: deploy-director
+
+###########################
+## Job - Config-Director ##
+###########################
+- name: config-director
   serial: true
   max_in_flight: 1
   serial_groups: [full]
@@ -328,7 +352,8 @@ jobs:
       params:
         globs:
         - "om-linux"
-  - task: deploy-director
+
+  - task: config-director
     config:
       platform: linux
       image: docker:///virtmerlin/c0-worker
@@ -336,7 +361,7 @@ jobs:
         - name: azure-concourse
         - name: tool-om
       run:
-        path: azure-concourse/ci/tasks/iaas/deploy-director.sh
+        path: azure-concourse/ci/tasks/iaas/config-director.sh
       params:
         pcf_ert_domain: {{pcf_ert_domain}}
         pcf_opsman_admin: {{pcf_opsman_admin}}
@@ -368,6 +393,61 @@ jobs:
           :deadpool: Job ${BUILD_JOB_NAME} Failed!!!
           Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
 
+###########################
+## Job - Deploy-Director ##
+###########################
+- name: deploy-director
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+  plan:
+  - aggregate:
+    - get: gcp-concourse
+      trigger: false
+    - get: tool-om
+      params:
+        globs:
+        - "om-linux"
+    - get: pivnet-elastic-runtime
+      trigger: false
+      passed: [config-opsman-auth]
+      params:
+        globs:
+        - "*pivotal"
+    - get: pivnet-opsmgr
+      trigger: false
+      passed: [config-opsman-auth]
+      params:
+        globs:
+        - "*Azure.pdf"
+
+  - task: deploy-director
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: virtmerlin/c0-worker-gcp
+      inputs:
+        - name: gcp-concourse
+        - name: tool-om
+      run:
+        path: gcp-concourse/ci/tasks/iaas/deploy-director.sh
+      params:
+        pcf_ert_domain: {{pcf_ert_domain}}
+        pcf_opsman_admin: {{pcf_opsman_admin}}
+        pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
+    on_failure:
+      put: slack-c0-coreteam
+      params:
+        text: |
+          :deadpool: Job ${BUILD_JOB_NAME} Failed!!!
+          Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
+
+
+###########################
+## Job - Upload ERT      ##
+###########################
 - name: upload-ert
   serial: true
   max_in_flight: 1
@@ -405,7 +485,9 @@ jobs:
         text: |
           :bomb: Job ${BUILD_JOB_NAME} Failed!!!
           Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
-
+###########################
+## Job - Configure ERT   ##
+###########################
 - name: configure-ert
   serial: true
   max_in_flight: 1
@@ -492,7 +574,7 @@ jobs:
       params:
         globs:
         - "om-linux"
-        
+
   - task: deploy-ert
     file: ert-concourse/ci/tasks/deploy-ert.yml
     params:
