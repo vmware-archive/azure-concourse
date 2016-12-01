@@ -25,7 +25,7 @@ pcf_ert_domain: "azure.customer0.net"
 pcf_ssh_key_pub: generate
 pcf_ssh_key_priv: generate
 
-# ERT Cert & Key , if the string 'generate' is passed, pieline will autogen
+# ERT Cert & Key , if the string 'generate' is passed, pipeline will autogen cert
 pcf_ert_ssl_cert: generate
 pcf_ert_ssl_key: generate
 
