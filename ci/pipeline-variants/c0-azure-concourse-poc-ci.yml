@@ -7,6 +7,7 @@ groups:
   - config-opsman-auth
   - deploy-director
   - upload-ert
+  - configure-ert
   - deploy-ert
   - run-cats
 
@@ -23,6 +24,7 @@ groups:
 - name: ert
   jobs:
   - upload-ert
+  - configure-ert
   - deploy-ert
 
 - name: cats
@@ -365,7 +367,6 @@ jobs:
         text: |
           :deadpool: Job ${BUILD_JOB_NAME} Failed!!!
           Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
-####### MG & SD working on Pulling ERT Out
 
 - name: upload-ert
   serial: true
@@ -377,13 +378,13 @@ jobs:
       trigger: false
     - get: pivnet-elastic-runtime
       trigger: false
-#      passed: [deploy-director]
+      passed: [deploy-director]
       params:
         globs:
         - "*pivotal"
     - get: pivnet-opsmgr
       trigger: false
-#      passed: [deploy-director]
+      passed: [deploy-director]
       params:
         globs:
         - "*Azure.pdf"
@@ -391,6 +392,7 @@ jobs:
       params:
         globs:
         - "om-linux"
+
   - task: upload-ert
     file: ert-concourse/ci/tasks/upload-ert.yml
     params:
@@ -404,14 +406,12 @@ jobs:
           :bomb: Job ${BUILD_JOB_NAME} Failed!!!
           Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
 
-- name: deploy-ert
+- name: configure-ert
   serial: true
   max_in_flight: 1
   serial_groups: [full]
   plan:
   - aggregate:
-    - get: azure-concourse
-      trigger: false
     - get: ert-concourse
       trigger: false
     - get: pivnet-elastic-runtime
@@ -431,6 +431,24 @@ jobs:
         globs:
         - "om-linux"
 
+  - task: configure-json
+    file: ert-concourse/ci/tasks/configure-json.yml
+    params:
+      pcf_iaas: {{pcf_iaas}}
+      pcf_ert_domain: {{pcf_ert_domain}}
+      pcf_opsman_admin: {{pcf_opsman_admin}}
+      pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
+      pcf_ert_ssl_cert: {{pcf_ert_ssl_cert}}
+      pcf_ert_ssl_key: {{pcf_ert_ssl_key}}
+      terraform_template: {{azure_pcf_terraform_template}}
+      terraform_prefix: {{azure_terraform_prefix}}
+    on_failure:
+      put: slack-c0-coreteam
+      params:
+        text: |
+          :bomb: Job ${BUILD_JOB_NAME} Failed!!!
+          Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
+
   - task: configure-ert
     file: ert-concourse/ci/tasks/configure-ert.yml
     params:
@@ -442,7 +460,39 @@ jobs:
       pcf_ert_ssl_key: {{pcf_ert_ssl_key}}
       terraform_template: {{azure_pcf_terraform_template}}
       terraform_prefix: {{azure_terraform_prefix}}
+    on_failure:
+      put: slack-c0-coreteam
+      params:
+        text: |
+          :bomb: Job ${BUILD_JOB_NAME} Failed!!!
+          Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
 
+- name: deploy-ert
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+
+  plan:
+  - aggregate:
+    - get: ert-concourse
+      trigger: false
+    - get: pivnet-elastic-runtime
+      trigger: false
+      passed: [configure-ert]
+      params:
+        globs:
+        - "*pivotal"
+    - get: pivnet-opsmgr
+      trigger: false
+      passed: [configure-ert]
+      params:
+        globs:
+        - "*Azure.pdf"
+    - get: tool-om
+      params:
+        globs:
+        - "om-linux"
+        
   - task: deploy-ert
     file: ert-concourse/ci/tasks/deploy-ert.yml
     params:
@@ -454,8 +504,6 @@ jobs:
       pcf_ert_ssl_key: {{pcf_ert_ssl_key}}
       terraform_template: {{azure_pcf_terraform_template}}
       terraform_prefix: {{azure_terraform_prefix}}
-
-
     on_failure:
       put: slack-c0-coreteam
       params:
