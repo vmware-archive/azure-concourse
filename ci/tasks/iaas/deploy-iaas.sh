@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+# Copy base template with no clobber if not using the base template
+if [[ ! ${azure_pcf_terraform_template} == "c0-azure-base" ]]; then
+  cp -rn azure-concourse/terraform/c0-azure-base/* azure-concourse/terraform/${azure_pcf_terraform_template}/
+fi
 
 echo "=============================================================================================="
 echo "Collecting Terraform Variables from Deployed Azure Objects ...."
