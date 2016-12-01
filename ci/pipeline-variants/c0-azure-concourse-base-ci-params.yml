@@ -1,0 +1,59 @@
+##############################################
+### Concourse Objects
+##############################################
+# github RSA private key for git resources
+githubtoken: ""
+# Slack Webhook
+slack-c0-coreteam: ""
+# Dyn
+dyn_enabled: true
+dyn_user:  #Reqd
+dyn_token: #Reqd
+
+
+##############################################
+### PCF Object Params
+##############################################
+pcf_iaas: "azure"
+# Pivent Download token
+pcf_pivnet_token: ""
+# Opsman Settings
+pcf_opsman_admin: admin
+pcf_opsman_admin_passwd: "P1v0t4l!"
+# ERT Domain Name
+pcf_ert_domain: "azure.customer0.net"
+pcf_ssh_key_pub: generate
+pcf_ssh_key_priv: generate
+
+# ERT Cert & Key , if the string 'generate' is passed, pieline will autogen
+pcf_ert_ssl_cert: generate
+pcf_ert_ssl_key: generate
+
+##############################################
+### IaaS Specific Params
+##############################################
+# Wipe Arg(s) anything other than wipe bypasses the wipe-env job
+arg_wipe: wipe
+### azure ###
+azure_pcf_terraform_template: c0-azure-base # 'Template' for pipeline to determine Terrafrom & Opsman JSON config
+azure_terraform_prefix: c0-azure # Prefix tag for Terraform created Objects
+azure_subscription_id: "" # REQD
+azure_tenant_id: "" # REQD
+azure_service_principal_id: "" # REQD
+azure_service_principal_password: 'P1v0t4l!P1v0t4l!'
+azure_region: eastus # valid Azure region reqd
+azure_terraform_vnet_cidr: "192.168.0.0/16"
+azure_terraform_subnet_infra_cidr: "192.168.100.0/26"
+azure_terraform_subnet_infra_reserved: "192.168.100.1-192.168.100.9"
+azure_terraform_subnet_infra_dns: "168.63.129.16,8.8.8.8"
+azure_terraform_subnet_infra_gateway: "192.168.100.1"
+azure_terraform_subnet_ert_cidr: "192.168.8.0/22"
+azure_terraform_subnet_ert_reserved: "192.168.8.1-192.168.8.9"
+azure_terraform_subnet_ert_dns: "168.63.129.16,8.8.8.8"
+azure_terraform_subnet_ert_gateway: "192.168.8.1"
+azure_terraform_subnet_services1_cidr: "192.168.12.0/22"
+azure_terraform_subnet_services1_reserved: "192.168.12.1-192.168.12.9"
+azure_terraform_subnet_services1_dns: "168.63.129.16,8.8.8.8"
+azure_terraform_subnet_services1_gateway: "192.168.12.1"
+azure_vm_admin: "pcfadmin" # must != 'admin'
+azure_vm_password: 'P1v0t4l!P1v0t4l!' # must be 12 chars & meet special char reqs
