@@ -50,7 +50,7 @@ function fn_get_ip {
 pub_ip_pcf=$(fn_get_ip "web-lb")
 pub_ip_tcp_lb=$(fn_get_ip "tcp-lb")
 pub_ip_doppler=$(fn_get_ip "web-lb")
-pub_ip_jumpbox=$(fn_get_ip "jumpbox")
+pub_ip_jumpbox=$(fn_get_ip "jb")
 pub_ip_opsman=$(fn_get_ip "opsman")
 pub_ip_mysql=$(fn_get_ip "mysql-lb")
 pub_ip_ssh=$(fn_get_ip "ssh-lb")
