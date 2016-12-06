@@ -128,22 +128,6 @@ resource "azurerm_lb_rule" "web-http-rule" {
   probe_id                = "${azurerm_lb.web.id}/probes/${azurerm_lb_probe.web-http-probe.name}"
 }
 
-resource "azurerm_lb_rule" "ssh-proxy-rule" {
-  name                = "ssh-proxy-rule"
-  location            = "${var.location}"
-  resource_group_name = "${var.env_name}"
-  loadbalancer_id     = "${azurerm_lb.ssh.id}"
-
-  frontend_ip_configuration_name = "frontendip"
-  protocol                       = "TCP"
-  frontend_port                  = 2222
-  backend_port                   = 2222
-
-  # Workaround until the backend_address_pool and probe resources output their own ids
-  backend_address_pool_id = "${azurerm_lb.web.id}/backendAddressPools/${azurerm_lb_backend_address_pool.web-backend-pool.name}"
-  probe_id                = "${azurerm_lb.web.id}/probes/${azurerm_lb_probe.web-ssh-probe.name}"
-}
-
 resource "azurerm_lb_rule" "tcp-rule" {
   count               = 150
   name                = "tcp-rule-${count.index + 1024}"
