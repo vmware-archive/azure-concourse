@@ -31,13 +31,11 @@ function fn_get_ip_ref_id {
 # Collect Public IPs
 pub_ip_pcf=$(fn_get_ip "web-lb")
 pub_ip_tcp_lb=$(fn_get_ip "tcp-lb")
+pub_ip_doppler=$(fn_get_ip "web-lb")
+pub_ip_jumpbox=$(fn_get_ip "jb")
 pub_ip_opsman=$(fn_get_ip "opsman")
-pub_ip_ssh_and_doppler=$(fn_get_ip "web-lb")
-pub_ip_jumpbox=$(fn_get_ip "jumpbox")
-# Collect Public IPs reference IDs for Terraform
-pub_ip_id_pcf=$(fn_get_ip_ref_id "web-lb")
-pub_ip_id_tcp_lb=$(fn_get_ip_ref_id "tcp-lb")
-pub_ip_id_opsman=$(fn_get_ip_ref_id "opsman")
+pub_ip_mysql=$(fn_get_ip "mysql-lb")
+pub_ip_ssh=$(fn_get_ip "ssh-lb")
 
 # Use prefix to strip down a Storage Account Prefix String
 env_short_name=$(echo ${azure_terraform_prefix} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
@@ -95,6 +93,8 @@ function fn_exec_tf {
     -var "pub_ip_id_pcf=${pub_ip_id_pcf}" \
     -var "pub_ip_id_tcp_lb=${pub_ip_id_tcp_lb}" \
     -var "pub_ip_tcp=${pub_ip_tcp_lb}" \
+    -var "pub_ip_id_tcp_jb=${pub_ip_jumpbox}" \
+    -var "pub_ip_id_tcp_ssh=${pcf_ssh_key_pub}" \
     -var "ops_manager_image_uri=${pcf_opsman_image_uri}" \
     -var "vm_admin_username=${azure_vm_admin}" \
     -var "vm_admin_password=${azure_vm_password}" \

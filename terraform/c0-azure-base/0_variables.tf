@@ -26,6 +26,9 @@ variable "pub_ip_id_pcf" {}
 variable "pub_ip_tcp" {}
 variable "pub_ip_id_tcp_lb" {}
 
+variable "pub_ip_id_tcp_jb" {}
+variable "pub_ip_id_tcp_ssh" {}
+
 variable "ops_manager_image_uri" {}
 variable "vm_admin_username" {}
 variable "vm_admin_password" {}
