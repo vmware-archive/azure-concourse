@@ -49,18 +49,21 @@ function fn_get_ip {
 
 pub_ip_pcf=$(fn_get_ip "web-lb")
 pub_ip_tcp_lb=$(fn_get_ip "tcp-lb")
-pub_ip_ssh_and_doppler=$(fn_get_ip "web-lb")
+pub_ip_doppler=$(fn_get_ip "web-lb")
 pub_ip_jumpbox=$(fn_get_ip "jumpbox")
 pub_ip_opsman=$(fn_get_ip "opsman")
+pub_ip_mysql=$(fn_get_ip "mysql-lb")
+pub_ip_ssh=$(fn_get_ip "ssh-lb")
 
 echo "You have now deployed Public IPs to azure that must be resolvable to:"
 echo "----------------------------------------------------------------------------------------------"
 echo "*.sys.${pcf_ert_domain} == ${pub_ip_pcf}"
 echo "*.cfapps.${pcf_ert_domain} == ${pub_ip_pcf}"
-echo "ssh.sys.${pcf_ert_domain} == ${pub_ip_ssh_and_doppler}"
-echo "doppler.sys.${pcf_ert_domain} == ${pub_ip_ssh_and_doppler}"
-echo "loggregator.sys.${pcf_ert_domain} == ${pub_ip_ssh_and_doppler}"
+echo "ssh.sys.${pcf_ert_domain} == ${pub_ip_ssh}"
+echo "doppler.sys.${pcf_ert_domain} == ${pub_ip_doppler}"
+echo "loggregator.sys.${pcf_ert_domain} == ${pub_ip_doppler}"
 echo "tcp.${pcf_ert_domain} == ${pub_ip_tcp_lb}"
 echo "opsman.${pcf_ert_domain} == ${pub_ip_opsman}"
+echo "jumpbox.${pcf_ert_domain} == ${pub_ip_jumpbox}"
 echo "----------------------------------------------------------------------------------------------"
 echo "DO Not Start the 'deploy-iaas' Concourse Job of this Pipeline until you have confirmed that DNS is reolving correctly.  Failure to do so will result in a FAIL!!!!"
