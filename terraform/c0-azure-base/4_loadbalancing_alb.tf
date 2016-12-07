@@ -34,7 +34,7 @@ resource "azurerm_lb" "tcp" {
 
 // SSH-Proxy ALB
 resource "azurerm_lb" "ssh-proxy" {
-  name                = "${var.env_name}-ssh-lb"
+  name                = "${var.env_name}-ssh-proxy-lb"
   location            = "${var.location}"
   resource_group_name = "${var.env_name}"
 

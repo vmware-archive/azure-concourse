@@ -28,12 +28,22 @@ function fn_get_ip_ref_id {
      echo $pub_ip
 }
 
+function fn_get_subnet_id {
+     local subnet = ${1}
+     azure_cmd="azure network vnet subnet list -g ${azure_terraform_prefix} -e ${azure_terraform_prefix}-virtual-network --json | jq '.[] | select(.name == \"${azure_terraform_prefix}-${1}\") | .id' | awk -F \"/\" '{print$3}'"
+     subnet_id=$(eval $azure_cmd)
+     echo $subnet_id
+}
+
 # Collect Public IPs
 pub_ip_pcf_lb=$(fn_get_ip "web-lb")
 pub_ip_tcp_lb=$(fn_get_ip "tcp-lb")
 pub_ip_ssh_proxy_lb=$(fn_get_ip "ssh-proxy-lb")
+priv_ip_mysql_lb=$(azure network lb frontend-ip list -g ${azure_terraform_prefix} -l ${azure_terraform_prefix}-mysql-lb --json | jq .[].privateIPAddress | tr -d '"')
+
 pub_ip_opsman_vm=$(fn_get_ip "opsman")
 pub_ip_jumpbox_vm=$(fn_get_ip "jb")
+
 
 # Collect Public IPs reference IDs for Terraform
 pub_ip_id_pcf_lb=$(fn_get_ip_ref_id "web-lb")
@@ -41,6 +51,9 @@ pub_ip_id_tcp_lb=$(fn_get_ip_ref_id "tcp-lb")
 pub_ip_id_ssh_proxy_lb=$(fn_get_ip_ref_id "ssh-proxy-lb")
 pub_ip_id_opsman_vm=$(fn_get_ip_ref_id "opsman")
 pub_ip_id_jumpbox_vm=$(fn_get_ip_ref_id "jb")
+
+# Get the Opsman Subnet ID
+subnet_infra_id=$(fn_get_subnet_id "opsman-and-director-subnet")
 
 # Use prefix to strip down a Storage Account Prefix String
 env_short_name=$(echo ${azure_terraform_prefix} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
@@ -96,14 +109,14 @@ function fn_exec_tf {
     -var "pub_ip_id_pcf_lb=${pub_ip_id_pcf_lb}" \
     -var "pub_ip_tcp_lb=${pub_ip_tcp_lb}" \
     -var "pub_ip_id_tcp_lb=${pub_ip_id_tcp_lb}" \
-    -var "pub_ip_mysql_lb=${pub_ip_mysql_lb}" \
-    -var "pub_ip_id_mysql_lb=${pub_ip_id_mysql_lb}" \
+    -var "priv_ip_mysql_lb=${priv_ip_mysql_lb}" \
     -var "pub_ip_ssh_proxy_lb=${pub_ip_ssh_proxy_lb}" \
     -var "pub_ip_id_ssh_proxy_lb=${pub_ip_id_ssh_proxy_lb}" \
     -var "pub_ip_opsman_vm=${pub_ip_opsman_vm}" \
     -var "pub_ip_id_opsman_vm=${pub_ip_id_opsman_vm}" \
     -var "pub_ip_jumpbox_vm=${pub_ip_jumpbox_vm}" \
     -var "pub_ip_id_jumpbox_vm=${pub_ip_id_jumpbox_vm}" \
+    -var "subnet_infra_id=${subnet_infra_id}" \
     -var "ops_manager_image_uri=${pcf_opsman_image_uri}" \
     -var "vm_admin_username=${azure_vm_admin}" \
     -var "vm_admin_password=${azure_vm_password}" \

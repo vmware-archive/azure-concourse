@@ -9,7 +9,7 @@ resource "azurerm_dns_zone" "env_dns_zone" {
 }
 
 resource "azurerm_dns_a_record" "ops_manager_dns" {
-  name                = "pcf"
+  name                = "opsman"
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${var.env_name}"
   ttl                 = "60"
@@ -33,12 +33,21 @@ resource "azurerm_dns_a_record" "sys" {
 }
 
 resource "azurerm_dns_a_record" "mysql" {
-  name                = "mysql"
+  name                = "mysql-proxy-lb.sys"
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${var.env_name}"
   ttl                 = "60"
-  records             = ["${var.pub_ip_id_mysql_lb}"]
+  records             = ["${var.priv_ip_mysql_lb}"]
 }
+
+resource "azurerm_dns_a_record" "ssh-proxy" {
+  name                = "ssh.sys"
+  zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
+  resource_group_name = "${var.env_name}"
+  ttl                 = "60"
+  records             = ["${var.pub_ip_ssh_proxy_lb}"]
+}
+
 
 resource "azurerm_dns_a_record" "tcp" {
   name                = "tcp"
@@ -46,4 +55,12 @@ resource "azurerm_dns_a_record" "tcp" {
   resource_group_name = "${var.env_name}"
   ttl                 = "60"
   records             = ["${var.pub_ip_pcf_lb}"]
+}
+
+resource "azurerm_dns_a_record" "jumpbox" {
+  name                = "jumpbox"
+  zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
+  resource_group_name = "${var.env_name}"
+  ttl                 = "60"
+  records             = ["${var.pub_ip_jumpbox_vm}"]
 }
