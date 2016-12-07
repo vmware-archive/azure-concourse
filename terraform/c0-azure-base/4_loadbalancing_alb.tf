@@ -189,6 +189,6 @@ resource "azurerm_lb_rule" "ssh-proxy-rule" {
   backend_port                   = 2222
 
   # Workaround until the backend_address_pool and probe resources output their own ids
-  backend_address_pool_id = "${azurerm_lb.web.id}/backendAddressPools/${azurerm_lb_backend_address_pool.ssh-backend-pool.name}"
-  probe_id                = "${azurerm_lb.web.id}/probes/${azurerm_lb_probe.ssh-proxy-probe.name}"
+  backend_address_pool_id = "${azurerm_lb.ssh-proxy.id}/backendAddressPools/${azurerm_lb_backend_address_pool.ssh-backend-pool.name}"
+  probe_id                = "${azurerm_lb.ssh-proxy.id}/probes/${azurerm_lb_probe.ssh-proxy-probe.name}"
 }
