@@ -17,10 +17,10 @@ variable "location" {}
 
 variable "dns_suffix" {}
 
-variable "pub_ip_pcf" {}
-variable "pub_ip_id_pcf" {}
+variable "pub_ip_pcf_lb" {}
+variable "pub_ip_id_pcf_lb" {}
 
-variable "pub_ip_tcp" {}
+variable "pub_ip_tcp_lb" {}
 variable "pub_ip_id_tcp_lb" {}
 
 variable "pub_ip_ssh_proxy_lb" {}

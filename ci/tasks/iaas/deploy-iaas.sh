@@ -31,7 +31,6 @@ function fn_get_ip_ref_id {
 # Collect Public IPs
 pub_ip_pcf_lb=$(fn_get_ip "web-lb")
 pub_ip_tcp_lb=$(fn_get_ip "tcp-lb")
-pub_ip_mysql_lb=$(fn_get_ip "mysql-lb")
 pub_ip_ssh_proxy_lb=$(fn_get_ip "ssh-proxy-lb")
 pub_ip_opsman_vm=$(fn_get_ip "opsman")
 pub_ip_jumpbox_vm=$(fn_get_ip "jb")
@@ -39,7 +38,6 @@ pub_ip_jumpbox_vm=$(fn_get_ip "jb")
 # Collect Public IPs reference IDs for Terraform
 pub_ip_id_pcf_lb=$(fn_get_ip_ref_id "web-lb")
 pub_ip_id_tcp_lb=$(fn_get_ip_ref_id "tcp-lb")
-pub_ip_id_mysql_lb=$(fn_get_ip_ref_id "mysql-lb")
 pub_ip_id_ssh_proxy_lb=$(fn_get_ip_ref_id "ssh-proxy-lb")
 pub_ip_id_opsman_vm=$(fn_get_ip_ref_id "opsman")
 pub_ip_id_jumpbox_vm=$(fn_get_ip_ref_id "jb")
