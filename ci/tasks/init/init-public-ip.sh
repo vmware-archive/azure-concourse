@@ -53,6 +53,8 @@ pub_ip_ssh_proxy_lb=$(fn_get_ip "ssh-proxy-lb")
 pub_ip_opsman_vm=$(fn_get_ip "opsman")
 pub_ip_jumpbox_vm=$(fn_get_ip "jb")
 
+priv_ip_mysql=$(azure network lb frontend-ip list -g ${azure_terraform_prefix} -l ${azure_terraform_prefix}-mysql-lb --json | jq .[].privateIPAddress | tr -d '"')
+
 
 echo "You have now deployed Public IPs to azure that must be resolvable to:"
 echo "----------------------------------------------------------------------------------------------"
@@ -62,5 +64,6 @@ echo "ssh.sys.${pcf_ert_domain} == ${pub_ip_ssh_proxy_lb}"
 echo "tcp.${pcf_ert_domain} == ${pub_ip_tcp_lb}"
 echo "opsman.${pcf_ert_domain} == ${pub_ip_opsman_vm}"
 echo "jumpbox.${pcf_ert_domain} == ${pub_ip_jumpbox_vm}"
+echo "mysql-proxy-lb.sys.${pcf_ert_domain} == ${priv_ip_mysql}"
 echo "----------------------------------------------------------------------------------------------"
 echo "DO Not Start the 'deploy-iaas' Concourse Job of this Pipeline until you have confirmed that DNS is reolving correctly.  Failure to do so will result in a FAIL!!!!"
