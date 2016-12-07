@@ -27,7 +27,6 @@ variable "pub_ip_ssh_proxy_lb" {}
 variable "pub_ip_id_ssh_proxy_lb" {}
 
 variable "priv_ip_mysql_lb" {}
-variable "priv_ip_id_mysql_lb" {}
 
 variable "pub_ip_jumpbox_vm" {}
 variable "pub_ip_id_jumpbox_vm" {}
