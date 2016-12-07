@@ -172,7 +172,7 @@ jobs:
         azure_terraform_subnet_infra_cidr: {{azure_terraform_subnet_infra_cidr}}
         azure_terraform_subnet_ert_cidr: {{azure_terraform_subnet_ert_cidr}}
         azure_terraform_subnet_services1_cidr: {{azure_terraform_subnet_services1_cidr}}
-        azure_terraform_subnet_dyanmic_services_cidr: {{azure_terraform_subnet_dyanmic_services_cidr}}
+        azure_terraform_subnet_dynamic_services_cidr: {{azure_terraform_subnet_dynamic_services_cidr}}
         pcf_ert_domain: {{pcf_ert_domain}}
     on_failure:
       put: slack-c0-coreteam
@@ -389,6 +389,10 @@ jobs:
         azure_terraform_subnet_services1_reserved: {{azure_terraform_subnet_services1_reserved}}
         azure_terraform_subnet_services1_dns: {{azure_terraform_subnet_services1_dns}}
         azure_terraform_subnet_services1_gateway: {{azure_terraform_subnet_services1_gateway}}
+        azure_terraform_subnet_dynamic_services_cidr: {{azure_terraform_subnet_dynamic_services_cidr}}
+        azure_terraform_subnet_dynamic_services_reserved: {{azure_terraform_subnet_dynamic_services_reserved}}
+        azure_terraform_subnet_dynamic_services_dns: {{azure_terraform_subnet_dynamic_services_dns}}
+        azure_terraform_subnet_dynamic_services_gateway: {{azure_terraform_subnet_dynamic_services_gateway}}
         pcf_ssh_key_pub: {{pcf_ssh_key_pub}}
         pcf_ssh_key_priv: {{pcf_ssh_key_priv}}
     on_failure:

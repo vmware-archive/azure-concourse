@@ -55,9 +55,9 @@ azure_terraform_subnet_services1_cidr: "192.168.8.0/22"
 azure_terraform_subnet_services1_reserved: "192.168.8.1-192.168.8.9"
 azure_terraform_subnet_services1_dns: "168.63.129.16,8.8.8.8"
 azure_terraform_subnet_services1_gateway: "192.168.8.1"
-azure_terraform_subnet_dyanmic_services_cidr: "192.168.12.0/22"
-azure_terraform_subnet_dyanmic_services_reserved: "192.168.12.1-192.168.12.9"
-azure_terraform_subnet_dyanmic_services_dns: "168.63.129.16,8.8.8.8"
-azure_terraform_subnet_dyanmic_services_gateway: "192.168.12.1"
+azure_terraform_subnet_dynamic_services_cidr: "192.168.12.0/22"
+azure_terraform_subnet_dynamic_services_reserved: "192.168.12.1-192.168.12.9"
+azure_terraform_subnet_dynamic_services_dns: "168.63.129.16,8.8.8.8"
+azure_terraform_subnet_dynamic_services_gateway: "192.168.12.1"
 azure_vm_admin: "pcfadmin" # must != 'admin'
 azure_vm_password: 'P1v0t4l!P1v0t4l!' # must be 12 chars & meet special char reqs
