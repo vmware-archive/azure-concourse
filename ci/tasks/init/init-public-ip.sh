@@ -12,24 +12,26 @@ fi
 
 export PATH=/opt/terraform:$PATH
 
-/opt/terraform/terraform plan \
+function fn_terraform {
+
+/opt/terraform/terraform ${1} \
   -var "subscription_id=${azure_subscription_id}" \
   -var "client_id=${azure_service_principal_id}" \
   -var "client_secret=${azure_service_principal_password}" \
   -var "tenant_id=${azure_tenant_id}" \
   -var "location=${azure_region}" \
   -var "env_name=${azure_terraform_prefix}" \
+  -var "azure_terraform_subnet_infra_cidr=${azure_terraform_subnet_infra_cidr}" \
+  -var "azure_terraform_subnet_ert_cidr=${azure_terraform_subnet_ert_cidr}" \
+  -var "azure_terraform_subnet_services1_cidr=${azure_terraform_subnet_services1_cidr}" \
+  -var "gcp_terraform_subnet_ert=${gcp_terraform_subnet_ert}" \
+  -var "gcp_terraform_subnet_services_1=${gcp_terraform_subnet_services_1}" \
   azure-concourse/terraform/${azure_pcf_terraform_template}/init
 
+}
 
-/opt/terraform/terraform apply \
-  -var "subscription_id=${azure_subscription_id}" \
-  -var "client_id=${azure_service_principal_id}" \
-  -var "client_secret=${azure_service_principal_password}" \
-  -var "tenant_id=${azure_tenant_id}" \
-  -var "location=${azure_region}" \
-  -var "env_name=${azure_terraform_prefix}" \
-  azure-concourse/terraform/${azure_pcf_terraform_template}/init
+fn_terraform "plan"
+fn_terraform "apply"
 
 
 echo "=============================================================================================="
