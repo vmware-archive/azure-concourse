@@ -14,26 +14,26 @@ resource "azurerm_subnet" "opsman_and_director_subnet" {
   name                 = "${var.env_name}-opsman-and-director-subnet"
   resource_group_name  = "${var.env_name}"
   virtual_network_name = "${azurerm_virtual_network.pcf_virtual_network.name}"
-  address_prefix       = "192.168.100.0/26"
+  address_prefix       = "192.168.0.0/26"
 }
 
 resource "azurerm_subnet" "ert_subnet" {
   name                 = "${var.env_name}-ert-subnet"
   resource_group_name  = "${var.env_name}"
   virtual_network_name = "${azurerm_virtual_network.pcf_virtual_network.name}"
-  address_prefix       = "192.168.8.0/22"
+  address_prefix       = "192.168.4.0/22"
 }
 
 resource "azurerm_subnet" "services_subnet" {
   name                 = "${var.env_name}-services-01-subnet"
   resource_group_name  = "${var.env_name}"
   virtual_network_name = "${azurerm_virtual_network.pcf_virtual_network.name}"
-  address_prefix       = "192.168.12.0/22"
+  address_prefix       = "192.168.8.0/22"
 }
 
 resource "azurerm_subnet" "dynamic_services_subnet" {
   name                 = "${var.env_name}-services-dynamic-subnet"
   resource_group_name  = "${var.env_name}"
   virtual_network_name = "${azurerm_virtual_network.pcf_virtual_network.name}"
-  address_prefix       = "192.168.16.0/22"
+  address_prefix       = "192.168.12.0/22"
 }
