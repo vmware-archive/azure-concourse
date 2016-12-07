@@ -1,6 +1,8 @@
 # Customer0 PCF+Azure Concourse Pipeline
 
 
+*_Pipeline is currently experiencing turbulence due to updates,  should be resolved by EOD Dec 8, 2016 MG_*
+
 ### Pre_Reqs & Instructions for POC Deployment via Concourse
 
 1. Create an Azure AD Service Principal for your subscription with "Contributor" Role on the target GCP Project
@@ -21,10 +23,10 @@ azure role assignment create --spn "http://MyBOSHAzureCPI" \
 4. **EDIT!!!** `ci/c0-azure-concourse-poc-params.yml` and replace all variables/parameters you will want for your concourse individual pipeline run
 
 5. **AFTER!!!** Completing Step 4 above ... log into concourse & create the pipeline.
-  
+
   _(this command syntax assumes you are at the root of your repo)_
-  - `fly -t [YOUR CONCOURSE TARGET] set-pipeline -p my-azure-pipeline -c ci/c0-azure-concourse-poc.yml -l ci/c0-azure-concourse-poc-params.yml` 
-  
+  - `fly -t [YOUR CONCOURSE TARGET] set-pipeline -p my-azure-pipeline -c ci/c0-azure-concourse-poc.yml -l ci/c0-azure-concourse-poc-params.yml`
+
 6. Un-pause the pipeline
 
 7. Run the **`init-env`** job manually,  you will need to review the output and record it for the DNS records that must then be made resolvable **BEFORE!!!** continuing to the next step:
@@ -53,4 +55,3 @@ DO Not Start the 'deploy-iaas' Concourse Job of this Pipeline until you have con
 ```
 
 **[DEPLOY]**. **AFTER!!!** Completing Step 7 above ... Run the **`deploy-iaas`** job manually, if valid values were passed, a successful ERT deployment on Azure will be the result.
-
