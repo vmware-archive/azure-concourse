@@ -47,23 +47,20 @@ function fn_get_ip {
      echo $pub_ip
 }
 
-pub_ip_pcf=$(fn_get_ip "web-lb")
+pub_ip_pcf_lb=$(fn_get_ip "web-lb")
 pub_ip_tcp_lb=$(fn_get_ip "tcp-lb")
-pub_ip_doppler=$(fn_get_ip "web-lb")
-pub_ip_jumpbox=$(fn_get_ip "jb")
-pub_ip_opsman=$(fn_get_ip "opsman")
-pub_ip_mysql=$(fn_get_ip "mysql-lb")
-pub_ip_ssh=$(fn_get_ip "ssh-lb")
+pub_ip_ssh_proxy_lb=$(fn_get_ip "ssh-proxy-lb")
+pub_ip_opsman_vm=$(fn_get_ip "opsman")
+pub_ip_jumpbox_vm=$(fn_get_ip "jb")
+
 
 echo "You have now deployed Public IPs to azure that must be resolvable to:"
 echo "----------------------------------------------------------------------------------------------"
-echo "*.sys.${pcf_ert_domain} == ${pub_ip_pcf}"
-echo "*.cfapps.${pcf_ert_domain} == ${pub_ip_pcf}"
-echo "ssh.sys.${pcf_ert_domain} == ${pub_ip_ssh}"
-echo "doppler.sys.${pcf_ert_domain} == ${pub_ip_doppler}"
-echo "loggregator.sys.${pcf_ert_domain} == ${pub_ip_doppler}"
+echo "*.sys.${pcf_ert_domain} == ${pub_ip_pcf_lb}"
+echo "*.cfapps.${pcf_ert_domain} == ${pub_ip_pcf_lb}"
+echo "ssh.sys.${pcf_ert_domain} == ${pub_ip_ssh_proxy_lb}"
 echo "tcp.${pcf_ert_domain} == ${pub_ip_tcp_lb}"
-echo "opsman.${pcf_ert_domain} == ${pub_ip_opsman}"
-echo "jumpbox.${pcf_ert_domain} == ${pub_ip_jumpbox}"
+echo "opsman.${pcf_ert_domain} == ${pub_ip_opsman_vm}"
+echo "jumpbox.${pcf_ert_domain} == ${pub_ip_jumpbox_vm}"
 echo "----------------------------------------------------------------------------------------------"
 echo "DO Not Start the 'deploy-iaas' Concourse Job of this Pipeline until you have confirmed that DNS is reolving correctly.  Failure to do so will result in a FAIL!!!!"
