@@ -42,18 +42,18 @@ azure_tenant_id: "" # REQD
 azure_service_principal_id: "" # REQD
 azure_service_principal_password: 'P1v0t4l!P1v0t4l!'
 azure_region: eastus # valid Azure region reqd
-azure_terraform_vnet_cidr: "192.168.0.0/16"
-azure_terraform_subnet_infra_cidr: "192.168.100.0/26"
-azure_terraform_subnet_infra_reserved: "192.168.100.1-192.168.100.9"
+azure_terraform_vnet_cidr: "192.168.0.0/20"
+azure_terraform_subnet_infra_cidr: "192.168.0.0/26"
+azure_terraform_subnet_infra_reserved: "192.168.0.1-192.168.0.9"
 azure_terraform_subnet_infra_dns: "168.63.129.16,8.8.8.8"
-azure_terraform_subnet_infra_gateway: "192.168.100.1"
-azure_terraform_subnet_ert_cidr: "192.168.8.0/22"
-azure_terraform_subnet_ert_reserved: "192.168.8.1-192.168.8.9"
+azure_terraform_subnet_infra_gateway: "192.168.0.1"
+azure_terraform_subnet_ert_cidr: "192.168.4.0/22"
+azure_terraform_subnet_ert_reserved: "192.168.4.1-192.168.4.9"
 azure_terraform_subnet_ert_dns: "168.63.129.16,8.8.8.8"
-azure_terraform_subnet_ert_gateway: "192.168.8.1"
-azure_terraform_subnet_services1_cidr: "192.168.12.0/22"
-azure_terraform_subnet_services1_reserved: "192.168.12.1-192.168.12.9"
+azure_terraform_subnet_ert_gateway: "192.168.4.1"
+azure_terraform_subnet_services1_cidr: "192.168.8.0/22"
+azure_terraform_subnet_services1_reserved: "192.168.8.1-192.168.8.9"
 azure_terraform_subnet_services1_dns: "168.63.129.16,8.8.8.8"
-azure_terraform_subnet_services1_gateway: "192.168.12.1"
+azure_terraform_subnet_services1_gateway: "192.168.8.1"
 azure_vm_admin: "pcfadmin" # must != 'admin'
 azure_vm_password: 'P1v0t4l!P1v0t4l!' # must be 12 chars & meet special char reqs
