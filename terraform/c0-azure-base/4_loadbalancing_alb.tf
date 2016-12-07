@@ -1,10 +1,13 @@
 ///////////////////////////////////////////////
-//////// Pivotal Customer[0] //////////////////
-//////// ALB for HTTP/S ///////////////////////
+//////// Pivotal Customer[0]       ////////////
+////////              ALB          ////////////
 ///////////////////////////////////////////////
 
+////////////////////////////////
+//// Azure Load Balancer Configs
+////////////////////////////////
 
-// API/APPS Controller traffic
+// API&APPS ALB
 resource "azurerm_lb" "web" {
   name                = "${var.env_name}-web-lb"
   location            = "${var.location}"
@@ -12,11 +15,11 @@ resource "azurerm_lb" "web" {
 
   frontend_ip_configuration = {
     name                 = "frontendip"
-    public_ip_address_id = "${var.pub_ip_id_pcf}"
+    public_ip_address_id = "${var.pub_ip_id_pcf_lb}"
   }
 }
 
-// TCP traffic
+// TCP ALB
 resource "azurerm_lb" "tcp" {
   name                = "${var.env_name}-tcp-lb"
   location            = "${var.location}"
@@ -28,17 +31,24 @@ resource "azurerm_lb" "tcp" {
   }
 }
 
-resource "azurerm_lb" "ssh" {
+
+// SSH-Proxy ALB
+resource "azurerm_lb" "ssh-proxy" {
   name                = "${var.env_name}-ssh-lb"
   location            = "${var.location}"
   resource_group_name = "${var.env_name}"
 
   frontend_ip_configuration = {
     name                 = "frontendip"
-    public_ip_address_id = "${var.pub_ip_id_tcp_ssh}"
+    public_ip_address_id = "${var.pub_ip_id_ssh_proxy_lb}"
   }
 }
 
+////////////////////////////////
+//// Backend Pools
+////////////////////////////////
+
+// API&APPS
 resource "azurerm_lb_backend_address_pool" "web-backend-pool" {
   name                = "web-backend-pool"
   location            = "${var.location}"
@@ -46,6 +56,7 @@ resource "azurerm_lb_backend_address_pool" "web-backend-pool" {
   loadbalancer_id     = "${azurerm_lb.web.id}"
 }
 
+// TCP Load Balancer
 resource "azurerm_lb_backend_address_pool" "tcp-backend-pool" {
   name                = "tcp-backend-pool"
   location            = "${var.location}"
@@ -53,13 +64,19 @@ resource "azurerm_lb_backend_address_pool" "tcp-backend-pool" {
   loadbalancer_id     = "${azurerm_lb.tcp.id}"
 }
 
+// SSH Proxy
 resource "azurerm_lb_backend_address_pool" "ssh-backend-pool" {
   name                = "ssh-backend-pool"
   location            = "${var.location}"
   resource_group_name = "${var.env_name}"
-  loadbalancer_id     = "${azurerm_lb.ssh.id}"
+  loadbalancer_id     = "${azurerm_lb.ssh-proxy.id}"
 }
 
+////////////////////////////////
+//// Health Checks
+////////////////////////////////
+
+// Go Router HTTPS
 resource "azurerm_lb_probe" "web-https-probe" {
   name                = "web-https-probe"
   location            = "${var.location}"
@@ -69,6 +86,8 @@ resource "azurerm_lb_probe" "web-https-probe" {
   port                = 443
 }
 
+
+// Go Router HTTP
 resource "azurerm_lb_probe" "web-http-probe" {
   name                = "web-http-probe"
   location            = "${var.location}"
@@ -78,6 +97,8 @@ resource "azurerm_lb_probe" "web-http-probe" {
   port                = 80
 }
 
+
+// TCP LB 80
 resource "azurerm_lb_probe" "tcp-probe" {
   name                = "tcp-probe"
   location            = "${var.location}"
@@ -87,15 +108,22 @@ resource "azurerm_lb_probe" "tcp-probe" {
   port                = 80
 }
 
+// Diego Brain 2222
 resource "azurerm_lb_probe" "ssh-proxy-probe" {
   name                = "ssh-proxy-probe"
   location            = "${var.location}"
   resource_group_name = "${var.env_name}"
-  loadbalancer_id     = "${azurerm_lb.ssh.id}"
+  loadbalancer_id     = "${azurerm_lb.ssh-proxy.id}"
   protocol            = "TCP"
   port                = 2222
 }
 
+////////////////////////////////
+//// Load Balancing Rules
+////////////////////////////////
+
+
+// API&APPS HTTPS
 resource "azurerm_lb_rule" "web-https-rule" {
   name                = "web-https-rule"
   location            = "${var.location}"
@@ -112,6 +140,7 @@ resource "azurerm_lb_rule" "web-https-rule" {
   probe_id                = "${azurerm_lb.web.id}/probes/${azurerm_lb_probe.web-https-probe.name}"
 }
 
+// API&APPS HTTP
 resource "azurerm_lb_rule" "web-http-rule" {
   name                = "web-http-rule"
   location            = "${var.location}"
@@ -128,6 +157,8 @@ resource "azurerm_lb_rule" "web-http-rule" {
   probe_id                = "${azurerm_lb.web.id}/probes/${azurerm_lb_probe.web-http-probe.name}"
 }
 
+
+// TCP LB
 resource "azurerm_lb_rule" "tcp-rule" {
   count               = 150
   name                = "tcp-rule-${count.index + 1024}"
@@ -145,11 +176,12 @@ resource "azurerm_lb_rule" "tcp-rule" {
   probe_id                = "${azurerm_lb.tcp.id}/probes/${azurerm_lb_probe.tcp-probe.name}"
 }
 
+// SSH Proxy
 resource "azurerm_lb_rule" "ssh-proxy-rule" {
   name                = "ssh-proxy-rule"
   location            = "${var.location}"
   resource_group_name = "${var.env_name}"
-  loadbalancer_id     = "${azurerm_lb.ssh.id}"
+  loadbalancer_id     = "${azurerm_lb.ssh-proxy.id}"
 
   frontend_ip_configuration_name = "frontendip"
   protocol                       = "TCP"

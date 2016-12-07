@@ -13,7 +13,7 @@ resource "azurerm_network_interface" "ops_manager_nic" {
     subnet_id                     = "${azurerm_subnet.opsman_and_director_subnet.id}"
     private_ip_address_allocation = "static"
     private_ip_address            = "192.168.100.9"
-    public_ip_address_id          = "${var.pub_ip_id_opsman}"
+    public_ip_address_id          = "${var.pub_ip_id_opsman_vm}"
   }
 }
 

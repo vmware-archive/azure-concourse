@@ -13,7 +13,7 @@ resource "azurerm_dns_a_record" "ops_manager_dns" {
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${var.env_name}"
   ttl                 = "60"
-  records             = ["${var.pub_ip_opsman}"]
+  records             = ["${var.pub_ip_opsman_vm}"]
 }
 
 resource "azurerm_dns_a_record" "apps" {
@@ -21,7 +21,7 @@ resource "azurerm_dns_a_record" "apps" {
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${var.env_name}"
   ttl                 = "60"
-  records             = ["${var.pub_ip_pcf}"]
+  records             = ["${var.pub_ip_pcf_lb}"]
 }
 
 resource "azurerm_dns_a_record" "sys" {
@@ -29,7 +29,7 @@ resource "azurerm_dns_a_record" "sys" {
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${var.env_name}"
   ttl                 = "60"
-  records             = ["${var.pub_ip_pcf}"]
+  records             = ["${var.pub_ip_pcf_lb}"]
 }
 
 resource "azurerm_dns_a_record" "mysql" {
@@ -37,7 +37,7 @@ resource "azurerm_dns_a_record" "mysql" {
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${var.env_name}"
   ttl                 = "60"
-  records             = ["${azurerm_lb.mysql.frontend_ip_configuration.0.private_ip_address}"]
+  records             = ["${var.pub_ip_id_mysql_lb}"]
 }
 
 resource "azurerm_dns_a_record" "tcp" {
@@ -45,5 +45,5 @@ resource "azurerm_dns_a_record" "tcp" {
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${var.env_name}"
   ttl                 = "60"
-  records             = ["${var.pub_ip_pcf}"]
+  records             = ["${var.pub_ip_pcf_lb}"]
 }
