@@ -29,18 +29,20 @@ function fn_set_dyn_dns {
      eval $curl_cmd
 }
 
-pub_ip_pcf=$(fn_get_ip "web-lb")
+pub_ip_pcf_lb=$(fn_get_ip "web-lb")
 pub_ip_tcp_lb=$(fn_get_ip "tcp-lb")
-pub_ip_ssh_and_doppler=$(fn_get_ip "web-lb")
-pub_ip_jumpbox=$(fn_get_ip "jumpbox")
-pub_ip_opsman=$(fn_get_ip "opsman")
+pub_ip_ssh_proxy_lb=$(fn_get_ip "ssh-proxy-lb")
+pub_ip_opsman_vm=$(fn_get_ip "opsman")
+pub_ip_jumpbox_vm=$(fn_get_ip "jb")
+priv_ip_mysql=$(azure network lb frontend-ip list -g ${azure_terraform_prefix} -l ${azure_terraform_prefix}-mysql-lb --json | jq .[].privateIPAddress | tr -d '"')
 
-fn_set_dyn_dns "api" "$pub_ip_pcf"
-fn_set_dyn_dns "opsman" "$pub_ip_opsman"
-fn_set_dyn_dns "ssh.sys" "$pub_ip_ssh_and_doppler"
-fn_set_dyn_dns "doppler.sys" "$pub_ip_ssh_and_doppler"
-fn_set_dyn_dns "loggregator.sys" "$pub_ip_ssh_and_doppler"
+
+fn_set_dyn_dns "api" "$pub_ip_pcf_lb"
+fn_set_dyn_dns "opsman" "$pub_ip_opsman_vm"
+fn_set_dyn_dns "ssh.sys" "$pub_ip_ssh_proxy_lb"
 fn_set_dyn_dns "tcp" "$pub_ip_tcp_lb"
+fn_set_dyn_dns "jumpbox" "$pub_ip_jumpbox_vm"
+fn_set_dyn_dns "mysql-proxy-lb.sys" "$priv_ip_mysql"
 
 echo
 echo "----------------------------------------------------------------------------------------------"
@@ -53,8 +55,8 @@ let dns_sleep_seconds=15
 for (( z=1; z<${dns_retries}; z++ )); do
 
     resolve_ip=$(dig opsman.${pcf_ert_domain} | grep -A 1 "ANSWER SECTION" | grep ^opsman | awk '{print$5}')
-    if [[ ! $resolve_ip == $pub_ip_opsman ]]; then
-      echo "dnsattempt_$z of $dns_retries:DNS not updated yet!!! I expected the new IP of $pub_ip_opsman but got this instead - $resolve_ip"
+    if [[ ! $resolve_ip == $pub_ip_opsman_vm ]]; then
+      echo "dnsattempt_$z of $dns_retries:DNS not updated yet!!! I expected the new IP of $pub_ip_opsman_vm but got this instead - $resolve_ip"
       sleep $dns_sleep_seconds
     else
       echo "SUCCESS!!! Standard Dyn DNS updated for  ${pcf_ert_domain}"
