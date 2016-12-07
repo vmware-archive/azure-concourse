@@ -24,6 +24,7 @@ function fn_terraform {
   -var "azure_terraform_subnet_infra_cidr=${azure_terraform_subnet_infra_cidr}" \
   -var "azure_terraform_subnet_ert_cidr=${azure_terraform_subnet_ert_cidr}" \
   -var "azure_terraform_subnet_services1_cidr=${azure_terraform_subnet_services1_cidr}" \
+  -var "azure_terraform_subnet_dyanmic_services_cidr=${azure_terraform_subnet_dyanmic_services_cidr}" \
   -var "gcp_terraform_subnet_ert=${gcp_terraform_subnet_ert}" \
   -var "gcp_terraform_subnet_services_1=${gcp_terraform_subnet_services_1}" \
   azure-concourse/terraform/${azure_pcf_terraform_template}/init
