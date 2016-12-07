@@ -17,8 +17,8 @@ provider_type=${1}
 config_target=${2}
 
 # Setting exec_mode=LOCAL for debugging, otherise vars get pulled from Concourse
-exec_mode="LOCAL" # LOCAL|CONCOURSE
-  if [[ $exec_mode == "CONCOURSE" ]]; then
+exec_mode="CONCOURSE" # LOCAL|CONCOURSE
+  if [[ $exec_mode == "LOCAL" ]]; then
      exec_mode_root="."
      pcf_opsman_admin="admin"
      pcf_opsman_admin_passwd='P1v0t4l!'
