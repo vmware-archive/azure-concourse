@@ -30,10 +30,10 @@ perl -pi -e "s|{{services1_subnet_reserved}}|${azure_terraform_subnet_services1_
 perl -pi -e "s|{{services1_subnet_dns}}|${azure_terraform_subnet_services1_dns}|g" ${json_file}
 perl -pi -e "s|{{services1_subnet_gateway}}|${azure_terraform_subnet_services1_gateway}|g" ${json_file}
 perl -pi -e "s|{{dynamic_services_subnet_iaas}}|${azure_terraform_prefix}-virtual-network/${azure_terraform_prefix}-dynamic-services-subnet|g" ${json_file}
-perl -pi -e "s|{{dynamic_services_subnet_cidr}}|${azure_terraform_subnet_dyanmic_services_cidr}|g" ${json_file}
-perl -pi -e "s|{{dynamic_services_subnet_reserved}}|${azure_terraform_subnet_dyanmic_services_reserved}|g" ${json_file}
-perl -pi -e "s|{{dynamic_services_subnet_dns}}|${azure_terraform_subnet_dyanmic_services_dns}|g" ${json_file}
-perl -pi -e "s|{{dynamic_services_subnet_gateway}}|${azure_terraform_subnet_dyanmic_services_gateway}|g" ${json_file}
+perl -pi -e "s|{{dynamic_services_subnet_cidr}}|${azure_terraform_subnet_dynamic_services_cidr}|g" ${json_file}
+perl -pi -e "s|{{dynamic_services_subnet_reserved}}|${azure_terraform_subnet_dynamic_services_reserved}|g" ${json_file}
+perl -pi -e "s|{{dynamic_services_subnet_dns}}|${azure_terraform_subnet_dynamic_services_dns}|g" ${json_file}
+perl -pi -e "s|{{dynamic_services_subnet_gateway}}|${azure_terraform_subnet_dynamic_services_gateway}|g" ${json_file}
 
 
 
