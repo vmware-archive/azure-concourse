@@ -29,7 +29,6 @@ function fn_get_ip_ref_id {
 }
 
 function fn_get_subnet_id {
-     local subnet = ${1}
      azure_cmd="azure network vnet subnet list -g ${azure_terraform_prefix} -e ${azure_terraform_prefix}-virtual-network --json | jq '.[] | select(.name == \"${azure_terraform_prefix}-${1}\") | .id' | awk -F \"/\" '{print$3}'"
      subnet_id=$(eval $azure_cmd)
      echo $subnet_id
