@@ -5,7 +5,7 @@
 
 ### Pre_Reqs & Instructions for POC Deployment via Concourse
 
-1. Create an Azure AD Service Principal for your subscription with "Contributor" Role on the target GCP Project
+1. Create an Azure AD Service Principal for your subscription with "Contributor" Role on the target Azure Project
 
 ```
 azure ad app create --name "My SVC Acct" \
