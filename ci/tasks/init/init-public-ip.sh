@@ -18,7 +18,15 @@ ert_subnet=$(eval $ert_subnet_cmd)
 echo "Found SubnetID=${ert_subnet}"
 
 
-export PATH=/opt/terraform:$PATH
+# Install Terraform cli until we can update the Docker image
+wget $(wget -q -O- https://www.terraform.io/downloads.html | grep linux_amd64 | awk -F '"' '{print$2}') -O /tmp/terraform.zip
+if [ -d /opt/terraform ]; then
+  rm -rf /opt/terraform
+fi
+
+unzip /tmp/terraform.zip
+sudo cp terraform /usr/local/bin
+export PATH=/opt/terraform/terraform:$PATH
 
 function fn_terraform {
 
