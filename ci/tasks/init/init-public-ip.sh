@@ -10,6 +10,12 @@ if [[ ! ${azure_pcf_terraform_template} == "c0-azure-base" ]]; then
   cp -rn azure-concourse/terraform/c0-azure-base/* azure-concourse/terraform/${azure_pcf_terraform_template}/
 fi
 
+# Get ert subnet if multi-resgroup
+ert_subnet_cmd="azure network vnet subnet list -g network-core  -e vnet-pcf --json | jq '.[] | select(.name == \"ert\") | .id' | tr -d '\"'"
+ert_subnet=$(eval $ert_subnet_cmd)
+echo "Found SubnetID=${ert_subnet}"
+
+
 export PATH=/opt/terraform:$PATH
 
 function fn_terraform {
@@ -26,8 +32,7 @@ function fn_terraform {
   -var "azure_terraform_subnet_ert_cidr=${azure_terraform_subnet_ert_cidr}" \
   -var "azure_terraform_subnet_services1_cidr=${azure_terraform_subnet_services1_cidr}" \
   -var "azure_terraform_subnet_dynamic_services_cidr=${azure_terraform_subnet_dynamic_services_cidr}" \
-  -var "gcp_terraform_subnet_ert=${gcp_terraform_subnet_ert}" \
-  -var "gcp_terraform_subnet_services_1=${gcp_terraform_subnet_services_1}" \
+  -var "ert_subnet_id=${ert_subnet}" \
   azure-concourse/terraform/${azure_pcf_terraform_template}/init
 
 }

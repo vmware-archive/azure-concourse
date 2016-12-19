@@ -9,3 +9,5 @@ variable "tenant_id" {}
 variable "client_id" {}
 variable "client_secret" {}
 variable "location" {}
+
+variable "ert_subnet_id" {}
