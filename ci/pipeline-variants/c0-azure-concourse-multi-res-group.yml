@@ -94,11 +94,11 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
-    - get: pivnet-elastic-runtime
-      trigger: false
-      params:
-        globs:
-        - "*pivotal"
+#    - get: pivnet-elastic-runtime
+#      trigger: false
+#      params:
+#        globs:
+#        - "*pivotal"
     - get: pivnet-opsmgr
       trigger: false
       params:
