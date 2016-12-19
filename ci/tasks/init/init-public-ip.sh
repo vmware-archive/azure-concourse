@@ -30,7 +30,7 @@ export PATH=/opt/terraform/terraform:$PATH
 
 function fn_terraform {
 
-/opt/terraform/terraform ${1} \
+terraform ${1} \
   -var "subscription_id=${azure_subscription_id}" \
   -var "client_id=${azure_service_principal_id}" \
   -var "client_secret=${azure_service_principal_password}" \
