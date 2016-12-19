@@ -5,13 +5,12 @@
 
 resource "azurerm_lb" "mysql" {
   name                = "${var.env_name}-mysql-lb"
-  depends_on          = ["azurerm_subnet.ert_subnet"]
   location            = "${var.location}"
   resource_group_name = "${var.env_name}"
 
   frontend_ip_configuration = {
     name      = "frontendip"
-    subnet_id = "${azurerm_subnet.ert_subnet.id}"
+    subnet_id = "${var.ert_subnet_id}"
   }
 }
 
