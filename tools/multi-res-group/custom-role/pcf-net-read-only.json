@@ -4,16 +4,11 @@
     "IsCustom": true,
     "Description": "MVP PCF Read Network Resgroup",
     "Actions": [
-        "Microsoft.Compute/*/read",
-        "Microsoft.Network/virtualNetworks/subnets/join/action",
-        "Microsoft.Network/virtualNetworks/subnets/read",
-        "Microsoft.Resources/subscriptions/resourceGroups/read",
-        "Microsoft.Storage/*/read",
-        "Microsoft.Storage/storageAccounts/listkeys/action",
-        "Microsoft.Network/virtualNetworks/read",
-        "Microsoft.Network/networkSecurityGroups/read",
-        "Microsoft.Network/networkSecurityGroups/join/action",
-        "Microsoft.Support/*"
+      "Microsoft.Network/networkSecurityGroups/read",
+      "Microsoft.Network/networkSecurityGroups/join/action",
+      "Microsoft.Network/virtualNetworks/subnets/read",
+      "Microsoft.Network/virtualNetworks/subnets/join/action",
+      "Microsoft.Network/virtualNetworks/read"
     ],
     "NotActions": [],
     "AssignableScopes": ["/subscriptions/3df1883a-06af-4e6e-8d78-7984d63ba9e6"]
