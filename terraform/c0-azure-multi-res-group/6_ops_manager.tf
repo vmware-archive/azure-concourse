@@ -6,7 +6,7 @@
 resource "azurerm_network_interface" "ops_manager_nic" {
   name                = "${var.env_name}-ops-manager-nic"
   location            = "${var.location}"
-  resource_group_name = "${var.env_name}"
+  resource_group_name = "${var.azure_multi_resgroup_pcf}"
 
   ip_configuration {
     name                          = "${var.env_name}-ops-manager-ip-config"

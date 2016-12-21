@@ -5,14 +5,14 @@
 
 resource "azurerm_storage_account" "bosh_root_storage_account" {
   name                = "${var.env_short_name}root"
-  resource_group_name = "${var.env_name}"
+  resource_group_name = "${var.azure_multi_resgroup_pcf}"
   location            = "${var.location}"
   account_type        = "Standard_LRS"
 }
 
 resource "azurerm_storage_account" "ops_manager_storage_account" {
   name                = "${var.env_short_name}infra"
-  resource_group_name = "${var.env_name}"
+  resource_group_name = "${var.azure_multi_resgroup_pcf}"
   location            = "${var.location}"
   account_type        = "Standard_LRS"
 }
@@ -57,7 +57,7 @@ resource "azurerm_storage_table" "stemcells_storage_table" {
 
 resource "azurerm_storage_account" "bosh_vms_storage_account_1" {
   name                = "${var.env_short_name}${data.template_file.base_storage_account_wildcard.rendered}1"
-  resource_group_name = "${var.env_name}"
+  resource_group_name = "${var.azure_multi_resgroup_pcf}"
   location            = "${var.location}"
   account_type        = "Standard_LRS"
 }
@@ -80,7 +80,7 @@ resource "azurerm_storage_container" "stemcell_storage_container_1" {
 
 resource "azurerm_storage_account" "bosh_vms_storage_account_2" {
   name                = "${var.env_short_name}${data.template_file.base_storage_account_wildcard.rendered}2"
-  resource_group_name = "${var.env_name}"
+  resource_group_name = "${var.azure_multi_resgroup_pcf}"
   location            = "${var.location}"
   account_type        = "Standard_LRS"
 }
@@ -103,7 +103,7 @@ resource "azurerm_storage_container" "stemcell_storage_container_2" {
 
 resource "azurerm_storage_account" "bosh_vms_storage_account_3" {
   name                = "${var.env_short_name}${data.template_file.base_storage_account_wildcard.rendered}3"
-  resource_group_name = "${var.env_name}"
+  resource_group_name = "${var.azure_multi_resgroup_pcf}"
   location            = "${var.location}"
   account_type        = "Standard_LRS"
 }

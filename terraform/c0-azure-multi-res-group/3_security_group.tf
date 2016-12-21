@@ -6,7 +6,7 @@
 resource "azurerm_network_security_group" "ops_manager_security_group" {
   name                = "pcf-default-security-group"
   location            = "${var.location}"
-  resource_group_name = "${var.env_name}"
+  resource_group_name = "${var.azure_multi_resgroup_pcf}"
 
   security_rule {
     name                       = "internal-anything"

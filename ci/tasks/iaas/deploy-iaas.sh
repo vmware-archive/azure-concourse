@@ -84,6 +84,12 @@ pub_ip_id_jumpbox_vm=$(fn_get_ip_ref_id "jb")
 # Get the Opsman Subnet ID
 subnet_infra_id=$(fn_get_subnet_id ${subnet_lookup_infra})
 
+# Exit if vars fail to set
+
+if [[ -z ${pub_ip_pcf_lb} || -z ${pub_ip_opsman_vm} || -z ${pub_ip_id_pcf_lb} || -z ${subnet_infra_id} ]]; then
+  echo "One or More Azure Variables have not set!!!"
+  exit 1
+fi
 
 # Use prefix to strip down a Storage Account Prefix String
 env_short_name=$(echo ${azure_terraform_prefix} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
@@ -151,10 +157,10 @@ function fn_exec_tf {
     -var "vm_admin_username=${azure_vm_admin}" \
     -var "vm_admin_password=${azure_vm_password}" \
     -var "vm_admin_public_key=${pcf_ssh_key_pub}" \
+    -var "azure_multi_resgroup_network=${e_multi_resgroup_network}" \
+    -var "azure_multi_resgroup_pcf=${azure_multi_resgroup_pcf}" \
     azure-concourse/terraform/$azure_pcf_terraform_template
 }
 
-echo "SubnetID=$subnet_infra_id"
-
 fn_exec_tf "plan"
-#fn_exec_tf "apply"
+fn_exec_tf "apply"
