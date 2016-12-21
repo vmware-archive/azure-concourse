@@ -61,14 +61,17 @@ echo "==========================================================================
 azure login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
 
 if [[ ! -z ${azure_multi_resgroup_network} && ${azure_pcf_terraform_template} == "c0-azure-multi-res-group" ]]; then
-    resgroup_lookup=${azure_multi_resgroup_network}
+    resgroup_lookup_net=${azure_multi_resgroup_network}
+    resgroup_lookup_pcf=${azure_multi_resgroup_pcf}
+
 else
-    resgroup_lookup=${azure_terraform_prefix}
+    resgroup_lookup_net=${azure_terraform_prefix}
+    resgroup_lookup_pcf=${azure_terraform_prefix}
 fi
 
 function fn_get_ip {
 
-     azure_cmd="azure network public-ip list -g ${resgroup_lookup} --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
+     azure_cmd="azure network public-ip list -g ${resgroup_lookup_net} --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
      pub_ip=$(eval $azure_cmd)
      echo $pub_ip
 }
@@ -79,7 +82,7 @@ pub_ip_ssh_proxy_lb=$(fn_get_ip "ssh-proxy-lb")
 pub_ip_opsman_vm=$(fn_get_ip "opsman")
 pub_ip_jumpbox_vm=$(fn_get_ip "jb")
 
-priv_ip_mysql=$(azure network lb frontend-ip list -g ${resgroup_lookup} -l ${azure_terraform_prefix}-mysql-lb --json | jq .[].privateIPAddress | tr -d '"')
+priv_ip_mysql=$(azure network lb frontend-ip list -g ${resgroup_lookup_pcf} -l ${azure_terraform_prefix}-mysql-lb --json | jq .[].privateIPAddress | tr -d '"')
 
 
 echo "You have now deployed Public IPs to azure that must be resolvable to:"

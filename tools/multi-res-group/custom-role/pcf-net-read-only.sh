@@ -22,5 +22,5 @@ azure role create --inputfile pcf-net-read-only.json
 #azure role assignment create --spn "http://c0-pcf-admin" \
 #--roleName "PCF Network Read Only" --resource-group network-core
 
-#azure role assignment create --spn "http://c0-pcf-admin" \
-#--roleName "Contributor" --resource-group c0-azure-multi-res-group
+azure role assignment create --spn "http://c0-pcf-admin" \
+--roleName "Contributor" --resource-group multi-res-grp-pcf
