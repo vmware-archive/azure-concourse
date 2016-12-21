@@ -70,10 +70,24 @@ else
 fi
 
 function fn_get_ip {
+      # Adding retry logic to this because Azure doesn't always return the IPs on the first attempt
+      for (( z=1; z<11; z++ )); do
+           sleep 1
+           azure_cmd="azure network public-ip list -g ${resgroup_lookup_net} --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
+           echo $azure_cmd
+           pub_ip=$(eval $azure_cmd)
 
-     azure_cmd="azure network public-ip list -g ${resgroup_lookup_net} --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
-     pub_ip=$(eval $azure_cmd)
-     echo $pub_ip
+           if [[ -z ${pub_ip} ]]; then
+             echo "Attempt $z of 10 failed to get an IP Address value returned from Azure cli"
+           else
+             return ${pub_ip}
+           fi
+      done
+
+     if [[ -z ${pub_ip} ]]; then
+       echo "I couldnt get any ip for ${1}"
+       exit 1
+     fi
 }
 
 pub_ip_pcf_lb=$(fn_get_ip "web-lb")

@@ -6,6 +6,8 @@
     "Actions": [
       "Microsoft.Network/networkSecurityGroups/read",
       "Microsoft.Network/networkSecurityGroups/join/action",
+      "Microsoft.Network/publicIPAddresses/read",
+      "Microsoft.Network/publicIPAddresses/join/action",
       "Microsoft.Network/loadBalancers/read",
       "Microsoft.Network/virtualNetworks/subnets/read",
       "Microsoft.Network/virtualNetworks/subnets/join/action",

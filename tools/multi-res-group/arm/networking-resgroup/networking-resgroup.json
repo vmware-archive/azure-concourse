@@ -7,7 +7,7 @@
             "type": "String"
         },
         "publicIPAddresses_name_jumpbox": {
-            "defaultValue": "jumpbox",
+            "defaultValue": "jb",
             "type": "String"
         },
         "publicIPAddresses_name_lb_ssh": {
@@ -19,7 +19,7 @@
             "type": "String"
         },
         "publicIPAddresses_name_lb_web": {
-            "defaultValue": "tcp-web",
+            "defaultValue": "web-lb",
             "type": "String"
         },
         "virtualNetwork_name": {
