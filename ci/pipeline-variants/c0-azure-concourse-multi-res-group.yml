@@ -128,6 +128,7 @@ jobs:
         azure_service_principal_password: {{azure_service_principal_password}}
         azure_region: {{azure_region}}
         azure_terraform_prefix: {{azure_terraform_prefix}}
+        azure_terraform_opsman_priv_ip: {{azure_terraform_opsman_priv_ip}}
         azure_terraform_vnet_cidr: {{azure_terraform_vnet_cidr}}
         azure_terraform_subnet_infra_cidr: {{azure_terraform_subnet_infra_cidr}}
         azure_terraform_subnet_ert_cidr: {{azure_terraform_subnet_ert_cidr}}

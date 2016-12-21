@@ -159,6 +159,7 @@ function fn_exec_tf {
     -var "vm_admin_public_key=${pcf_ssh_key_pub}" \
     -var "azure_multi_resgroup_network=${e_multi_resgroup_network}" \
     -var "azure_multi_resgroup_pcf=${azure_multi_resgroup_pcf}" \
+    -var "priv_ip_opsman_vm=${azure_terraform_opsman_priv_ip}" \
     azure-concourse/terraform/$azure_pcf_terraform_template
 }
 
