@@ -108,7 +108,10 @@ jobs:
   - task: wipe-env
     config:
       platform: linux
-      image: docker:///virtmerlin/c0-worker
+      image_resource:
+        type: docker-image
+        source:
+          repository: virtmerlin/c0-worker
       inputs:
         - name: azure-concourse
       outputs:
@@ -128,7 +131,10 @@ jobs:
   - task: init-public-ips
     config:
       platform: linux
-      image: docker:///virtmerlin/c0-worker
+      image_resource:
+        type: docker-image
+        source:
+          repository: virtmerlin/c0-worker
       inputs:
         - name: azure-concourse
       outputs:
@@ -178,7 +184,10 @@ jobs:
   - task: upload-opsman
     config:
       platform: linux
-      image: docker:///virtmerlin/c0-worker
+      image_resource:
+        type: docker-image
+        source:
+          repository: virtmerlin/c0-worker
       inputs:
         - name: azure-concourse
         - name: pivnet-opsmgr
@@ -190,7 +199,10 @@ jobs:
   - task: deploy-iaas
     config:
       platform: linux
-      image: docker:///virtmerlin/c0-worker
+      image_resource:
+        type: docker-image
+        source:
+          repository: virtmerlin/c0-worker
       inputs:
         - name: azure-concourse
         - name: opsman-metadata
@@ -241,7 +253,10 @@ jobs:
   - task: config-opsman
     config:
       platform: linux
-      image: docker:///virtmerlin/c0-worker
+      image_resource:
+        type: docker-image
+        source:
+          repository: virtmerlin/c0-worker
       inputs:
         - name: azure-concourse
         - name: tool-om
@@ -282,7 +297,10 @@ jobs:
   - task: config-director
     config:
       platform: linux
-      image: docker:///virtmerlin/c0-worker
+      image_resource:
+        type: docker-image
+        source:
+          repository: virtmerlin/c0-worker
       inputs:
         - name: azure-concourse
         - name: tool-om
