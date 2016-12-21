@@ -209,6 +209,7 @@ jobs:
       azure_multi_resgroup_network: {{azure_multi_resgroup_network}}
       azure_multi_resgroup_pcf: {{azure_multi_resgroup_pcf}}
       azure_multi_resgroup_infra_subnet_name: {{azure_multi_resgroup_infra_subnet_name}}
+      azure_multi_resgroup_infra_vnet_name: {{azure_multi_resgroup_infra_vnet_name}}
 
 ##############################
 ## Job - Config OpsMan Auth ##

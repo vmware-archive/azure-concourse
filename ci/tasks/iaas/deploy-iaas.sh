@@ -21,10 +21,12 @@ if [[ ! -z ${azure_multi_resgroup_network} && ${azure_pcf_terraform_template} ==
     resgroup_lookup_net=${azure_multi_resgroup_network}
     resgroup_lookup_pcf=${azure_multi_resgroup_pcf}
     subnet_lookup_infra=${azure_multi_resgroup_infra_subnet_name}
+    vnet_lookup=${azure_multi_resgroup_infra_vnet_name}
 else
     resgroup_lookup_net=${azure_terraform_prefix}
     resgroup_lookup_pcf=${azure_terraform_prefix}
     subnet_lookup_infra="opsman-and-director-subnet"
+    vnet_lookup="${azure_terraform_prefix}-virtual-network"
 fi
 
 ### IP Functions
@@ -57,7 +59,7 @@ function fn_get_ip_ref_id {
 }
 
 function fn_get_subnet_id {
-     azure_cmd="azure network vnet subnet list -g ${resgroup_lookup_net} -e ${azure_terraform_prefix}-virtual-network --json | jq '.[] | select(.name == \"${azure_terraform_prefix}-${1}\") | .id' | awk -F \"/\" '{print$3}'"
+     azure_cmd="azure network vnet subnet list -g ${resgroup_lookup_net} -e ${vnet_lookup} --json | jq '.[] | select(.name == \"${azure_terraform_prefix}-${1}\") | .id' | awk -F \"/\" '{print$3}'"
      subnet_id=$(eval $azure_cmd)
      echo $subnet_id
 }
