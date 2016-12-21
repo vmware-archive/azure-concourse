@@ -207,7 +207,7 @@ jobs:
       pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
       pcf_ssh_key_pub: {{pcf_ssh_key_pub}}
       azure_multi_resgroup_network: {{azure_multi_resgroup_network}}
-      azure_multi_resgroup_network: {{azure_multi_resgroup_pcf}}
+      azure_multi_resgroup_pcf: {{azure_multi_resgroup_pcf}}
 
 ##############################
 ## Job - Config OpsMan Auth ##

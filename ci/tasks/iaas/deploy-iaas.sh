@@ -65,7 +65,7 @@ function fn_get_subnet_id {
 pub_ip_pcf_lb=$(fn_get_ip "web-lb")
 pub_ip_tcp_lb=$(fn_get_ip "tcp-lb")
 pub_ip_ssh_proxy_lb=$(fn_get_ip "ssh-proxy-lb")
-priv_ip_mysql_lb=$(azure network lb frontend-ip list -g ${azure_terraform_prefix} -l ${azure_terraform_prefix}-mysql-lb --json | jq .[].privateIPAddress | tr -d '"')
+priv_ip_mysql_lb=$(azure network lb frontend-ip list -g ${resgroup_lookup_pcf} -l ${azure_terraform_prefix}-mysql-lb --json | jq .[].privateIPAddress | tr -d '"')
 
 pub_ip_opsman_vm=$(fn_get_ip "opsman")
 pub_ip_jumpbox_vm=$(fn_get_ip "jb")
@@ -81,7 +81,6 @@ pub_ip_id_jumpbox_vm=$(fn_get_ip_ref_id "jb")
 # Get the Opsman Subnet ID
 subnet_infra_id=$(fn_get_subnet_id "opsman-and-director-subnet")
 
-exit 0
 
 # Use prefix to strip down a Storage Account Prefix String
 env_short_name=$(echo ${azure_terraform_prefix} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
@@ -151,6 +150,8 @@ function fn_exec_tf {
     -var "vm_admin_public_key=${pcf_ssh_key_pub}" \
     azure-concourse/terraform/$azure_pcf_terraform_template
 }
+
+echo "SubnetID=$subnet_infra_id"
 
 fn_exec_tf "plan"
 #fn_exec_tf "apply"
