@@ -27,7 +27,7 @@ resource "azurerm_storage_container" "ops_manager_storage_container" {
 
 resource "azurerm_storage_blob" "ops_manager_image" {
   name                   = "opsman-18.vhd"
-  resource_group_name    = "${var.env_name}"
+  resource_group_name    = "${var.azure_multi_resgroup_pcf}"
   storage_account_name   = "${azurerm_storage_account.ops_manager_storage_account.name}"
   storage_container_name = "${azurerm_storage_container.ops_manager_storage_container.name}"
   source_uri             = "${var.ops_manager_image_uri}"
@@ -51,7 +51,7 @@ resource "azurerm_storage_container" "stemcell_storage_container" {
 
 resource "azurerm_storage_table" "stemcells_storage_table" {
   name                 = "stemcells"
-  resource_group_name  = "${var.env_name}"
+  resource_group_name  = "${var.azure_multi_resgroup_pcf}"
   storage_account_name = "${azurerm_storage_account.bosh_root_storage_account.name}"
 }
 
