@@ -263,7 +263,7 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
-      passed: [config-opsman-auth]
+#      passed: [config-opsman-auth]
     - get: pivnet-elastic-runtime
       trigger: false
       params:
@@ -298,6 +298,9 @@ jobs:
         azure_service_principal_id: {{azure_service_principal_id}}
         azure_service_principal_password: {{azure_service_principal_password}}
         azure_terraform_prefix: {{azure_terraform_prefix}}
+        azure_multi_resgroup_ert_subnet_name: {{azure_multi_resgroup_ert_subnet_name}}
+        azure_multi_resgroup_services1_subnet_name: {{azure_multi_resgroup_services1_subnet_name}}
+        azure_multi_resgroup_dynamic_services_subnet_name: {{azure_multi_resgroup_dynamic_services_subnet_name}}
         azure_terraform_subnet_infra_cidr: {{azure_terraform_subnet_infra_cidr}}
         azure_terraform_subnet_infra_reserved: {{azure_terraform_subnet_infra_reserved}}
         azure_terraform_subnet_infra_dns: {{azure_terraform_subnet_infra_dns}}
