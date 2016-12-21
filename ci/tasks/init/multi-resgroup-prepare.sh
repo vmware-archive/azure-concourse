@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Auth
-azure login --service-principal -u ${azure_multi_resgroup_subscription_owner_id} -p ${azure_multi_resgroup_subscription_owner_password} --tenant ${azure_tenant_id}
+azure login -u ${azure_multi_resgroup_subscription_owner_id} -p ${azure_multi_resgroup_subscription_owner_password} --tenant ${azure_tenant_id}
 
 
 # Remove both Resource Groups
