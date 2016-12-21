@@ -17,10 +17,34 @@ azure login --service-principal -u ${azure_service_principal_id} -p ${azure_serv
 #############################################################
 
 
+if [[ ! -z ${azure_multi_resgroup_network} && ${azure_pcf_terraform_template} == "c0-azure-multi-res-group" ]]; then
+    resgroup_lookup_net=${azure_multi_resgroup_network}
+    resgroup_lookup_pcf=${azure_multi_resgroup_pcf}
+
+else
+    resgroup_lookup_net=${azure_terraform_prefix}
+    resgroup_lookup_pcf=${azure_terraform_prefix}
+fi
+
 function fn_get_ip {
-     azure_cmd="azure network public-ip list -g ${azure_terraform_prefix} --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
-     pub_ip=$(eval $azure_cmd)
-     echo $pub_ip
+      # Adding retry logic to this because Azure doesn't always return the IPs on the first attempt
+      for (( z=1; z<11; z++ )); do
+           sleep 1
+           azure_cmd="azure network public-ip list -g ${resgroup_lookup_net} --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
+           pub_ip=$(eval $azure_cmd)
+
+           if [[ -z ${pub_ip} ]]; then
+             echo "Attempt $z of 10 failed to get an IP Address value returned from Azure cli" 1>&2
+           else
+             echo ${pub_ip}
+             return 0
+           fi
+      done
+
+     if [[ -z ${pub_ip} ]]; then
+       echo "I couldnt get any ip from Azure CLI for ${1}"
+       exit 1
+     fi
 }
 
 function fn_set_dyn_dns {
@@ -34,7 +58,7 @@ pub_ip_tcp_lb=$(fn_get_ip "tcp-lb")
 pub_ip_ssh_proxy_lb=$(fn_get_ip "ssh-proxy-lb")
 pub_ip_opsman_vm=$(fn_get_ip "opsman")
 pub_ip_jumpbox_vm=$(fn_get_ip "jb")
-priv_ip_mysql=$(azure network lb frontend-ip list -g ${azure_terraform_prefix} -l ${azure_terraform_prefix}-mysql-lb --json | jq .[].privateIPAddress | tr -d '"')
+priv_ip_mysql=$(azure network lb frontend-ip list -g ${resgroup_lookup_pcf} -l ${azure_terraform_prefix}-mysql-lb --json | jq .[].privateIPAddress | tr -d '"')
 
 
 fn_set_dyn_dns "api" "$pub_ip_pcf_lb"
