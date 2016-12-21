@@ -20,10 +20,11 @@ azure login --service-principal -u ${azure_service_principal_id} -p ${azure_serv
 if [[ ! -z ${azure_multi_resgroup_network} && ${azure_pcf_terraform_template} == "c0-azure-multi-res-group" ]]; then
     resgroup_lookup_net=${azure_multi_resgroup_network}
     resgroup_lookup_pcf=${azure_multi_resgroup_pcf}
-
+    subnet_lookup_infra=${azure_multi_resgroup_infra_subnet_name}
 else
     resgroup_lookup_net=${azure_terraform_prefix}
     resgroup_lookup_pcf=${azure_terraform_prefix}
+    subnet_lookup_infra="opsman-and-director-subnet"
 fi
 
 ### IP Functions
@@ -79,7 +80,7 @@ pub_ip_id_opsman_vm=$(fn_get_ip_ref_id "opsman")
 pub_ip_id_jumpbox_vm=$(fn_get_ip_ref_id "jb")
 
 # Get the Opsman Subnet ID
-subnet_infra_id=$(fn_get_subnet_id "opsman-and-director-subnet")
+subnet_infra_id=$(fn_get_subnet_id ${subnet_lookup_infra})
 
 
 # Use prefix to strip down a Storage Account Prefix String

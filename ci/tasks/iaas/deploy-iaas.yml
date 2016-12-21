@@ -29,3 +29,4 @@ params:
   pcf_ssh_key_pub:
   azure_multi_resgroup_network:
   azure_multi_resgroup_pcf:
+  azure_multi_resgroup_infra_subnet_name:
