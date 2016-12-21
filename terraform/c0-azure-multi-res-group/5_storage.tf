@@ -20,7 +20,7 @@ resource "azurerm_storage_account" "ops_manager_storage_account" {
 resource "azurerm_storage_container" "ops_manager_storage_container" {
   name                  = "opsmanagerimage"
   depends_on            = ["azurerm_storage_account.ops_manager_storage_account"]
-  resource_group_name   = "${var.env_name}"
+  resource_group_name   = "${var.azure_multi_resgroup_pcf}"
   storage_account_name  = "${azurerm_storage_account.ops_manager_storage_account.name}"
   container_access_type = "private"
 }
@@ -36,7 +36,7 @@ resource "azurerm_storage_blob" "ops_manager_image" {
 resource "azurerm_storage_container" "bosh_storage_container" {
   name                  = "bosh"
   depends_on            = ["azurerm_storage_account.bosh_root_storage_account"]
-  resource_group_name   = "${var.env_name}"
+  resource_group_name   = "${var.azure_multi_resgroup_pcf}"
   storage_account_name  = "${azurerm_storage_account.bosh_root_storage_account.name}"
   container_access_type = "private"
 }
@@ -44,7 +44,7 @@ resource "azurerm_storage_container" "bosh_storage_container" {
 resource "azurerm_storage_container" "stemcell_storage_container" {
   name                  = "stemcell"
   depends_on            = ["azurerm_storage_account.bosh_root_storage_account"]
-  resource_group_name   = "${var.env_name}"
+  resource_group_name   = "${var.azure_multi_resgroup_pcf}"
   storage_account_name  = "${azurerm_storage_account.bosh_root_storage_account.name}"
   container_access_type = "blob"
 }
@@ -65,7 +65,7 @@ resource "azurerm_storage_account" "bosh_vms_storage_account_1" {
 resource "azurerm_storage_container" "bosh_storage_container_1" {
   name                  = "bosh"
   depends_on            = ["azurerm_storage_account.bosh_vms_storage_account_1"]
-  resource_group_name   = "${var.env_name}"
+  resource_group_name   = "${var.azure_multi_resgroup_pcf}"
   storage_account_name  = "${azurerm_storage_account.bosh_vms_storage_account_1.name}"
   container_access_type = "private"
 }
@@ -73,7 +73,7 @@ resource "azurerm_storage_container" "bosh_storage_container_1" {
 resource "azurerm_storage_container" "stemcell_storage_container_1" {
   name                  = "stemcell"
   depends_on            = ["azurerm_storage_account.bosh_vms_storage_account_1"]
-  resource_group_name   = "${var.env_name}"
+  resource_group_name   = "${var.azure_multi_resgroup_pcf}"
   storage_account_name  = "${azurerm_storage_account.bosh_vms_storage_account_1.name}"
   container_access_type = "private"
 }
@@ -88,7 +88,7 @@ resource "azurerm_storage_account" "bosh_vms_storage_account_2" {
 resource "azurerm_storage_container" "bosh_storage_container_2" {
   name                  = "bosh"
   depends_on            = ["azurerm_storage_account.bosh_vms_storage_account_2"]
-  resource_group_name   = "${var.env_name}"
+  resource_group_name   = "${var.azure_multi_resgroup_pcf}"
   storage_account_name  = "${azurerm_storage_account.bosh_vms_storage_account_2.name}"
   container_access_type = "private"
 }
@@ -96,7 +96,7 @@ resource "azurerm_storage_container" "bosh_storage_container_2" {
 resource "azurerm_storage_container" "stemcell_storage_container_2" {
   name                  = "stemcell"
   depends_on            = ["azurerm_storage_account.bosh_vms_storage_account_2"]
-  resource_group_name   = "${var.env_name}"
+  resource_group_name   = "${var.azure_multi_resgroup_pcf}"
   storage_account_name  = "${azurerm_storage_account.bosh_vms_storage_account_2.name}"
   container_access_type = "private"
 }
@@ -111,7 +111,7 @@ resource "azurerm_storage_account" "bosh_vms_storage_account_3" {
 resource "azurerm_storage_container" "bosh_storage_container_3" {
   name                  = "bosh"
   depends_on            = ["azurerm_storage_account.bosh_vms_storage_account_3"]
-  resource_group_name   = "${var.env_name}"
+  resource_group_name   = "${var.azure_multi_resgroup_pcf}"
   storage_account_name  = "${azurerm_storage_account.bosh_vms_storage_account_3.name}"
   container_access_type = "private"
 }
@@ -119,7 +119,7 @@ resource "azurerm_storage_container" "bosh_storage_container_3" {
 resource "azurerm_storage_container" "stemcell_storage_container_3" {
   name                  = "stemcell"
   depends_on            = ["azurerm_storage_account.bosh_vms_storage_account_3"]
-  resource_group_name   = "${var.env_name}"
+  resource_group_name   = "${var.azure_multi_resgroup_pcf}"
   storage_account_name  = "${azurerm_storage_account.bosh_vms_storage_account_3.name}"
   container_access_type = "private"
 }

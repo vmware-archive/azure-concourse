@@ -21,7 +21,7 @@ resource "azurerm_virtual_machine" "ops_manager_vm" {
   name                  = "${var.env_name}-ops-manager-vm"
   depends_on            = ["azurerm_network_interface.ops_manager_nic", "azurerm_storage_blob.ops_manager_image"]
   location              = "${var.location}"
-  resource_group_name   = "${var.env_name}"
+  resource_group_name   = "${var.azure_multi_resgroup_pcf}"
   network_interface_ids = ["${azurerm_network_interface.ops_manager_nic.id}"]
   vm_size               = "Standard_DS2_v2"
 
