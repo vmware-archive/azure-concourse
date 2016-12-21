@@ -59,7 +59,7 @@ function fn_get_ip_ref_id {
 }
 
 function fn_get_subnet_id {
-     azure_cmd="azure network vnet subnet list -g ${resgroup_lookup_net} -e ${vnet_lookup} --json | jq '.[] | select(.name == \"${azure_terraform_prefix}-${1}\") | .id' | awk -F \"/\" '{print$3}'"
+     azure_cmd="azure network vnet subnet list -g ${resgroup_lookup_net} -e ${vnet_lookup} --json | jq '.[] | select(.name == \"${subnet_lookup_infra}\") | .id' | awk -F \"/\" '{print$3}'"
      subnet_id=$(eval $azure_cmd)
      echo $subnet_id
 }
