@@ -27,3 +27,5 @@ params:
   pcf_opsman_admin:
   pcf_opsman_admin_passwd:
   pcf_ssh_key_pub:
+  azure_multi_resgroup_network:
+  azure_multi_resgroup_pcf:
