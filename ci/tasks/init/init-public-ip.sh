@@ -60,6 +60,8 @@ echo "==========================================================================
 
 azure login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
 
+
+# Setting lookup Values when using multiple Resource Group Template
 if [[ ! -z ${azure_multi_resgroup_network} && ${azure_pcf_terraform_template} == "c0-azure-multi-res-group" ]]; then
     resgroup_lookup_net=${azure_multi_resgroup_network}
     resgroup_lookup_pcf=${azure_multi_resgroup_pcf}
