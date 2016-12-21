@@ -1,9 +1,10 @@
 #!/bin/bash
 # Will need to set the subscription ID in the role json AssignableScopes
 azure role create --inputfile pcf-net-read-only.json
+#azure role set --inputfile pcf-net-read-only.json
 
 ## Create Resgroup
-#azure group create c0-azure-multi-res-group -l eastus
+#azure group create multi-res-grp-pcf -l eastus
 
 
 ## Create AD acct

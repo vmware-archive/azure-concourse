@@ -43,6 +43,8 @@ terraform ${1} \
   -var "azure_terraform_subnet_services1_cidr=${azure_terraform_subnet_services1_cidr}" \
   -var "azure_terraform_subnet_dynamic_services_cidr=${azure_terraform_subnet_dynamic_services_cidr}" \
   -var "ert_subnet_id=${ert_subnet}" \
+  -var "azure_multi_resgroup_network=${azure_multi_resgroup_network}" \
+  -var "azure_multi_resgroup_pcf=${azure_multi_resgroup_pcf}" \
   azure-concourse/terraform/${azure_pcf_terraform_template}/init
 
 }
@@ -58,10 +60,15 @@ echo "==========================================================================
 
 azure login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
 
-
+if [[ ! -z ${azure_multi_resgroup_network} && ${azure_pcf_terraform_template} == "c0-azure-multi-res-group" ]]; then
+    resgroup_lookup=${azure_multi_resgroup_network}
+else
+    resgroup_lookup=${azure_terraform_prefix}
+fi
 
 function fn_get_ip {
-     azure_cmd="azure network public-ip list -g ${azure_terraform_prefix} --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
+
+     azure_cmd="azure network public-ip list -g ${resgroup_lookup} --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
      pub_ip=$(eval $azure_cmd)
      echo $pub_ip
 }
@@ -72,7 +79,7 @@ pub_ip_ssh_proxy_lb=$(fn_get_ip "ssh-proxy-lb")
 pub_ip_opsman_vm=$(fn_get_ip "opsman")
 pub_ip_jumpbox_vm=$(fn_get_ip "jb")
 
-priv_ip_mysql=$(azure network lb frontend-ip list -g ${azure_terraform_prefix} -l ${azure_terraform_prefix}-mysql-lb --json | jq .[].privateIPAddress | tr -d '"')
+priv_ip_mysql=$(azure network lb frontend-ip list -g ${resgroup_lookup} -l ${azure_terraform_prefix}-mysql-lb --json | jq .[].privateIPAddress | tr -d '"')
 
 
 echo "You have now deployed Public IPs to azure that must be resolvable to:"
@@ -85,4 +92,4 @@ echo "opsman.${pcf_ert_domain} == ${pub_ip_opsman_vm}"
 echo "jumpbox.${pcf_ert_domain} == ${pub_ip_jumpbox_vm}"
 echo "mysql-proxy-lb.sys.${pcf_ert_domain} == ${priv_ip_mysql}"
 echo "----------------------------------------------------------------------------------------------"
-echo "DO Not Start the 'deploy-iaas' Concourse Job of this Pipeline until you have confirmed that DNS is reolving correctly.  Failure to do so will result in a FAIL!!!!"
+echo "Do Not Start the 'deploy-iaas' Concourse Job of this Pipeline until you have confirmed that DNS is reolving correctly.  Failure to do so will result in a FAIL!!!!"
