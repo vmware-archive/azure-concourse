@@ -80,7 +80,8 @@ function fn_get_ip {
            if [[ -z ${pub_ip} ]]; then
              echo "Attempt $z of 10 failed to get an IP Address value returned from Azure cli"
            else
-             return ${pub_ip}
+             echo ${pub_ip}
+             return 0
            fi
       done
 
