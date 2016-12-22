@@ -94,7 +94,16 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
-
+    - get: pivnet-elastic-runtime
+      trigger: false
+      params:
+        globs:
+        - "*pivotal"
+    - get: pivnet-opsmgr
+      trigger: false
+      params:
+        globs:
+        - "*Azure.pdf"
   - task: multi-resgroup-prepare
     file: azure-concourse/ci/tasks/init/multi-resgroup-prepare.yml
     params:
@@ -168,11 +177,13 @@ jobs:
       trigger: false
     - get: pivnet-elastic-runtime
       trigger: false
+      passed: [init-env]
       params:
         globs:
         - "*pivotal"
     - get: pivnet-opsmgr
       trigger: false
+      passed: [init-env]
       params:
         globs:
         - "*Azure.pdf"
@@ -222,14 +233,15 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
-      passed: [deploy-iaas]
     - get: pivnet-elastic-runtime
       trigger: false
+      passed: [deploy-iaas]
       params:
         globs:
         - "*pivotal"
     - get: pivnet-opsmgr
       trigger: false
+      passed: [deploy-iaas]
       params:
         globs:
         - "*Azure.pdf"
@@ -263,14 +275,15 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
-#      passed: [config-opsman-auth]
     - get: pivnet-elastic-runtime
       trigger: false
+      passed: [config-opsman-auth]
       params:
         globs:
         - "*pivotal"
     - get: pivnet-opsmgr
       trigger: false
+      passed: [config-opsman-auth]
       params:
         globs:
         - "*Azure.pdf"
@@ -335,18 +348,19 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
-      passed: [config-director]
     - get: tool-om
       params:
         globs:
         - "om-linux"
     - get: pivnet-elastic-runtime
       trigger: false
+      passed: [config-director]
       params:
         globs:
         - "*pivotal"
     - get: pivnet-opsmgr
       trigger: false
+      passed: [config-director]
       params:
         globs:
         - "*Azure.pdf"
@@ -379,16 +393,17 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
-      passed: [deploy-director]
     - get: ert-concourse
       trigger: false
     - get: pivnet-elastic-runtime
       trigger: false
+      passed: [deploy-director]
       params:
         globs:
         - "*pivotal"
     - get: pivnet-opsmgr
       trigger: false
+      passed: [deploy-director]
       params:
         globs:
         - "*Azure.pdf"
@@ -414,17 +429,18 @@ jobs:
   plan:
   - aggregate:
     - get: azure-concourse
-      passed: [upload-ert]
       trigger: false
     - get: ert-concourse
       trigger: false
     - get: pivnet-elastic-runtime
       trigger: false
+      passed: [upload-ert]
       params:
         globs:
         - "*pivotal"
     - get: pivnet-opsmgr
       trigger: false
+      passed: [upload-ert]
       params:
         globs:
         - "*Azure.pdf"
@@ -469,16 +485,17 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
-      passed: [configure-ert]
     - get: ert-concourse
       trigger: false
     - get: pivnet-elastic-runtime
       trigger: false
+      passed: [configure-ert]
       params:
         globs:
         - "*pivotal"
     - get: pivnet-opsmgr
       trigger: false
+      passed: [configure-ert]
       params:
         globs:
         - "*Azure.pdf"

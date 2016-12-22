@@ -25,7 +25,7 @@ if [[ ! -z ${azure_multi_resgroup_network} && ${azure_pcf_terraform_template} ==
 else
     resgroup_lookup_net=${azure_terraform_prefix}
     resgroup_lookup_pcf=${azure_terraform_prefix}
-    subnet_lookup_infra="opsman-and-director-subnet"
+    subnet_lookup_infra="${azure_terraform_prefix}-opsman-and-director-subnet"
     vnet_lookup="${azure_terraform_prefix}-virtual-network"
 fi
 

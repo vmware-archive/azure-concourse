@@ -55,7 +55,7 @@ resources:
   type: git
   source:
     uri: https://github.com/c0-ops/azure-concourse.git
-    branch: master
+    branch: mglynn-dev-split-resgrp
 
 - name: ert-concourse
   type: git
