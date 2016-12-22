@@ -10,11 +10,27 @@ if [[ ! ${azure_pcf_terraform_template} == "c0-azure-base" ]]; then
   cp -rn azure-concourse/terraform/c0-azure-base/* azure-concourse/terraform/${azure_pcf_terraform_template}/
 fi
 
-export PATH=/opt/terraform:$PATH
+# Get ert subnet if multi-resgroup
+
+azure login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
+ert_subnet_cmd="azure network vnet subnet list -g network-core  -e vnet-pcf --json | jq '.[] | select(.name == \"ert\") | .id' | tr -d '\"'"
+ert_subnet=$(eval $ert_subnet_cmd)
+echo "Found SubnetID=${ert_subnet}"
+
+
+# Install Terraform cli until we can update the Docker image
+wget $(wget -q -O- https://www.terraform.io/downloads.html | grep linux_amd64 | awk -F '"' '{print$2}') -O /tmp/terraform.zip
+if [ -d /opt/terraform ]; then
+  rm -rf /opt/terraform
+fi
+
+unzip /tmp/terraform.zip
+sudo cp terraform /usr/local/bin
+export PATH=/opt/terraform/terraform:$PATH
 
 function fn_terraform {
 
-/opt/terraform/terraform ${1} \
+terraform ${1} \
   -var "subscription_id=${azure_subscription_id}" \
   -var "client_id=${azure_service_principal_id}" \
   -var "client_secret=${azure_service_principal_password}" \
@@ -26,8 +42,9 @@ function fn_terraform {
   -var "azure_terraform_subnet_ert_cidr=${azure_terraform_subnet_ert_cidr}" \
   -var "azure_terraform_subnet_services1_cidr=${azure_terraform_subnet_services1_cidr}" \
   -var "azure_terraform_subnet_dynamic_services_cidr=${azure_terraform_subnet_dynamic_services_cidr}" \
-  -var "gcp_terraform_subnet_ert=${gcp_terraform_subnet_ert}" \
-  -var "gcp_terraform_subnet_services_1=${gcp_terraform_subnet_services_1}" \
+  -var "ert_subnet_id=${ert_subnet}" \
+  -var "azure_multi_resgroup_network=${azure_multi_resgroup_network}" \
+  -var "azure_multi_resgroup_pcf=${azure_multi_resgroup_pcf}" \
   azure-concourse/terraform/${azure_pcf_terraform_template}/init
 
 }
@@ -44,11 +61,35 @@ echo "==========================================================================
 azure login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
 
 
+# Setting lookup Values when using multiple Resource Group Template
+if [[ ! -z ${azure_multi_resgroup_network} && ${azure_pcf_terraform_template} == "c0-azure-multi-res-group" ]]; then
+    resgroup_lookup_net=${azure_multi_resgroup_network}
+    resgroup_lookup_pcf=${azure_multi_resgroup_pcf}
+
+else
+    resgroup_lookup_net=${azure_terraform_prefix}
+    resgroup_lookup_pcf=${azure_terraform_prefix}
+fi
 
 function fn_get_ip {
-     azure_cmd="azure network public-ip list -g ${azure_terraform_prefix} --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
-     pub_ip=$(eval $azure_cmd)
-     echo $pub_ip
+      # Adding retry logic to this because Azure doesn't always return the IPs on the first attempt
+      for (( z=1; z<11; z++ )); do
+           sleep 1
+           azure_cmd="azure network public-ip list -g ${resgroup_lookup_net} --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
+           pub_ip=$(eval $azure_cmd)
+
+           if [[ -z ${pub_ip} ]]; then
+             echo "Attempt $z of 10 failed to get an IP Address value returned from Azure cli" 1>&2
+           else
+             echo ${pub_ip}
+             return 0
+           fi
+      done
+
+     if [[ -z ${pub_ip} ]]; then
+       echo "I couldnt get any ip from Azure CLI for ${1}"
+       exit 1
+     fi
 }
 
 pub_ip_pcf_lb=$(fn_get_ip "web-lb")
@@ -57,7 +98,7 @@ pub_ip_ssh_proxy_lb=$(fn_get_ip "ssh-proxy-lb")
 pub_ip_opsman_vm=$(fn_get_ip "opsman")
 pub_ip_jumpbox_vm=$(fn_get_ip "jb")
 
-priv_ip_mysql=$(azure network lb frontend-ip list -g ${azure_terraform_prefix} -l ${azure_terraform_prefix}-mysql-lb --json | jq .[].privateIPAddress | tr -d '"')
+priv_ip_mysql=$(azure network lb frontend-ip list -g ${resgroup_lookup_pcf} -l ${azure_terraform_prefix}-mysql-lb --json | jq .[].privateIPAddress | tr -d '"')
 
 
 echo "You have now deployed Public IPs to azure that must be resolvable to:"
@@ -70,4 +111,4 @@ echo "opsman.${pcf_ert_domain} == ${pub_ip_opsman_vm}"
 echo "jumpbox.${pcf_ert_domain} == ${pub_ip_jumpbox_vm}"
 echo "mysql-proxy-lb.sys.${pcf_ert_domain} == ${priv_ip_mysql}"
 echo "----------------------------------------------------------------------------------------------"
-echo "DO Not Start the 'deploy-iaas' Concourse Job of this Pipeline until you have confirmed that DNS is reolving correctly.  Failure to do so will result in a FAIL!!!!"
+echo "Do Not Start the 'deploy-iaas' Concourse Job of this Pipeline until you have confirmed that DNS is reolving correctly.  Failure to do so will result in a FAIL!!!!"

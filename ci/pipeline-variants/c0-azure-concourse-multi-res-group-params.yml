@@ -1,0 +1,80 @@
+##############################################
+### Concourse Objects
+##############################################
+# github RSA private key for git resources
+githubtoken: "" # Reqd
+
+# Dyn
+dyn_enabled: true
+dyn_user: # Reqd
+dyn_token: # Reqd
+
+
+##############################################
+### PCF Object Params
+##############################################
+pcf_iaas: "azure"
+# Pivent Download token
+pcf_pivnet_token: ""
+# Opsman Settings
+pcf_opsman_admin: admin
+pcf_opsman_admin_passwd: "P1v0t4l!"
+# ERT Domain Name
+pcf_ert_domain: "azure-poc.customer0.net"
+pcf_ssh_key_pub: generate
+pcf_ssh_key_priv: generate
+
+# ERT Cert & Key , if the string 'generate' is passed, pieline will autogen
+pcf_ert_ssl_cert: generate
+pcf_ert_ssl_key: generate
+
+##############################################
+### IaaS Specific Params
+##############################################
+
+# Wipe Arg, anything other than 'wipe' bypasses the wipe-env job/task
+arg_wipe: non
+
+# Multi-Res-Group Variant Network Resource group vars.
+# This variant assumes that resource groups are created already for the pipeline
+# As customers will genrally already have the resource groups provisioned.
+azure_multi_resgroup_network: network-core
+azure_multi_resgroup_pcf: multi-res-grp-pcf
+azure_multi_resgroup_infra_vnet_name: vnet-pcf
+azure_multi_resgroup_infra_subnet_name: infrastructure
+azure_multi_resgroup_ert_subnet_name: ert
+azure_multi_resgroup_services1_subnet_name: services-01
+azure_multi_resgroup_dynamic_services_subnet_name: dynamic-services
+azure_multi_resgroup_subscription_owner_id: '' # Reqd, you must enter a Owner Account, not Svc Principal
+azure_multi_resgroup_subscription_owner_password: '' # Reqd
+azure_multi_resgroup_pcf_service_principal_spn: http://c0-pcf-admin
+
+
+### azure ###
+azure_pcf_terraform_template: c0-azure-multi-res-group # 'Template' for pipeline to determine Terrafrom & Opsman JSON config
+azure_terraform_prefix: c0-azure-multi-res-group # Prefix tag for Terraform created Objects
+azure_subscription_id: "" # REQD
+azure_tenant_id: "" # REQD
+azure_service_principal_id: "" # Reqd
+azure_service_principal_password: '' # Reqd
+azure_region: eastus # valid Azure region reqd
+azure_terraform_opsman_priv_ip: "172.16.10.4"
+azure_terraform_vnet_cidr: "172.16.0.0/16"
+azure_terraform_subnet_infra_cidr: "172.16.10.0/24"
+azure_terraform_subnet_infra_reserved: "172.16.10.1-172.16.10.9"
+azure_terraform_subnet_infra_dns: "168.63.129.16,8.8.8.8"
+azure_terraform_subnet_infra_gateway: "172.16.10.1"
+azure_terraform_subnet_ert_cidr: "172.16.11.0/24"
+azure_terraform_subnet_ert_reserved: "172.16.11.1-172.16.11.9"
+azure_terraform_subnet_ert_dns: "168.63.129.16,8.8.8.8"
+azure_terraform_subnet_ert_gateway: "172.16.11.1"
+azure_terraform_subnet_services1_cidr: "172.16.12.0/24"
+azure_terraform_subnet_services1_reserved: "172.16.12.1-172.16.12.9"
+azure_terraform_subnet_services1_dns: "168.63.129.16,8.8.8.8"
+azure_terraform_subnet_services1_gateway: "172.16.12.1"
+azure_terraform_subnet_dynamic_services_cidr: "172.16.13.0/24"
+azure_terraform_subnet_dynamic_services_reserved: "172.16.13.1-172.16.13.9"
+azure_terraform_subnet_dynamic_services_dns: "168.63.129.16,8.8.8.8"
+azure_terraform_subnet_dynamic_services_gateway: "172.16.13.1"
+azure_vm_admin: "pcfadmin" # must != 'admin'
+azure_vm_password: 'P1v0t4l!P1v0t4l!' # must be 12 chars & meet special char reqs
