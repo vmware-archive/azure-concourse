@@ -73,13 +73,13 @@ fi
 
 function fn_get_ip {
       # Adding retry logic to this because Azure doesn't always return the IPs on the first attempt
-      for (( z=1; z<11; z++ )); do
+      for (( z=1; z<6; z++ )); do
            sleep 1
            azure_cmd="azure network public-ip list -g ${resgroup_lookup_net} --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
            pub_ip=$(eval $azure_cmd)
 
            if [[ -z ${pub_ip} ]]; then
-             echo "Attempt $z of 10 failed to get an IP Address value returned from Azure cli" 1>&2
+             echo "Attempt $z of 5 failed to get an IP Address value returned from Azure cli" 1>&2
            else
              echo ${pub_ip}
              return 0
