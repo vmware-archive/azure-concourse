@@ -35,7 +35,7 @@
     "network_collection[networks_attributes][1][subnets][0][availability_zone_references][]": "null-az",
     "network_collection[networks_attributes][2][guid]": "2",
     "network_collection[networks_attributes][2][name]": "services-1",
-    "network_collection[networks_attributes][2][service_network]": "1",
+    "network_collection[networks_attributes][2][service_network]": "0",
     "network_collection[networks_attributes][2][subnets][0][iaas_identifier]": "{{services1_subnet_iaas}}",
     "network_collection[networks_attributes][2][subnets][0][cidr]": "{{services1_subnet_cidr}}",
     "network_collection[networks_attributes][2][subnets][0][reserved_ip_ranges]": "{{services1_subnet_reserved}}",
