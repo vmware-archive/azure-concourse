@@ -15,6 +15,9 @@ dyn_token: #Reqd
 ### PCF Object Params
 ##############################################
 pcf_iaas: "azure"
+opsman_major_minor_version: '1\.9\..*' # Reqd
+ert_major_minor_version: '1\.9\..*' # Reqd
+
 # Pivent Download token
 pcf_pivnet_token: ""
 # Opsman Settings

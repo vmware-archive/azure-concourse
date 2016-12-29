@@ -76,7 +76,7 @@ resources:
   source:
     api_token: {{pcf_pivnet_token}}
     product_slug: ops-manager
-    product_version: 1\.8\..*
+    product_version: {{opsman_major_minor_version}}
     sort_by: semver
 
 - name: pivnet-elastic-runtime
@@ -85,7 +85,7 @@ resources:
   source:
     api_token: {{pcf_pivnet_token}}
     product_slug: elastic-runtime
-    product_version: 1\.8\..*
+    product_version: {{ert_major_minor_version}}
     sort_by: semver
 
 - name: slack-c0-coreteam

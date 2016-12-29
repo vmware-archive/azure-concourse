@@ -1,8 +1,6 @@
 # Customer0 PCF+Azure Concourse Pipeline
 
 
-*_Pipeline is currently experiencing turbulence due to updates,  should be resolved by EOD Dec 8, 2016 MG_*
-
 ### Pre_Reqs & Instructions for POC Deployment via Concourse
 
 1. Create an Azure AD Service Principal for your subscription with "Contributor" Role on the target Azure Project
@@ -22,6 +20,11 @@ azure role assignment create --spn "http://MyBOSHAzureCPI" \
 
 4. **EDIT!!!** `ci/c0-azure-concourse-poc-params.yml` and replace all variables/parameters you will want for your concourse individual pipeline run
 
+    - The sample pipeline params file includes 2 params that set the major/minor versions of OpsMan & ERT that will be pulled.  They will typically default to the latest RC/GA avail tiles.
+      ```
+      opsman_major_minor_version: '1\.9\..*'
+      ert_major_minor_version: '1\.9\..*'
+      ```
 5. **AFTER!!!** Completing Step 4 above ... log into concourse & create the pipeline.
 
   _(this command syntax assumes you are at the root of your repo)_
