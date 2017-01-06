@@ -87,12 +87,22 @@ fi
   pcf_ssh_key_priv=$(echo "${pcf_ssh_key_priv}" | perl -p -e 's/\s+$/\\\\n/g')
 
 if [[ $provider_type == "azure" ]]; then
+
+  # Setting lookup Values when using multiple Resource Group Template
+  if [[ ! -z ${azure_multi_resgroup_network} && ${azure_pcf_terraform_template} == "c0-azure-multi-res-group" ]]; then
+      resgroup_lookup_net=${azure_multi_resgroup_network}
+      resgroup_lookup_pcf=${azure_multi_resgroup_pcf}
+  else
+      resgroup_lookup_net=${azure_terraform_prefix}
+      resgroup_lookup_pcf=${azure_terraform_prefix}
+  fi
+
   iaas_configuration_json=$(echo "{
     \"iaas_configuration[subscription_id]\": \"${azure_subscription_id}\",
     \"iaas_configuration[tenant_id]\": \"${azure_tenant_id}\",
     \"iaas_configuration[client_id]\": \"${azure_service_principal_id}\",
     \"iaas_configuration[client_secret]\": \"${azure_service_principal_password}\",
-    \"iaas_configuration[resource_group_name]\": \"${azure_terraform_prefix}\",
+    \"iaas_configuration[resource_group_name]\": \"${resgroup_lookup_pcf}\",
     \"iaas_configuration[bosh_storage_account_name]\": \"${azure_bosh_stg_acct}\",
     \"iaas_configuration[deployments_storage_account_name]\": \"${azure_deployment_stg_acct_wildcard}\",
     \"iaas_configuration[default_security_group]\": \"${azure_default_security_group}\",

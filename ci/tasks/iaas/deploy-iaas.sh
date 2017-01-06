@@ -16,20 +16,50 @@ pcf_opsman_image_uri=$(cat opsman-metadata/uri)
 # Get Public IPs
 azure login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
 
+# Setting lookup Values when using multiple Resource Group Template
+if [[ ! -z ${azure_multi_resgroup_network} && ${azure_pcf_terraform_template} == "c0-azure-multi-res-group" ]]; then
+    resgroup_lookup_net=${azure_multi_resgroup_network}
+    resgroup_lookup_pcf=${azure_multi_resgroup_pcf}
+    subnet_lookup_infra=${azure_multi_resgroup_infra_subnet_name}
+    vnet_lookup=${azure_multi_resgroup_infra_vnet_name}
+else
+    resgroup_lookup_net=${azure_terraform_prefix}
+    resgroup_lookup_pcf=${azure_terraform_prefix}
+    subnet_lookup_infra="${azure_terraform_prefix}-opsman-and-director-subnet"
+    vnet_lookup="${azure_terraform_prefix}-virtual-network"
+fi
+
+### IP Functions
+
 function fn_get_ip {
-     azure_cmd="azure network public-ip list -g ${azure_terraform_prefix} --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
-     pub_ip=$(eval $azure_cmd)
-     echo $pub_ip
+      # Adding retry logic to this because Azure doesn't always return the IPs on the first attempt
+      for (( z=1; z<6; z++ )); do
+           sleep 1
+           azure_cmd="azure network public-ip list -g ${resgroup_lookup_net} --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
+           pub_ip=$(eval $azure_cmd)
+
+           if [[ -z ${pub_ip} ]]; then
+             echo "Attempt $z of 5 failed to get an IP Address value returned from Azure cli" 1>&2
+           else
+             echo ${pub_ip}
+             return 0
+           fi
+      done
+
+     if [[ -z ${pub_ip} ]]; then
+       echo "I couldnt get any ip from Azure CLI for ${1}"
+       exit 1
+     fi
 }
 
 function fn_get_ip_ref_id {
-     azure_cmd="azure network public-ip list -g ${azure_terraform_prefix} --json | jq '.[] | select( .name | contains(\"${1}\")) | .id' | tr -d '\"'"
+     azure_cmd="azure network public-ip list -g ${resgroup_lookup_net} --json | jq '.[] | select( .name | contains(\"${1}\")) | .id' | tr -d '\"'"
      pub_ip=$(eval $azure_cmd)
      echo $pub_ip
 }
 
 function fn_get_subnet_id {
-     azure_cmd="azure network vnet subnet list -g ${azure_terraform_prefix} -e ${azure_terraform_prefix}-virtual-network --json | jq '.[] | select(.name == \"${azure_terraform_prefix}-${1}\") | .id' | awk -F \"/\" '{print$3}'"
+     azure_cmd="azure network vnet subnet list -g ${resgroup_lookup_net} -e ${vnet_lookup} --json | jq '.[] | select(.name == \"${subnet_lookup_infra}\") | .id' | awk -F \"/\" '{print$3}'"
      subnet_id=$(eval $azure_cmd)
      echo $subnet_id
 }
@@ -38,7 +68,7 @@ function fn_get_subnet_id {
 pub_ip_pcf_lb=$(fn_get_ip "web-lb")
 pub_ip_tcp_lb=$(fn_get_ip "tcp-lb")
 pub_ip_ssh_proxy_lb=$(fn_get_ip "ssh-proxy-lb")
-priv_ip_mysql_lb=$(azure network lb frontend-ip list -g ${azure_terraform_prefix} -l ${azure_terraform_prefix}-mysql-lb --json | jq .[].privateIPAddress | tr -d '"')
+priv_ip_mysql_lb=$(azure network lb frontend-ip list -g ${resgroup_lookup_pcf} -l ${azure_terraform_prefix}-mysql-lb --json | jq .[].privateIPAddress | tr -d '"')
 
 pub_ip_opsman_vm=$(fn_get_ip "opsman")
 pub_ip_jumpbox_vm=$(fn_get_ip "jb")
@@ -52,7 +82,14 @@ pub_ip_id_opsman_vm=$(fn_get_ip_ref_id "opsman")
 pub_ip_id_jumpbox_vm=$(fn_get_ip_ref_id "jb")
 
 # Get the Opsman Subnet ID
-subnet_infra_id=$(fn_get_subnet_id "opsman-and-director-subnet")
+subnet_infra_id=$(fn_get_subnet_id ${subnet_lookup_infra})
+
+# Exit if vars fail to set
+
+if [[ -z ${pub_ip_pcf_lb} || -z ${pub_ip_opsman_vm} || -z ${pub_ip_id_pcf_lb} || -z ${subnet_infra_id} ]]; then
+  echo "One or More Azure Variables have not set!!!"
+  exit 1
+fi
 
 # Use prefix to strip down a Storage Account Prefix String
 env_short_name=$(echo ${azure_terraform_prefix} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
@@ -120,6 +157,9 @@ function fn_exec_tf {
     -var "vm_admin_username=${azure_vm_admin}" \
     -var "vm_admin_password=${azure_vm_password}" \
     -var "vm_admin_public_key=${pcf_ssh_key_pub}" \
+    -var "azure_multi_resgroup_network=${e_multi_resgroup_network}" \
+    -var "azure_multi_resgroup_pcf=${azure_multi_resgroup_pcf}" \
+    -var "priv_ip_opsman_vm=${azure_terraform_opsman_priv_ip}" \
     azure-concourse/terraform/$azure_pcf_terraform_template
 }
 
