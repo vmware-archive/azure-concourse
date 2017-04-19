@@ -25,6 +25,10 @@
       ```
 
 4. **AFTER!!!** Completing Step 3 above ... log into concourse & create the pipeline.
+      ```
+      fly -t <Target> login
+      fly -t <Target> set-pipeline -p <Pipeline-Name> -c ci/c0-azure-concourse-poc.yml -l ci/c0-azure-concourse-poc-params.yml
+      ```
 
 5. Un-pause the pipeline
 

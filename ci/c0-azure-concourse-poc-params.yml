@@ -12,7 +12,7 @@ opsman_major_minor_version: '1\.9\..*' # Reqd
 ert_major_minor_version: '1\.9\..*' # Reqd
 
 # Pivent Download token
-pcf_pivnet_token: ""
+pcf_pivnet_token: ""  # Reqd
 # Opsman Settings
 pcf_opsman_admin: admin
 pcf_opsman_admin_passwd: "P1v0t4l!"
