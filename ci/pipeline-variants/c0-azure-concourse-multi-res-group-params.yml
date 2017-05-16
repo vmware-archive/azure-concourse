@@ -3,7 +3,8 @@
 ##############################################
 # github RSA private key for git resources
 githubtoken: "" # Reqd
-
+# Slack Webhook
+slack-c0-coreteam: ""
 # Dyn
 dyn_enabled: true
 dyn_user: # Reqd

@@ -2,6 +2,7 @@ groups:
 
 - name: all
   jobs:
+  - clean-env
   - init-env
   - deploy-iaas
   - config-opsman-auth
@@ -13,6 +14,7 @@ groups:
 
 - name: init
   jobs:
+  - clean-env
   - init-env
 
 - name: iaas
@@ -82,7 +84,54 @@ resources:
     product_version: {{ert_major_minor_version}}
     sort_by: semver
 
+- name: slack-c0-coreteam
+  type: slack-notification
+  source:
+    url: {{slack-c0-coreteam}}
+    insecure: true
+
 jobs:
+- name: clean-env
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+  plan:
+  - aggregate:
+    - get: azure-concourse
+      trigger: false
+
+  - task: wipe-env
+    config:
+      platform: linux
+      image: docker:///virtmerlin/c0-worker
+      inputs:
+        - name: azure-concourse
+      outputs:
+        - name: opsman-metadata
+      run:
+        path: azure-concourse/ci/tasks/init/wipe-env.sh
+      params:
+        arg_wipe: {{arg_wipe}}
+        azure_pcf_terraform_template: {{azure_pcf_terraform_template}}
+        azure_subscription_id: {{azure_subscription_id}}
+        azure_tenant_id: {{azure_tenant_id}}
+        azure_service_principal_id: {{azure_service_principal_id}}
+        azure_service_principal_password: {{azure_service_principal_password}}
+        azure_region: {{azure_region}}
+        azure_terraform_prefix: {{azure_terraform_prefix}}
+    on_success:
+      put: slack-c0-coreteam
+      params:
+        text: |
+          :clap: Job ${BUILD_JOB_NAME} Has Started ....
+          Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
+    on_failure:
+      put: slack-c0-coreteam
+      params:
+        text: |
+          :deadpool: Job ${BUILD_JOB_NAME} Failed!!!
+          Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
+
 #####################
 ## Job - Init Env  ##
 #####################

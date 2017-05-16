@@ -2,6 +2,7 @@ groups:
 
 - name: all
   jobs:
+  - clean-env
   - init-env
   - deploy-iaas
   - config-opsman-auth
@@ -14,6 +15,7 @@ groups:
 
 - name: init
   jobs:
+  - clean-env
   - init-env
 
 - name: iaas
@@ -95,10 +97,7 @@ resources:
     insecure: true
 
 jobs:
-#####################
-## Job - Init Env  ##
-#####################
-- name: init-env
+- name: clean-env
   serial: true
   max_in_flight: 1
   serial_groups: [full]
@@ -106,16 +105,6 @@ jobs:
   - aggregate:
     - get: azure-concourse
       trigger: false
-    - get: pivnet-elastic-runtime
-      trigger: true
-      params:
-        globs:
-        - "*pivotal"
-    - get: pivnet-opsmgr
-      trigger: true
-      params:
-        globs:
-        - "*Azure.pdf"
 
   - task: wipe-env
     config:
@@ -148,6 +137,28 @@ jobs:
         text: |
           :deadpool: Job ${BUILD_JOB_NAME} Failed!!!
           Check here for more details ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}
+
+#####################
+## Job - Init Env  ##
+#####################
+- name: init-env
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+  plan:
+  - aggregate:
+    - get: azure-concourse
+      trigger: false
+    - get: pivnet-elastic-runtime
+      trigger: true
+      params:
+        globs:
+        - "*pivotal"
+    - get: pivnet-opsmgr
+      trigger: true
+      params:
+        globs:
+        - "*Azure.pdf"
 
   - task: init-public-ips
     config:
