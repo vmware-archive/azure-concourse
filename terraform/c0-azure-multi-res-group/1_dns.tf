@@ -17,7 +17,7 @@ resource "azurerm_dns_a_record" "ops_manager_dns" {
 }
 
 resource "azurerm_dns_a_record" "apps" {
-  name                = "*.apps"
+  name                = "*.cfapps"
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${var.azure_multi_resgroup_pcf}"
   ttl                 = "60"
