@@ -48,7 +48,7 @@ resources:
 - name: azure-concourse
   type: git
   source:
-    uri: https://github.com/mxplusb/azure-concourse.git
+    uri: https://github.com/c0-ops/azure-concourse.git
     branch: master
 
 - name: ert-concourse
