@@ -473,7 +473,13 @@ jobs:
       pcf_ert_ssl_key: {{pcf_ert_ssl_key}}
       terraform_template: {{azure_pcf_terraform_template}}
       terraform_prefix: {{azure_terraform_prefix}}
-
+      azure_access_key: {{azure_access_key}}
+      azure_account_name: {{azure_account_name}}
+      azure_buildpacks_container: {{azure_buildpacks_container}}
+      azure_droplets_container: {{azure_droplets_container}}
+      azure_packages_container: {{azure_packages_container}}
+      azure_resources_container: {{azure_resources_container}}
+      
 ###########################
 ## Job - Deploy    ERT   ##
 ###########################
