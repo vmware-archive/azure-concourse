@@ -155,6 +155,12 @@ jobs:
         azure_terraform_subnet_ert_cidr: {{azure_terraform_subnet_ert_cidr}}
         azure_terraform_subnet_services1_cidr: {{azure_terraform_subnet_services1_cidr}}
         azure_terraform_subnet_dynamic_services_cidr: {{azure_terraform_subnet_dynamic_services_cidr}}
+        azure_access_key: {{azure_access_key}}
+        azure_account_name: {{azure_account_name}}
+        azure_buildpacks_container: {{azure_buildpacks_container}}
+        azure_droplets_container: {{azure_droplets_container}}
+        azure_packages_container: {{azure_packages_container}}
+        azure_resources_container: {{azure_resources_container}}
         pcf_ert_domain: {{pcf_ert_domain}}
 
 
