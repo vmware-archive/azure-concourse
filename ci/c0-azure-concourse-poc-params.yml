@@ -32,14 +32,19 @@ pcf_ert_ssl_key:
 # Wipe Arg(s) anything other than wipe bypasses the wipe-env job
 arg_wipe: wipe
 ### azure ###
-azure_access_key:
+# IF the azure_access_name is empty "", ERT will use internal storage. If you want ERT to use Azure blob store, provide a valid azure_account_name and azure_account_key values.
 azure_account_name:
-azure_buildpacks_container:
+azure_access_key:
+# REQD if Azure blob storage is used as external storage by ERT, which is determined by azure_access_name being not null. This setting is used to specify the container where the buildpacks will be stored. It is similar to the S3 bucket in AWS.
+azure_buildpacks_container: 
+# REQD if Azure blob storage is used as external storage by ERT, which is determined by azure_access_name being not null. This setting is used to specify the container where the droplets will be stored. It is similar to the S3 bucket in AWS.
 azure_droplets_container:
+# REQD if Azure blob storage is used as external storage by ERT, which is determined by azure_access_name being not null. This setting is used to specify the container where the packages will be stored. It is similar to the S3 bucket in AWS.
 azure_packages_container:
+# REQD if Azure blob storage is used as external storage by ERT, which is determined by azure_access_name being not null. This setting is used to specify the container where the resources will be stored. It is similar to the S3 bucket in AWS.
+azure_resources_container:
 azure_pcf_terraform_template: c0-azure-base # 'Template' for pipeline to determine Terrafrom & Opsman JSON config
 azure_region: eastus # valid Azure region reqd
-azure_resources_container:
 azure_service_principal_id: "" # REQD
 azure_service_principal_password: "c0P1v0tal"
 azure_subscription_id: "" # REQD
