@@ -49,7 +49,7 @@ azure_service_principal_id: "" # REQD
 azure_service_principal_password: "c0P1v0tal"
 azure_subscription_id: "" # REQD
 azure_tenant_id: "" # REQD
-azure_terraform_prefix: c0-opsman-validation # Prefix tag for Terraform created Objects
+azure_terraform_prefix: "" # REQD Prefix tag for Terraform created Objects
 azure_terraform_subnet_dynamic_services_cidr: "192.168.12.0/22"
 azure_terraform_subnet_dynamic_services_dns: "168.63.129.16,8.8.8.8"
 azure_terraform_subnet_dynamic_services_gateway: "192.168.12.1"
