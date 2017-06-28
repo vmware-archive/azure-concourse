@@ -26,6 +26,11 @@ pcf_ert_ssl_cert: |
 
 pcf_ert_ssl_key:
 
+# ERT UAA SAML configuration, if the string "generate" is passed, the pipeline will autogen certs
+pcf_ert_uaa_saml_cert: |
+
+pcf_ert_uaa_saml_key: |
+
 ##############################################
 ### IaaS Specific Params
 ##############################################
