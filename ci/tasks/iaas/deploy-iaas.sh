@@ -15,6 +15,7 @@ pcf_opsman_image_uri=$(cat opsman-metadata/uri)
 
 # Get Public IPs
 azure login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
+azure account set ${azure_subscription_id}
 
 # Setting lookup Values when using multiple Resource Group Template
 if [[ ! -z ${azure_multi_resgroup_network} && ${azure_pcf_terraform_template} == "c0-azure-multi-res-group" ]]; then
