@@ -471,6 +471,8 @@ jobs:
       pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
       pcf_ert_ssl_cert: {{pcf_ert_ssl_cert}}
       pcf_ert_ssl_key: {{pcf_ert_ssl_key}}
+      pcf_ert_saml_cert: {{pcf_ert_saml_cert}}
+      pcf_ert_saml_key: {{pcf_ert_saml_key}}
       terraform_template: {{azure_pcf_terraform_template}}
       terraform_prefix: {{azure_terraform_prefix}}
       azure_access_key: {{azure_access_key}}
