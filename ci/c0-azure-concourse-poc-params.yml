@@ -26,6 +26,11 @@ pcf_ert_ssl_cert: |
 
 pcf_ert_ssl_key:
 
+# SAML Service Credential provider Cert and Key, of the string generate is passed, pipeline will autogen certs
+pcf_ert_saml_cert: generate
+
+pcf_ert_saml_key: generate
+
 ##############################################
 ### IaaS Specific Params
 ##############################################
