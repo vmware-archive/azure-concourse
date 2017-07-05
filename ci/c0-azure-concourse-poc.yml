@@ -471,6 +471,7 @@ jobs:
       pcf_ert_domain: {{pcf_ert_domain}}
       pcf_opsman_admin: {{pcf_opsman_admin}}
       pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
+      pcf_ert_networking_pointofentry: {{pcf_ert_networking_pointofentry}}
       pcf_ert_ssl_cert: {{pcf_ert_ssl_cert}}
       pcf_ert_ssl_key: {{pcf_ert_ssl_key}}
       pcf_ert_saml_cert: {{pcf_ert_saml_cert}}
