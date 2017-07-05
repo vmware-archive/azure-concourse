@@ -22,6 +22,8 @@ pcf_ssh_key_pub: ""
 pcf_ssh_key_priv: |
 
 # ERT Cert & Key , if the string 'generate' is passed, pipeline will autogen certs
+pcf_ert_networking_pointofentry: "haproxy" #This is set to HAProxy for now as Azure load balancer does not support external SSL termination now. If Azure adds suport for that, you may change it to a different value in future.
+
 pcf_ert_ssl_cert: |
 
 pcf_ert_ssl_key:
