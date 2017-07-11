@@ -123,3 +123,45 @@ resource "azurerm_storage_container" "stemcell_storage_container_3" {
   storage_account_name  = "${azurerm_storage_account.bosh_vms_storage_account_3.name}"
   container_access_type = "private"
 }
+
+resource "azurerm_storage_account" "ert_storage_account" {
+  name                = "${var.env_short_name}ert"
+  resource_group_name = "${var.env_name}"
+  location            = "${var.location}"
+  account_type        = "Premium_LRS"
+  tags {
+    job = "ert_storage_account"
+  }
+}
+
+resource "azurerm_storage_container" "ert_storage_container" {
+  name                  = "buildpacks"
+  depends_on            = ["azurerm_storage_account.ert_storage_account"]
+  resource_group_name   = "${var.env_name}"
+  storage_account_name  = "${azurerm_storage_account.ert_storage_account.name}"
+  container_access_type = "private"
+}
+
+resource "azurerm_storage_container" "ert_storage_container" {
+  name                  = "droplets"
+  depends_on            = ["azurerm_storage_account.ert_storage_account"]
+  resource_group_name   = "${var.env_name}"
+  storage_account_name  = "${azurerm_storage_account.ert_storage_account.name}"
+  container_access_type = "private"
+}
+
+resource "azurerm_storage_container" "ert_storage_container" {
+  name                  = "packages"
+  depends_on            = ["azurerm_storage_account.ert_storage_account"]
+  resource_group_name   = "${var.env_name}"
+  storage_account_name  = "${azurerm_storage_account.ert_storage_account.name}"
+  container_access_type = "private"
+}
+
+resource "azurerm_storage_container" "ert_storage_container" {
+  name                  = "resources"
+  depends_on            = ["azurerm_storage_account.ert_storage_account"]
+  resource_group_name   = "${var.env_name}"
+  storage_account_name  = "${azurerm_storage_account.ert_storage_account.name}"
+  container_access_type = "private"
+}
