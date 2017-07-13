@@ -125,7 +125,7 @@ resource "azurerm_storage_container" "stemcell_storage_container_3" {
 }
 
 resource "azurerm_storage_account" "ert_storage_account" {
-  name                = "${var.env_short_name}ert"
+  name                = "${var.env_short_name}${var.azure_account_name}"
   resource_group_name = "${var.env_name}"
   location            = "${var.location}"
   account_type        = "Premium_LRS"
@@ -134,32 +134,32 @@ resource "azurerm_storage_account" "ert_storage_account" {
   }
 }
 
-resource "azurerm_storage_container" "ert_storage_container_buildpacks" {
-  name                  = "buildpacks"
+resource "azurerm_storage_container" "ert_storage_container" {
+  name                  = "${var.azure_buildpacks_container}"
   depends_on            = ["azurerm_storage_account.ert_storage_account"]
   resource_group_name   = "${var.env_name}"
   storage_account_name  = "${azurerm_storage_account.ert_storage_account.name}"
   container_access_type = "private"
 }
 
-resource "azurerm_storage_container" "ert_storage_container_droplets" {
-  name                  = "droplets"
+resource "azurerm_storage_container" "ert_storage_container" {
+  name                  = "${var.azure_droplets_container}"
   depends_on            = ["azurerm_storage_account.ert_storage_account"]
   resource_group_name   = "${var.env_name}"
   storage_account_name  = "${azurerm_storage_account.ert_storage_account.name}"
   container_access_type = "private"
 }
 
-resource "azurerm_storage_container" "ert_storage_container_packages" {
-  name                  = "packages"
+resource "azurerm_storage_container" "ert_storage_container" {
+  name                  = "${var.azure_packages_container}"
   depends_on            = ["azurerm_storage_account.ert_storage_account"]
   resource_group_name   = "${var.env_name}"
   storage_account_name  = "${azurerm_storage_account.ert_storage_account.name}"
   container_access_type = "private"
 }
 
-resource "azurerm_storage_container" "ert_storage_container_resources" {
-  name                  = "resources"
+resource "azurerm_storage_container" "ert_storage_container" {
+  name                  = "${var.azure_resources_container}"
   depends_on            = ["azurerm_storage_account.ert_storage_account"]
   resource_group_name   = "${var.env_name}"
   storage_account_name  = "${azurerm_storage_account.ert_storage_account.name}"
