@@ -134,7 +134,7 @@ resource "azurerm_storage_account" "ert_storage_account" {
   }
 }
 
-resource "azurerm_storage_container" "ert_storage_container" {
+resource "azurerm_storage_container" "ert_storage_container_buildpacks" {
   name                  = "${var.azure_buildpacks_container}"
   depends_on            = ["azurerm_storage_account.ert_storage_account"]
   resource_group_name   = "${var.env_name}"
@@ -142,7 +142,7 @@ resource "azurerm_storage_container" "ert_storage_container" {
   container_access_type = "private"
 }
 
-resource "azurerm_storage_container" "ert_storage_container" {
+resource "azurerm_storage_container" "ert_storage_container_droplets" {
   name                  = "${var.azure_droplets_container}"
   depends_on            = ["azurerm_storage_account.ert_storage_account"]
   resource_group_name   = "${var.env_name}"
@@ -150,7 +150,7 @@ resource "azurerm_storage_container" "ert_storage_container" {
   container_access_type = "private"
 }
 
-resource "azurerm_storage_container" "ert_storage_container" {
+resource "azurerm_storage_container" "ert_storage_container_packages" {
   name                  = "${var.azure_packages_container}"
   depends_on            = ["azurerm_storage_account.ert_storage_account"]
   resource_group_name   = "${var.env_name}"
@@ -158,7 +158,7 @@ resource "azurerm_storage_container" "ert_storage_container" {
   container_access_type = "private"
 }
 
-resource "azurerm_storage_container" "ert_storage_container" {
+resource "azurerm_storage_container" "ert_storage_container_resources" {
   name                  = "${var.azure_resources_container}"
   depends_on            = ["azurerm_storage_account.ert_storage_account"]
   resource_group_name   = "${var.env_name}"
