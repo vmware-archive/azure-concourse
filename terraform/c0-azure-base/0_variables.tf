@@ -40,3 +40,9 @@ variable "ops_manager_image_uri" {}
 variable "vm_admin_username" {}
 variable "vm_admin_password" {}
 variable "vm_admin_public_key" {}
+
+variable "azure_account_name" {}
+variable "azure_buildpacks_container" {}
+variable "azure_droplets_container" {}
+variable "azure_packages_container" {}
+variable "azure_resources_container" {}

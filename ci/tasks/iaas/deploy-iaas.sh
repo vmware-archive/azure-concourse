@@ -15,6 +15,7 @@ pcf_opsman_image_uri=$(cat opsman-metadata/uri)
 
 # Get Public IPs
 azure login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
+azure account set ${azure_subscription_id}
 
 # Setting lookup Values when using multiple Resource Group Template
 if [[ ! -z ${azure_multi_resgroup_network} && ${azure_pcf_terraform_template} == "c0-azure-multi-res-group" ]]; then
@@ -160,6 +161,11 @@ function fn_exec_tf {
     -var "azure_multi_resgroup_network=${e_multi_resgroup_network}" \
     -var "azure_multi_resgroup_pcf=${azure_multi_resgroup_pcf}" \
     -var "priv_ip_opsman_vm=${azure_terraform_opsman_priv_ip}" \
+    -var "azure_account_name=${azure_account_name}" \
+    -var "azure_buildpacks_container=${azure_buildpacks_container}" \
+    -var "azure_droplets_container=${azure_droplets_container}" \
+    -var "azure_packages_container=${azure_packages_container}" \
+    -var "azure_resources_container=${azure_resources_container}" \
     azure-concourse/terraform/$azure_pcf_terraform_template
 }
 

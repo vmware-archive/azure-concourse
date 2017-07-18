@@ -22,9 +22,16 @@ pcf_ssh_key_pub: ""
 pcf_ssh_key_priv: |
 
 # ERT Cert & Key , if the string 'generate' is passed, pipeline will autogen certs
+pcf_ert_networking_pointofentry: "haproxy" #This is set to HAProxy for now as Azure load balancer does not support external SSL termination now. If Azure adds suport for that, you may change it to a different value in future.
+
 pcf_ert_ssl_cert: |
 
 pcf_ert_ssl_key:
+
+# SAML Service Credential provider Cert and Key, of the string generate is passed, pipeline will autogen certs
+pcf_ert_saml_cert: generate
+
+pcf_ert_saml_key: generate
 
 ##############################################
 ### IaaS Specific Params
@@ -34,6 +41,8 @@ arg_wipe: wipe
 ### azure ###
 # IF the azure_access_name is empty "", ERT will use internal storage. If you want ERT to use Azure blob store, provide a valid azure_account_name and azure_account_key values.
 azure_account_name:
+# Retrieve the value of Primary access key of the Azure Storage account which ends with the value corresponding to the above parameter azure_account_name and 
+# assign it to the azure_access_key after the Deploy IaaS job in the Concourse pipeline, then do a fly to apply changes.
 azure_access_key:
 # REQD if Azure blob storage is used as external storage by ERT, which is determined by azure_access_name being not null. This setting is used to specify the container where the buildpacks will be stored. It is similar to the S3 bucket in AWS.
 azure_buildpacks_container: 
@@ -67,5 +76,6 @@ azure_terraform_subnet_services1_dns: "168.63.129.16,8.8.8.8"
 azure_terraform_subnet_services1_gateway: "192.168.8.1"
 azure_terraform_subnet_services1_reserved: "192.168.8.1-192.168.8.9"
 azure_terraform_vnet_cidr: "192.168.0.0/20"
+# azure_vm_admin value should match with userid used to create the certs pcf_ssh_key_pub. The userid will appear towards the end of the pub key
 azure_vm_admin: "pcfadmin" # must != 'admin'
 azure_vm_password: "P1v0t4l!P1v0t4l!" # must be 12 chars & meet special char reqs
